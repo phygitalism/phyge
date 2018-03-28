@@ -1,7 +1,7 @@
 # MLX
 ## Update 28.03.18
 - Решить задачу из Kaggle про Титаник, используя:
-	- sklearn logic_regression;
+	- sklearn logic_regression; https://www.dataquest.io/blog/kaggle-fundamentals/
 	- tensorflow.estimator.LinearRegressor;
 	- Random Forest TensorFlow/Sklearn;
 - Доклад на Research 8.04.18 про:
