@@ -5,6 +5,7 @@
 - Сделать план доклада. Посмотреть:
 	- [первые две лекции с Coursera про отток клиентов](https://www.coursera.org/learn/data-analysis-applications/lecture/V33wg/analiz-poviedieniia-pol-zovatieliei?authMode=signup)
 	- виды нейронных связей по [табличке](https://towardsdatascience.com/the-mostly-complete-chart-of-neural-networks-explained-3fb6f2367464),  некоторые описать с примерами использования
+	![Neural Networks](https://cdn-images-1.medium.com/max/1000/1*cuTSPlTq0a_327iTPJyD-Q.png)
 	- **к среде накидать основные слайды**
 - найти примеры с кластеризацией с учителем и без. *Желательно, которые можно повторить*
 - найти датасеты с данными сотовыми пользователями. Проанализировать какие бывают параметры там (тоже можно смотреть курс на Coursera)
