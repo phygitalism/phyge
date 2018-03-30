@@ -2,7 +2,7 @@
 
 ## Update 30.03.18
 - Задачки остаются. Посмотреть, попробовать реальзовать, пример с простой нейронной сетью.
-- Сделать план доклада. Посмотреть:
+- Сделать план доклада (постоянно обновляется, палим ***plan_of_the_report.md***). Посмотреть:
 	- [первые две лекции с Coursera про отток клиентов](https://www.coursera.org/learn/data-analysis-applications/lecture/V33wg/analiz-poviedieniia-pol-zovatieliei?authMode=signup)
 	- виды нейронных связей по [табличке](https://towardsdatascience.com/the-mostly-complete-chart-of-neural-networks-explained-3fb6f2367464),  некоторые описать с примерами использования
 	- **к среде накидать основные слайды**
