@@ -4,8 +4,9 @@
   - [OpenAI](https://www.imena.ua/blog/inside-openai/), [AIGym](https://habrahabr.ru/company/newprolab/blog/343834/), GAN - [Генеративные модели от OpenAI](https://habrahabr.ru/company/wunderfund/blog/334568/) 
   
 ## Apple
-  - [CoreML](https://habrahabr.ru/company/mobileup/blog/332500/), [Apple Machine Learning Journal](https://machinelearning.apple.com)  
-  - [Learning with Privacy at Scale](https://machinelearning.apple.com/2017/12/06/learning-with-privacy-at-scale.html)
+  - [CoreML](https://habrahabr.ru/company/mobileup/blog/332500/)
+  - [Apple Machine Learning Journal](https://machinelearning.apple.com)  
+### [Learning with Privacy at Scale](https://machinelearning.apple.com/2017/12/06/learning-with-privacy-at-scale.html)
 
 **Поиск популярных Emodjis в локальных областях**
 
