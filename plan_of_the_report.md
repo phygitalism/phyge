@@ -12,5 +12,6 @@
 - как оценить результат *важно*
 - основные бибилиотеки/рассмотренные инстуременты (Саша)
 - интересные примеры
+  - [OpenAI](https://www.imena.ua/blog/inside-openai/), [AIGym](https://habrahabr.ru/company/newprolab/blog/343834/), GAN - [Генеративные модели от OpenAI](https://habrahabr.ru/company/wunderfund/blog/334568/) 
 
 *Обязательно список ресурсов в конце, сохраняйте ссылки на статьи, можно хаотично*
