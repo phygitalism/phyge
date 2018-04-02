@@ -17,3 +17,23 @@
     - [Learning with Privacy at Scale](https://machinelearning.apple.com/2017/12/06/learning-with-privacy-at-scale.html)
 
 *Обязательно список ресурсов в конце, сохраняйте ссылки на статьи, можно хаотично*
+
+**Алгоритмы из либы Sklearn:**
+
+    - LogisticRegression - логическая регрессия
+    - SGDClassifier - стохастический градиентный спуск
+    - MLPClassifier - многоуровневый перцептрон
+    - RandomForestClassifier - случайные леса
+    - GradientBoostingClassifier - [User Guide](http://scikit-learn.org/stable/modules/ensemble.html#gradient-boosting)
+    - DecisionTreeClassifier - Дерево принятий решений (классификация и регрессия)
+    - SVC - метод опорных векторов (?) 
+
+**На примере Титаника:**   
+accuracy,class   
+0.8101           LogisticRegression   
+0.7765               SGDClassifier   
+0.8156               MLPClassifier   
+0.8212      RandomForestClassifier   
+0.8156  GradientBoostingClassifier   
+0.8156      DecisionTreeClassifier   
+0.7877                         SVC   
