@@ -1,12 +1,21 @@
+import pylab
 import pandas as pd
+import xgboost as xgb
+import matplotlib.pyplot as plt
 import tensorflow as tf
-from sklearn.linear_model import LogisticRegression
+import numpy as np
+from sklearn.linear_model import SGDClassifier, LogisticRegression
+from sklearn.neural_network import MLPClassifier
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score
+from IPython.core.display import display, HTML
 from sklearn.model_selection import train_test_split, cross_val_score
-from matplotlib import pyplot as plt
 
 tf.logging.set_verbosity(tf.logging.ERROR)
 pd.options.display.max_rows = 10
-pd.options.display.float_format = '{:.1f}'.format
+pd.options.display.float_format = '{:.4f}'.format
 
 train = pd.read_csv('train.csv')
 test = pd.read_csv('test.csv')
@@ -79,4 +88,37 @@ def view():
     print('Accuracy: ', accuracy)
     print('Model:', model)
 
-view()
+# view()
+
+classifiers = [
+    LogisticRegression(max_iter=200, penalty="l2"),
+    SGDClassifier(loss="hinge", penalty="l2"),
+    MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(3, 4)),
+    RandomForestClassifier(n_estimators=60, max_depth=5),
+    GradientBoostingClassifier(n_estimators=180, learning_rate=1.0, max_depth=4),
+    DecisionTreeClassifier(),
+    SVC(),
+]
+
+result = []
+for classifier in classifiers:
+    classifier.fit(features_train, target_train)
+    report = accuracy_score(target_test, classifier.predict(features_test))
+    result.append({'class': classifier.__class__.__name__, 'accuracy': report})
+
+display(HTML('<h2>Result</h2>'))
+display(pd.DataFrame(result))
+
+model = xgb.XGBClassifier()
+model.fit(features_train, target_train)
+
+pylab.rcParams['figure.figsize'] = 7, 7
+plt.style.use('ggplot')
+pd.Series(model.feature_importances_).plot(kind='bar', xticks=features_train.index)
+x_name = ['Pclass_1', 'Pclass_2', 'Pclass_3', 'Female', 'Male',
+          'Missing', 'Infant', 'Child', 'Teenager', 'Adult', 'Adult', 'Senior']
+plt.xticks(np.arange(0, 12), x_name, rotation=70)
+plt.title('Feature Importances')
+plt.show()
+
+pd.DataFrame(result).to_csv('result.csv', index=False)
