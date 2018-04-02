@@ -20,16 +20,16 @@
 
 **Алгоритмы из либы Sklearn:**
 
-    - LogisticRegression - логическая регрессия
-    - SGDClassifier - стохастический градиентный спуск
-    - MLPClassifier - многоуровневый перцептрон
-    - RandomForestClassifier - случайные леса
-    - GradientBoostingClassifier - [User Guide](http://scikit-learn.org/stable/modules/ensemble.html#gradient-boosting)
-    - DecisionTreeClassifier - дерево принятий решений
-    - SVC - метод опорных векторов (?) 
+1. LogisticRegression - логическая регрессия
+2. SGDClassifier - стохастический градиентный спуск
+3. MLPClassifier - многоуровневый перцептрон
+4. RandomForestClassifier - случайные леса
+5. GradientBoostingClassifier - [User Guide](http://scikit-learn.org/stable/modules/ensemble.html#gradient-boosting)
+6. DecisionTreeClassifier - дерево принятий решений
+7. SVC - метод опорных векторов (?) 
 
 **На примере Титаника:**   
-accuracy,class   
+*accuracy, class*   
 0.8101           LogisticRegression   
 0.7765               SGDClassifier   
 0.8156               MLPClassifier   
