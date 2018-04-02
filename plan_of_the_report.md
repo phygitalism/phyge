@@ -25,7 +25,7 @@
     - MLPClassifier - многоуровневый перцептрон
     - RandomForestClassifier - случайные леса
     - GradientBoostingClassifier - [User Guide](http://scikit-learn.org/stable/modules/ensemble.html#gradient-boosting)
-    - DecisionTreeClassifier - Дерево принятий решений (классификация и регрессия)
+    - DecisionTreeClassifier - дерево принятий решений
     - SVC - метод опорных векторов (?) 
 
 **На примере Титаника:**   
