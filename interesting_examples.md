@@ -5,6 +5,9 @@
   
 ## Apple
   - [CoreML](https://habrahabr.ru/company/mobileup/blog/332500/)
+  
+*Кирилл Клебанов, Surf*, рассказал о CoreML и его практическом применении. На примере приложения «Лабиринт» узнали об устройстве визуального поиска. Приложение находит по обложке любую из 180 000 книг из базы магазина. 
+
   - Блог: [Apple Machine Learning Journal](https://machinelearning.apple.com)  
 ### [Learning with Privacy at Scale](https://machinelearning.apple.com/2017/12/06/learning-with-privacy-at-scale.html)
 
@@ -54,8 +57,24 @@ Apple начала использовать глубокое обучение р
 
 
 
-### [Hey, Siri!]()
+### [Hey, Siri!](https://machinelearning.apple.com/2017/10/01/hey-siri.html)
 
 Вся система имеет несколько частей. Большая часть реализации Siri - «в облаке», включая автоматическое распознавание речи, интерпретацию на естественном языке и различные информационные услуги. Существуют также серверы, которые могут предоставлять обновления для акустических моделей, используемых детектором. В этой статье основное внимание уделяется той части, которая работает на вашем локальном устройстве, например iPhone или Apple Watch. В частности, он фокусируется на детекторе: специализированный распознаватель речи, который всегда прослушивает только свою пробуждающую фразу (на недавнем iPhone с включенной функцией «Hey Siri»).
 
 ![Поток Hey Siri на iPhone](https://machinelearning.apple.com/images/journals/hey-siri/HeySiriFlow-1.png)
+
+### [Распознавание рукописных китайских символов в реальном времени, охватывающих список из 30 000 иероглифов](https://machinelearning.apple.com/2017/09/12/handwriting.html)
+
+Работают с точностью 95-97%
+
+Юзают CNN сети
+
+Вариации U + 7684 (的)
+
+![Вариации U + 7684 (的)](https://machinelearning.apple.com/images/journals/handwriting/chw-fig-5.png)
+
+Вариации U + 4EE5 (以)
+
+![Вариации U + 4EE5 (以)](https://machinelearning.apple.com/images/journals/handwriting/chw-fig-6.png)
+
+
