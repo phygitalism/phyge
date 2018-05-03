@@ -17,3 +17,4 @@ print(filtered_tokens)
 best_kek = {}
 best_kek.update({'test_text': str(filtered_tokens)})
 bag_of_words = BagOfWordsModel(best_kek)
+bag_of_words.to_uci()
