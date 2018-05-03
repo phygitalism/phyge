@@ -27,7 +27,7 @@ def create_uci(article):
 
 if __name__ == '__main__':
     data_url = pd.read_csv('url_test.csv')
-    urls_to_download = data_url.iloc[0:4, 0]
+    urls_to_download = data_url.iloc[:, 0]
     saved_articles = ArticleSerializer.deserialize()
     existing_urls = [article.downloaded_from_url for article in saved_articles]
 
@@ -52,7 +52,7 @@ if __name__ == '__main__':
     def view_value_counts(size_of_head):
         for i in range(0, len(df_words_in_doc.columns)):
             print('url №', i, '\n', df_words_in_doc.iloc[:, i].value_counts().head(size_of_head))
-    view_value_counts(size_of_head=5)
+    view_value_counts(size_of_head=10)
 
     print('\nCreate uci from Article (to \'out\'):')
     df_words_in_doc = create_uci(desirialized_articles)
