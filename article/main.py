@@ -1,17 +1,59 @@
-import re
-from nltk.corpus import stopwords
-import pymorphy2
+import pandas as pd
+from ArticleFetcher import ArticleFetcher
+from ArticleSerializer import ArticleSerializer
 from BagOfWordsModel import BagOfWordsModel
 
-text = 'Вызывая большую функцию и используя результат несколько раз, сохраните результат в переменной вместо того, чтобы постоянно вызывать данную функцию. Хорошо спроектированная функция имеет следующие характеристики. Используйте параметры, чтобы отправлять информацию из функции или когда функции нужно возвратить несколько значений. Отправляя объект в функцию как параметр, вы должны передавать его по ссылке, так как если он будет передан как значение, то будет скопирован весь объект. Копирование объектов требует больших затрат памяти.'
-tokens = re.sub('[^\w]', ' ', text).split()
-text_tokens = list(map(str.lower, tokens))
-russian_words = re.compile('[А-Яа-я]+').findall(' '.join(text_tokens))
-filtered_tokens = list(filter(lambda x: x not in stopwords.words('russian') and len(x) > 1, russian_words))
-morph = pymorphy2.MorphAnalyzer()
-kek = list(map(lambda x: morph.parse(x)[0].normal_form, filtered_tokens))
 
-print(kek)
-best_kek = {}
-best_kek.update({'test_text': str(kek)})
-bag_of_words = BagOfWordsModel(best_kek)
+def filtred_download_urls(urls_to_download, existing_urls):
+    return [x for x in urls_to_download if x not in existing_urls]
+
+
+def create_df_words(article):
+    df_words_in_doc = pd.DataFrame()
+    for i in range(0, len(article)):
+        df_words_in_doc[i] = pd.Series(article[i].normalized_words)
+        df_words_in_doc.to_csv('value.csv', index=False, encoding='utf8')
+    print(article[1].title)
+    print(article[1].normalized_words)
+    return df_words_in_doc
+
+
+def create_uci(article):
+    dict_kek = {}
+    for i in range(0, len(article)):
+        dict_kek.update({i: str(article[i].normalized_words)})
+    bag_of_words = BagOfWordsModel(dict_kek)
+    bag_of_words.to_uci()
+
+if __name__ == '__main__':
+    data_url = pd.read_csv('url_test.csv')
+    urls_to_download = data_url.iloc[0:4, 0]
+    saved_articles = ArticleSerializer.deserialize()
+    existing_urls = [article.downloaded_from_url for article in saved_articles]
+
+    filtred_urls = filtred_download_urls(urls_to_download, existing_urls)
+    print('New url:\n', filtred_urls)
+
+    article_fetcher = ArticleFetcher(filtred_urls)
+    downloaded_articles = article_fetcher.fetch()
+
+    downloaded_articles += saved_articles
+    article_serializer = ArticleSerializer.serialize(downloaded_articles)
+    desirialized_articles = ArticleSerializer.deserialize()
+
+    print('\nTitle parsed article and url:')
+    for i in range(0, len(desirialized_articles)):
+        print(desirialized_articles[i], desirialized_articles[i].downloaded_from_url)
+
+    print('\nCreate dataframe all words (value.csv):')
+    df_words_in_doc = create_df_words(desirialized_articles)
+
+    print('\nView value counts:')
+    def view_value_counts(size_of_head):
+        for i in range(0, len(df_words_in_doc.columns)):
+            print('url №', i, '\n', df_words_in_doc.iloc[:, i].value_counts().head(size_of_head))
+    view_value_counts(size_of_head=5)
+
+    print('\nCreate uci from Article (to \'out\'):')
+    df_words_in_doc = create_uci(desirialized_articles)
+
