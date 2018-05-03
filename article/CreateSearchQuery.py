@@ -7,11 +7,13 @@ text = 'Вызывая большую функцию и используя ре�
 tokens = re.sub('[^\w]', ' ', text).split()
 text_tokens = list(map(str.lower, tokens))
 russian_words = re.compile('[А-Яа-я]+').findall(' '.join(text_tokens))
-filtered_tokens = list(filter(lambda x: x not in stopwords.words('russian') and len(x) > 1, russian_words))
-morph = pymorphy2.MorphAnalyzer()
-kek = list(map(lambda x: morph.parse(x)[0].normal_form, filtered_tokens))
 
-print(kek)
+morph = pymorphy2.MorphAnalyzer()
+russian_words_normal = list(map(lambda x: morph.parse(x)[0].normal_form, russian_words))
+filtered_tokens = list(filter(lambda x: x not in stopwords.words('russian') and len(x) > 1, russian_words_normal))
+
+
+print(filtered_tokens)
 best_kek = {}
-best_kek.update({'test_text': str(kek)})
+best_kek.update({'test_text': str(filtered_tokens)})
 bag_of_words = BagOfWordsModel(best_kek)
