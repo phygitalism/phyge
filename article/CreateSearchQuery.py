@@ -1,15 +1,22 @@
 import re
 from nltk.corpus import stopwords
 import pymorphy2
+import json
 
 
 class CreateSearchQuery:
-    def __init__(self, text=str):
-        self.text = text
-        self.query_normalize = self.create_uci()
+    def __init__(self, path_query='query.json'):
+        self.path_query = path_query
+        self.text_normalize = self.create_uci()
+
+    def load_query(self):
+        with open(self.path_query, 'r', encoding='utf8') as data_file:
+            text_query = json.load(data_file)
+        return text_query['text']
 
     def create_uci(self):
-        tokens = re.sub('[^\w]', ' ', self.text).split()
+        text = self.load_query()
+        tokens = re.sub('[^\w]', ' ', text).split()
         text_tokens = list(map(str.lower, tokens))
         russian_words = re.compile('[А-Яа-я]+').findall(' '.join(text_tokens))
         morph = pymorphy2.MorphAnalyzer()
@@ -18,5 +25,5 @@ class CreateSearchQuery:
 
 
 if __name__ == '__main__':
-    text_normalize = 'ОС Windows долгое время попрекали за медлительность её файловых операций и медленное создание процессов. А почему бы не попробовать сделать их ещё более медленными? Эта статья покажет способы замедления файловых операций в Windows примерно в 10 раз от их нормальной скорости (или даже больше), причём способы эти практически не поддаются отслеживанию обычным пользователем.'
-    create_search_query = CreateSearchQuery(text_normalize)
+    create_search_query = CreateSearchQuery()
+    print(create_search_query.text_normalize)

@@ -1,14 +1,17 @@
 from gensim import corpora, models
 from scipy import spatial
+from PhyVariables import PhyVariables
 
-data = corpora.UciCorpus('docword.bow.txt', 'vocab.bow.txt')
+phy_var = PhyVariables()
+path = phy_var.save_folder_key
+data = corpora.UciCorpus(path + phy_var.docword_articles_key, path + phy_var.vocab_articles_key)
 dictionary = data.create_dictionary()
 
 num_topics = 2
 # train model
 ldamodel = models.ldamodel.LdaModel(data, id2word=dictionary, num_topics=num_topics, passes=50, alpha=1.25, eta=1.25)
-ldamodel.save("ldamodel_xkcd_1")
-# ldamodel = models.ldamodel.LdaModel.load("ldamodel_xkcd_2")
+ldamodel.save(path + phy_var.model_name_key)
+# ldamodel = models.ldamodel.LdaModel.load(path+phy_var.model_name_key)
 
 import numpy as np
 
@@ -30,7 +33,7 @@ print(2 ** (-perplexity))
 perp = ldamodel.bound(data)
 2 ** (-perp / float(87409))
 
-data2 = corpora.UciCorpus("docword.query.txt", "vocab.query.txt")
+data2 = corpora.UciCorpus(path + phy_var.docword_query_key, path + phy_var.vocab_query_key)
 
 
 def to_vec(x):
@@ -58,7 +61,7 @@ for i in range(1):
     P_tema_articles_vec = to_vec(P_tema_articles)
     # print(i + 2, P_tema_articles_vec)
 
-    print('косинус: ' , i)
+    print('косинус: ', i)
     sim = 1 - spatial.distance.cosine(P_tema_articles_vec, P_tema_query_vec)
     cos_sum.append(sim)
 print(cos_sum)

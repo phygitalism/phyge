@@ -1,8 +1,5 @@
 from requests import request
 from PhyArticle import PhyArticle
-import pandas as pd
-
-from readability.readability import Document
 from newspaper import Article
 
 
