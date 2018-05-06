@@ -1,10 +1,11 @@
 import json
 
 from PhyArticle import PhyArticle
-
+from PhyVariables import PhyVariables
 
 class ArticleSerializer:
-    path = 'articles.json'
+    phy_var = PhyVariables()
+    path = phy_var.articles_json_key
 
     @classmethod
     def serialize(cls, objects: list):

@@ -2,10 +2,11 @@ import re
 from nltk.corpus import stopwords
 import pymorphy2
 import json
+from PhyVariables import PhyVariables
 
 
 class CreateSearchQuery:
-    def __init__(self, path_query='query.json'):
+    def __init__(self, path_query=PhyVariables().query_json_key):
         self.path_query = path_query
         self.text_normalize = self.create_uci()
 

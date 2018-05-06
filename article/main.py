@@ -57,7 +57,7 @@ if __name__ == '__main__':
     print('\nCreate .uci:')
     save_folder = phy_var.save_folder_key
 
-    text_query_normalize = CreateSearchQuery().text_normalize
+    text_query_normalize = CreateSearchQuery(path_query=phy_var.query_json_key).text_normalize
     uci_dict = CreatedUci(text_query=text_query_normalize, article=articles, save_folder=save_folder)
     uci_dict.create_uci(uci_dict.text_query, model_name='query')
     uci_dict.create_uci(uci_dict.text_article, model_name='articles')
