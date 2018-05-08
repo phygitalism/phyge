@@ -21,12 +21,11 @@ print(dct)
 corpus = [dct.doc2bow(doc) for doc in documents]
 corpora.MmCorpus.serialize(path + '/deerwester.mm', corpus)  # store to disk, for later use
 
-lsi = models.LsiModel(corpus, id2word=dct, num_topics=2)
+lsi = models.LsiModel(corpus, id2word=dct, num_topics=100)
 
 vec_bow = dct.doc2bow(query_normalize)
 vec_lsi = lsi[vec_bow]  # convert the query to LSI space
-
 index = similarities.MatrixSimilarity(lsi[corpus])
 sims = index[vec_lsi]  # perform a similarity query against the corpus
 sims = sorted(enumerate(sims), key=lambda item: -item[1])
-print('answer ', sims[0])  # print sorted (document number, similarity score) 2-tuples
+print('answer ', sims)  # print sorted (document number, similarity score) 2-tuples

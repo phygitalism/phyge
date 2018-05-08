@@ -1,7 +1,7 @@
 class PhyVariables():
     def __init__(self):
-        self.ulrs_key = 'urls_two_topic.csv' #'url_test.csv'
-        self.save_folder_key = 'test_2_topis_20urls'
+        self.ulrs_key = 'urls_three_topic.csv' #'url_test.csv'
+        self.save_folder_key = 'test_3_topis_20urls'
         self.articles_json_key = 'articles.json'
         self.query_json_key = 'query.json'
 
