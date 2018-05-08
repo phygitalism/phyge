@@ -3,7 +3,8 @@ from ArticleFetcher import ArticleFetcher
 from ArticleSerializer import ArticleSerializer
 from CreateSearchQuery import CreateSearchQuery
 from CreatedUci import CreatedUci
-from PhyVariables import  PhyVariables
+from PhyVariables import PhyVariables
+
 phy_var = PhyVariables()
 
 
@@ -18,7 +19,7 @@ def create_df_words(articles):
 
 
 def load_data():
-    data_url = pd.read_csv(phy_var.ulrs)
+    data_url = pd.read_csv(phy_var.ulrs_key)
     urls_to_download = data_url.iloc[:, 0]
     saved_articles = ArticleSerializer.deserialize()
     existing_urls = [article.downloaded_from_url for article in saved_articles]
