@@ -18,8 +18,8 @@ def create_df_words(articles):
 
 
 def load_data():
-    data_url = pd.read_csv('url_test.csv')
-    urls_to_download = data_url.iloc[0:2, 0]
+    data_url = pd.read_csv(phy_var.ulrs)
+    urls_to_download = data_url.iloc[:, 0]
     saved_articles = ArticleSerializer.deserialize()
     existing_urls = [article.downloaded_from_url for article in saved_articles]
     filtred_urls = [x for x in urls_to_download if x not in existing_urls]

@@ -46,15 +46,16 @@ if __name__ == '__main__':
     dictionary = data.create_dictionary()
 
     number_of_topics = 2
-    ldamodel = models.ldamodel.LdaModel(data, id2word=dictionary, num_topics=number_of_topics, passes=20, alpha=1.25, eta=1.25)
+    # ldamodel = models.LsiModel(data, id2word=dictionary, num_topics=number_of_topics)
+    ldamodel = models.ldamodel.LdaModel(data, id2word=dictionary, num_topics=number_of_topics, passes=40, alpha=1.25, eta=1.25)
     ldamodel.save(path + phy_var.model_name_key)
     # Load model:
     # ldamodel = models.ldamodel.LdaModel.load(path+phy_var.model_name_key)
 
     print_top_words()
 
-    perplexity = calculate_perplexity(ldamodel)
-    print('\nperplexity = ', perplexity)
+    # perplexity = calculate_perplexity(ldamodel)
+    # print('\nperplexity = ', perplexity)
 
     data2 = corpora.UciCorpus(path + phy_var.docword_query_key, path + phy_var.vocab_query_key)
 
@@ -67,8 +68,8 @@ if __name__ == '__main__':
     print('\nраспределение тем для запроса в виде вектора:\n', P_tema_query_vec)
 
     cosines = []
-    for i in range(2):
-        P_tema_articles = ldamodel.get_document_topics(list(data)[i])
+    for article in list(data):
+        P_tema_articles = ldamodel.get_document_topics(article)
         P_tema_articles_vec = to_vec(P_tema_articles)
         sim = 1 - spatial.distance.cosine(P_tema_articles_vec, P_tema_query_vec)
         cosines.append(sim)
