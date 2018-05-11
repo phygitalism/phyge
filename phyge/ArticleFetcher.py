@@ -1,5 +1,5 @@
-from requests import request
-from PhyArticle import PhyArticle
+
+from Models.PhyArticle import PhyArticle
 from newspaper import Article
 
 
@@ -9,7 +9,8 @@ class ArticleFetcher:
         self.articles = list()
 
     def fetch(self):
-        for current_url in self.urls:
+        for number, current_url in enumerate(self.urls, start=1):
+            print(str.format('Downloading article {0} from {1} {2}', number, len(self.urls), current_url))
             article_html = Article(url=current_url, language='ru')
             article_html.download()
             # article_html = request(url=current_url, method='GET').text
