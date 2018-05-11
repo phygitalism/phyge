@@ -1,5 +1,7 @@
 from Models.BagOfWordsModel import BagOfWordsModel
 
+from TextNormalizer import TextNormalizer
+
 
 class Query:
     idKey = 'id'
@@ -17,4 +19,8 @@ class Query:
 
     def uci_representation(self, path):
         bag_of_words = BagOfWordsModel({self.id: self.text})
-        bag_of_words.to_uci(model_name='query', save_folder=path+'/uci')
+        bag_of_words.to_uci(model_name='query', save_folder=path + '/uci')
+
+    @property
+    def normalized_words(self) -> [str]:
+        return TextNormalizer.normalize(self.text)
