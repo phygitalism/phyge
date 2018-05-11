@@ -1,7 +1,7 @@
 import os.path
 import json
 
-from Models.PhyArticle import PhyArticle
+from Models.PhygeArticle import PhyArticle
 
 
 class ArticleSerializer:

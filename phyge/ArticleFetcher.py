@@ -1,5 +1,5 @@
 
-from Models.PhyArticle import PhyArticle
+from Models.PhygeArticle import PhyArticle
 from newspaper import Article
 
 

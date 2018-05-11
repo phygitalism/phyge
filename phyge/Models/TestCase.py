@@ -1,6 +1,6 @@
 import pandas as pd
 
-from Models.PhyVariables import PhyVariables
+from Models.PhygeVariables import PhyVariables
 
 from ArticleFetcher import ArticleFetcher
 from ArticleSerializer import ArticleSerializer
@@ -37,7 +37,7 @@ class TestCase:
         data = dict((key, value) for key, value in pairs)
 
         df_words_in_doc = pd.DataFrame(data)
-        df_words_in_doc.to_csv(str.format('{0}/test_{1}/{2}',PhyVariables.testsPath, str(self.id), PhyVariables.valuesFileKey),
+        df_words_in_doc.to_csv(str.format('{0}/test_{1}/{2}', PhyVariables.testsPath, str(self.id), PhyVariables.valuesFileKey),
                                index=False,
                                encoding='utf8')
         return df_words_in_doc

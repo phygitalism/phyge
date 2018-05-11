@@ -4,7 +4,7 @@ import os
 
 from ArticleSerializer import ArticleSerializer
 
-from Models.PhyVariables import PhyVariables
+from Models.PhygeVariables import PhyVariables
 from Models.TestCase import TestCase
 from Models.Query import Query
 
