@@ -1,4 +1,12 @@
-class PhyVariables():
+
+class PhyVariables:
+    testsPath = 'Tests'
+
+    urlsFileKey = 'urls.csv'
+    articlesFileKey = 'articles.json'
+    queriesFileKey = 'queries.json'
+    valuesFileKey = 'values.csv'
+
     def __init__(self):
         self.ulrs_key = 'urls_three_topic.csv' #'url_test.csv'
         self.save_folder_key = 'test_3_topis_20urls'
