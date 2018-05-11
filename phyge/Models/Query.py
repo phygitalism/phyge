@@ -17,6 +17,9 @@ class Query:
         self.title = obj.get(self.titleKey, None)
         self.summary = obj.get(self.summaryKey, None)
 
+    def __str__(self):
+        return ' '.join(self.normalized_words)
+
     def uci_representation(self, path):
         bag_of_words = BagOfWordsModel({self.id: self.text})
         bag_of_words.to_uci(model_name='query', save_folder=path + '/uci')

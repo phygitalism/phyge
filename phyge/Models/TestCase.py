@@ -1,6 +1,7 @@
 import pandas as pd
 
 from Models.PhygeVariables import PhyVariables
+from Models.BagOfWordsModel import BagOfWordsModel
 
 from ArticleFetcher import ArticleFetcher
 from ArticleSerializer import ArticleSerializer
@@ -31,6 +32,8 @@ class TestCase:
         if self.values is None:
             self.values = self.__create_df_words()
 
+        self.uci_representation(self.path)
+
     def __create_df_words(self):
         columns = [pd.Series(article.normalized_words) for article in self.articles]
         pairs = zip(range(len(self.articles)), columns)
@@ -41,3 +44,10 @@ class TestCase:
                                index=False,
                                encoding='utf8')
         return df_words_in_doc
+
+    def uci_representation(self, path):
+        pairs = zip(range(len(self.articles)), self.articles)
+        data = dict((key, value.normalized_words) for key, value in pairs)
+
+        bag_of_words = BagOfWordsModel(data)
+        bag_of_words.to_uci(model_name='articles', save_folder=path + '/uci')
