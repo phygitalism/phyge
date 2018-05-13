@@ -1,0 +1,6 @@
+1) Качаем ветку с гитхаба  
+2) Устанавливаем readability ОБЯЗАТЕЛЬНО С ГИТХАБА https://github.com/buriy/python-readability  
+3) Устанавливаем pymorphy2 https://github.com/kmike/pymorphy2  
+4) запускаем python, в нем импортируем ntlk и запускаем nltk.downloads('stopwords')  
+5) Находим в пользавателе /AppData, она скрытая. Дальше идем в /AppData/Roaming/ntlk_data/corpora/stopwords/ и заменяем файл russian на наш файл  
+6) Profit! 
