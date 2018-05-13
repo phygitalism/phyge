@@ -35,6 +35,6 @@ class Storage:
         if not os.path.isfile(queries_json_path):
             return list()
 
-        with open(queries_json_path, 'r') as file:
+        with open(queries_json_path, 'r', encoding='utf8') as file:
             queries = json.load(file)
             return [Query(obj) for obj in queries]
