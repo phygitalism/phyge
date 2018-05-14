@@ -2,7 +2,7 @@
 class PhyVariables:
     testsPath = 'Tests'
 
-    urlsFileKey = 'urls.csv'
+    urlsFileKey = 'urls.json'
     articlesFileKey = 'articles.json'
     queriesFileKey = 'queries.json'
     valuesFileKey = 'values.csv'
