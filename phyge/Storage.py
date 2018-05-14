@@ -29,7 +29,7 @@ class Storage:
             saved_articles = ArticleSerializer.deserialize(test_case_path + '/' + PhyVariables.articlesFileKey)
 
         if os.path.isfile(test_case_path + '/' + PhyVariables.valuesFileKey):
-            values = pd.read_csv(test_case_path + '/' + PhyVariables.valuesFileKey)
+            values = pd.read_csv(test_case_path + '/' + PhyVariables.valuesFileKey, dtype='unicode')
 
         return TestCase(test_case_id, {'urls': urls,
                                        'path': test_case_path,
