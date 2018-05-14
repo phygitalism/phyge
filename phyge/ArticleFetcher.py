@@ -13,8 +13,11 @@ class ArticleFetcher:
             print(str.format('Downloading article {0} from {1} {2}', number, len(self.urls), current_url))
             article_html = Article(url=current_url, language='ru')
             article_html.download()
+            if len(article_html.html) > 0:
             # article_html = request(url=current_url, method='GET').text
-            article = PhyArticle()
-            article.transform(article_html, current_url)
-            self.articles.append(article)
+                article = PhyArticle()
+                article.transform(article_html, current_url)
+                self.articles.append(article)
+            else:
+                print('article', number, 'doesn\'t parsed! Url:', current_url)
         return self.articles
