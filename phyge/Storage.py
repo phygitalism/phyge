@@ -10,11 +10,17 @@ from Models.Query import Query
 
 
 class Storage:
-
     def load_test_case(self, test_case_id):
         test_case_path = str.format('{0}/test_{1}', PhyVariables.testsPath, test_case_id)
-        data_url = pd.read_csv(test_case_path + '/' + PhyVariables.urlsFileKey)
-        urls = data_url.iloc[:, 0]
+        urls = []
+        with open(test_case_path + '/' + PhyVariables.urlsFileKey, 'r', encoding="utf8") as json_file:
+            data_urls = json.load(json_file)
+        for article in data_urls:
+            urls.append(article.get('url'))
+
+
+        # data_url = pd.read_csv(test_case_path + '/' + PhyVariables.urlsFileKey)
+        # urls = data_url.iloc[:, 0]
         queries = self.__load_queries(test_case_path + '/' + PhyVariables.queriesFileKey)
 
         saved_articles, values = list(), None
@@ -23,7 +29,7 @@ class Storage:
             saved_articles = ArticleSerializer.deserialize(test_case_path + '/' + PhyVariables.articlesFileKey)
 
         if os.path.isfile(test_case_path + '/' + PhyVariables.valuesFileKey):
-            values = pd.read_csv(test_case_path + '/' + PhyVariables.valuesFileKey)
+            values = pd.read_csv(test_case_path + '/' + PhyVariables.valuesFileKey, dtype='unicode')
 
         return TestCase(test_case_id, {'urls': urls,
                                        'path': test_case_path,

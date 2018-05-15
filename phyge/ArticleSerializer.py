@@ -10,8 +10,8 @@ class ArticleSerializer:
     def serialize(cls, objects: list, path):
         serialized = list(map(lambda x: x.serialized(), objects))
 
-        with open(path, 'w+') as file:
-            s = json.dumps(serialized)
+        with open(path, 'w+', encoding="utf8") as file:
+            s = json.dumps(serialized, indent=2, ensure_ascii=False)
             file.write(s)
 
     @classmethod
@@ -19,6 +19,6 @@ class ArticleSerializer:
         if not os.path.isfile(path):
             return list()
 
-        with open(path, 'r') as file:
+        with open(path, 'r', encoding="utf8") as file:
             articles = json.load(file)
             return [PhyArticle(obj) for obj in articles]

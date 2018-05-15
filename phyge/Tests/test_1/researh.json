@@ -1,0 +1,89 @@
+[[{'attachments': [{'fallback': '«Всплеск, который быстро затухает»',
+                    'from_url': 'https://nplus1.ru/material/2017/03/24/abel-prize',
+                    'id': 1,
+                    'service_icon': 'https://nplus1.ru/favicon.ico',
+                    'service_name': 'nplus1.ru',
+                    'text': 'Как с помощью открытия, заслужившего Абелевскую '
+                            'премию, починить древнеримский водопровод',
+                    'thumb_height': 310,
+                    'thumb_url': 'https://nplus1.ru/images/2017/03/24/8826a7b71939c3b8b03abef28a0e556b.jpg',
+                    'thumb_width': 300,
+                    'title': '«Всплеск, который быстро затухает»',
+                    'title_link': 'https://nplus1.ru/material/2017/03/24/abel-prize'}],
+   'text': '<#C3RLT3U49|cps-mathengine> Абеля (нобелевка в математике) дали '
+           'вейвлетам. Интересная короткая статья на пальцах про то, что это '
+           'такое\n'
+           '<https://nplus1.ru/material/2017/03/24/abel-prize>',
+   'ts': '1490439299.146584',
+   'type': 'message',
+   'user': 'U301UR5SR'}],
+ [{'attachments': [{'fallback': 'Building Apps for Windows: Microsoft '
+                                'Announces Simplygon Cloud; Optimizes Mixed '
+                                'Reality Development - Building Apps for '
+                                'Windows',
+                    'from_url': 'https://blogs.windows.com/buildingapps/2017/12/07/microsoft-announces-simplygon-cloud-optimizes-mixed-reality-development/',
+                    'id': 1,
+                    'image_bytes': 47128,
+                    'image_height': 250,
+                    'image_url': 'https://winblogs.azureedge.net/win/2017/12/42faa6abe1f3428211da00b60e498afe.jpg',
+                    'image_width': 698,
+                    'service_icon': 'https://winblogs.azureedge.net/win/2016/12/cropped-Windows-logo2-180x180.png',
+                    'service_name': 'Building Apps for Windows',
+                    'text': 'Earlier this year, we announced the acquisition '
+                            'of Simplygon, a leader in 3D model optimization '
+                            'based in southern Sweden. As we continue our '
+                            'journey to bring the benefits of mixed reality to '
+                            'everyone, Simplygon is an important accelerant '
+                            'that makes it easier, faster, and cheaper to '
+                            'develop in 3D. Introducing Simplygon Cloud Today, '
+                            'I am …',
+                    'title': 'Microsoft Announces Simplygon Cloud; Optimizes '
+                             'Mixed Reality Development - Building Apps for '
+                             'Windows',
+                    'title_link': 'https://blogs.windows.com/buildingapps/2017/12/07/microsoft-announces-simplygon-cloud-optimizes-mixed-reality-development/',
+                    'ts': 1512666051}],
+   'reactions': [{'count': 1, 'name': 'star', 'users': ['U1229H3CJ']}],
+   'text': 'В начале года Microsoft купила шведскую компанию Simplygon, '
+           'разрабатывающие технологии оптимизации трехмерных моделей. После '
+           'некоторого периода внутренней инкубации, теперь технологии '
+           'Simplygon доступны в виде облачного сервиса - Simplygon Cloud! На '
+           'вход принимаются GLTF, FBX и OBJ, на выходе модели для HoloLens и '
+           'Windows Mixed Reality, ARKit на iOS, ARCore на Android, и WebGL '
+           'для браузеров.  '
+           '<https://blogs.windows.com/buildingapps/2017/12/07/microsoft-announces-simplygon-cloud-optimizes-mixed-reality-development/> '
+           '#ar #mr #vr #graphics #optimization\n'
+           '\n'
+           'p.s. Работает в вариантах Azure и Azure Stack',
+   'ts': '1512725124.000104',
+   'type': 'message',
+   'user': 'U11HN6K61'},
+  {'text': '<@U1TH2FLLA> нужно будет посмотреть',
+   'ts': '1512725131.000472',
+   'type': 'message',
+   'user': 'U11HN6K61'},
+  {'attachments': [{'fallback': 'www.interface.ru: Нейросеть NVIDIA превратила '
+                                'зиму в лето',
+                    'from_url': 'http://www.interface.ru/home.asp?artId=39518',
+                    'id': 1,
+                    'image_bytes': 226505,
+                    'image_height': 250,
+                    'image_url': 'http://www.interface.ru/iarticle/img/39518_42017721.jpg',
+                    'image_width': 349,
+                    'service_name': 'www.interface.ru',
+                    'text': 'Создан алгоритм переноса деталей между '
+                            'изображениями, основанный на обучении без '
+                            'учителя, что облегчает сбор данных для его '
+                            'тренировки.',
+                    'title': 'Нейросеть NVIDIA превратила зиму в лето',
+                    'title_link': 'http://www.interface.ru/home.asp?artId=39518'}],
+   'reactions': [{'count': 1, 'name': 'scream_cat', 'users': ['U4QQQHXU7']},
+                 {'count': 1, 'name': 'star', 'users': ['U1229H3CJ']},
+                 {'count': 1, 'name': '+1', 'users': ['U29FHCWFL']}],
+   'text': 'ебать!) <http://www.interface.ru/home.asp?artId=39518>',
+   'ts': '1512729958.000137',
+   'type': 'message',
+   'user': 'U11HN6K61'},
+  {'text': 'тоже интересно <https://www.carpetvr.com>',
+   'ts': '1512730205.000127',
+   'type': 'message',
+   'user': 'U11HN6K61'}]]
