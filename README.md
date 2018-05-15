@@ -1,31 +1,22 @@
 # MLX
 
-## Update 26.04.18
-Phydge	
-1. Парсинг сайта, достать весь тест (без тулбаров)	
-2. Предъобработка теста - убрать знаки препинания, картинки, код, таблицы, начальная форма слов, убрать стоп-слова. Максимально увеличиваем колличество значивых слов	
-3. Читаем про word_to_vec https://events.yandex.ru/events/science-seminars/26-oct-2016/	
-4. Подумать про сокращения типа VR - виртуальная реальность	
-5. Сколько хранить речи? Поиск по слову «Посмотри»	
+## Instalation for Phydge
+*Версии модулей:* 
+Версия Python 3.6.4
+pymorphy2                0.8
+beautifulsoup4           4.6.0
+pandas                   0.22.0
+jsonschema               2.6.0
+gensim                   3.4.0
+readability-lxml         0.6.2 / readability_lxml-0.7-py3.6.
 
-## Update 30.03.18
-- Задачки остаются. Посмотреть, попробовать реальзовать, пример с простой нейронной сетью.
-- Сделать план доклада (постоянно обновляется, палим ***plan_of_the_report.md***). Посмотреть:
-	- [первые две лекции с Coursera про отток клиентов](https://www.coursera.org/learn/data-analysis-applications/lecture/V33wg/analiz-poviedieniia-pol-zovatieliei?authMode=signup)
-	- виды нейронных связей по [табличке](https://towardsdatascience.com/the-mostly-complete-chart-of-neural-networks-explained-3fb6f2367464),  некоторые описать с примерами использования
-	- **к среде накидать основные слайды**
-- найти примеры с кластеризацией с учителем и без. *Желательно, которые можно повторить*
-- найти датасеты с данными сотовыми пользователями. Проанализировать какие бывают параметры там (тоже можно смотреть курс на Coursera)
-	- сделать список датасетов
+Readability-lxml нужно устанавливать из источников с **https://github.com/buriy/python-readability** , тк там последняя версия. Какие для этого нужны команды в терминале - смотрим **requirenments.txt** . Все остальное ставится через  **pip**.
 
-## Update 28.03.18
-- Решить задачу из Kaggle про Титаник, используя:
-	- [sklearn logic_regression](https://www.dataquest.io/blog/kaggle-fundamentals/);
-	- tensorflow.estimator.LinearRegressor;
-	- Random Forest TensorFlow/Sklearn;
-- Доклад на Research 8.04.18 про:
-	- рассмотренные инструменты, либы, алгоритмы и отличие ML от нейронок
-- Запланировать хакатон, рассмотреть на нем три направления: ЦУП, техъячейка, Билайн;
-	- *mustread*: [Как идентифицировать спутник на орбите](https://geektimes.ru/post/299395/)
-- Найти открытые датасеты
-	- [Список открытых источников данных, на которых можно найти бесплатные датасеты](https://github.com/demidovakatya/vvedenie-mashinnoe-obuchenie/blob/master/datasets.md)
+## p.s.
+ - Читаем про word_to_vec https://events.yandex.ru/events/science-seminars/26-oct-2016/
+ - Подумать про сокращения типа VR - виртуальная реальность
+ - Сколько хранить речи? Поиск после активационного слова
+ - виды нейронных связей по [табличке](https://towardsdatascience.com/the-mostly-complete-chart-of-neural-networks-explained-3fb6f2367464),  некоторые описать с примерами использования
+ - Техъячейка *mustread*: [Как идентифицировать спутник на орбите](https://geektimes.ru/post/299395/)
+ - Найти открытые датасеты
+ - [Список открытых источников данных, на которых можно найти бесплатные датасеты](https://github.com/demidovakatya/vvedenie-mashinnoe-obuchenie/blob/master/datasets.md)
