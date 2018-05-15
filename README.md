@@ -2,13 +2,13 @@
 
 ## Instalation for Phydge
 *Версии модулей:* 
-Версия Python 3.6.4
-pymorphy2                0.8
-beautifulsoup4           4.6.0
-pandas                   0.22.0
-jsonschema               2.6.0
-gensim                   3.4.0
-readability-lxml         0.6.2 / readability_lxml-0.7-py3.6.
+Версия Python 3.6.4     
+pymorphy2                0.8        
+beautifulsoup4           4.6.0      
+pandas                   0.22.0     
+jsonschema               2.6.0      
+gensim                   3.4.0      
+readability-lxml         0.6.2 / readability_lxml-0.7-py3.6.        
 
 Readability-lxml нужно устанавливать из источников с **https://github.com/buriy/python-readability** , тк там последняя версия. Какие для этого нужны команды в терминале - смотрим **requirenments.txt** . Все остальное ставится через  **pip**.
 

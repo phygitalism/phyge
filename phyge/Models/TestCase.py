@@ -8,7 +8,6 @@ from ArticleSerializer import ArticleSerializer
 
 
 class TestCase:
-
     def __init__(self, id, obj: dict):
         self.id = id
         self.path = obj.get('path', None)
@@ -27,12 +26,12 @@ class TestCase:
 
             self.articles += downloaded_articles
 
-        ArticleSerializer.serialize(self.articles, self.path + '/' + PhyVariables.articlesFileKey)
+        ArticleSerializer.serialize(self.articles, self.path + '/tmp/' + PhyVariables.articlesFileKey)
 
         if self.values is None:
             self.values = self.__create_df_words()
 
-        self.uci_representation(self.path)
+        self.uci_representation(self.path + '/tmp/')
 
     def __create_df_words(self):
         columns = [pd.Series(article.normalized_words) for article in self.articles]
@@ -40,7 +39,8 @@ class TestCase:
         data = dict((key, value) for key, value in pairs)
 
         df_words_in_doc = pd.DataFrame(data)
-        df_words_in_doc.to_csv(str.format('{0}/test_{1}/{2}', PhyVariables.testsPath, str(self.id), PhyVariables.valuesFileKey),
+        df_words_in_doc.to_csv(str.format('{0}/test_{1}/{2}/{3}', PhyVariables.testsPath, str(self.id), '/tmp/',
+                                          PhyVariables.valuesFileKey),
                                index=False,
                                encoding='utf8')
         return df_words_in_doc
