@@ -33,7 +33,7 @@ if __name__ == '__main__':
             return 0
 
     TEST_NUMBER = 3
-    TOPIC_NUMBER = 100
+    TOPIC_NUMBER = 300
 
     #sys.stdout = open('out.txt', 'w')
 
@@ -93,4 +93,8 @@ if __name__ == '__main__':
     print("LSI: ",TRUE_ANSWER_NUMBER_LSI / QUERY_NUMBER )
     print("LDA: ", TRUE_ANSWER_NUMBER_LDA / QUERY_NUMBER)
 
-
+    out_file = open('info.txt', 'a')
+    out_file.write(
+        'Number of topics: ' + str(TOPIC_NUMBER) + '\nLSI:' + str(TRUE_ANSWER_NUMBER_LSI / QUERY_NUMBER)+
+        '\nLDA: ' +  str(TRUE_ANSWER_NUMBER_LDA / QUERY_NUMBER)+ '\n--------------\n')
+    out_file.close()
