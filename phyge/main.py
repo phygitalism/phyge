@@ -4,7 +4,7 @@ from Storage import Storage
 
 if __name__ == '__main__':
     storage = Storage()
-    test_case = storage.load_test_case(1)
+    test_case = storage.load_test_case(3)
     test_case.setup()
     print('\nTitle parsed article and url:')
     for article in test_case.articles:

@@ -4,6 +4,8 @@ from gensim import corpora, models, similarities
 from Models.PhygeArticle import PhyArticle
 from Storage import Storage
 
+# import sys, os # Для записи в файл
+
 if __name__ == '__main__':
 
     def find_article(model_corpus, query_vec):
@@ -25,11 +27,15 @@ if __name__ == '__main__':
     def comparison_answer(model_answer):
         if model_answer['url'] == true_answer:
             print('Article found correctly!')
+            return 1
         else:
             print('Article found NOT correctly! the first five articles:')
+            return 0
 
-    TEST_NUMBER = 2
+    TEST_NUMBER = 3
     TOPIC_NUMBER = 100
+
+    #sys.stdout = open('out.txt', 'w')
 
     storage = Storage()
     test_case = storage.load_test_case(TEST_NUMBER)
@@ -63,6 +69,9 @@ if __name__ == '__main__':
         lda.save('ldamodel')
 
     QUERY_NUMBER = len(test_case.queries)
+
+    TRUE_ANSWER_NUMBER_LSI,TRUE_ANSWER_NUMBER_LDA = 0,0
+
     for i, query in enumerate(test_case.queries):
         print('QUERY NUMBER ', i + 1, '/', QUERY_NUMBER )
         query_normalize = query.normalized_words
@@ -73,15 +82,15 @@ if __name__ == '__main__':
         vec_bow_query = dct.doc2bow(query_normalize)
         lsi_answer = find_article(lsi[corpus], lsi[vec_bow_query])
         pprint(lsi_answer[0:2])
-        comparison_answer(lsi_answer[0])
+        TRUE_ANSWER_NUMBER_LSI+= comparison_answer(lsi_answer[0])
 
         lda_answer = find_article(lda[corpus], lda[vec_bow_query])
         pprint(lda_answer[0:2])
-        comparison_answer(lda_answer[0])
+        TRUE_ANSWER_NUMBER_LDA += comparison_answer(lda_answer[0])
         print('------------------------------------\n')
         # dct.save(path + '/deerwester.dict')
         # corpora.MmCorpus.serialize(path + '/deerwester.mm', corpus)  # store to disk, for later use
-
-
+    print("LSI: ",TRUE_ANSWER_NUMBER_LSI / QUERY_NUMBER )
+    print("LDA: ", TRUE_ANSWER_NUMBER_LDA / QUERY_NUMBER)
 
 
