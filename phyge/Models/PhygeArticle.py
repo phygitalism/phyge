@@ -35,4 +35,5 @@ class PhyArticle:
     def serialized(self):
         return {'url': self.downloaded_from_url,
                 'title': self.title,
+                'text': self.text,
                 'normalized_words': self.normalized_words}
