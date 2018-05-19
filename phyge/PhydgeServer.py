@@ -1,8 +1,7 @@
 from flask import Flask, request, Response
-from TematicModels import TematicModels
-from pprint import pprint
-
 import json
+from pprint import pprint
+from TematicModels import TematicModels
 
 app = Flask(__name__)
 logging_enabled = False
@@ -30,7 +29,7 @@ def search_articles():
     print('\nLDA answer:')
     pprint(lda_answer)
     models_answer = dict(lsi=lsi_answer, lda=lda_answer)
-    return Response(json.dumps(models_answer), status=200, mimetype='application/json')
+    return Response(json.dumps(models_answer, ensure_ascii=False), status=200, mimetype='application/json')
 
 
 @app.route('/check_answer', methods=['POST'])
