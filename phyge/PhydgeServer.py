@@ -21,12 +21,14 @@ def search_articles():
     query_text = search_articles["text"]
     amount = search_articles["amount"]
     tematic_models = TematicModels(TEST_NUMBER=3)
-    lsi_answer = tematic_models.find_article(query_text, model='lsi', amount=amount)
+    query_vec = tematic_models.load_query_to_vec(query_text)
+    lsi_answer = tematic_models.find_article(query_vec, model='lsi', amount=amount)
     pprint(lsi_answer)
 
-    lda_answer = tematic_models.find_article(query_text, model='lda', amount=amount)
+    lda_answer = tematic_models.find_article(query_vec, model='lda', amount=amount)
     pprint(lda_answer)
     response_body = dict(lsi=lsi_answer, lda=lda_answer)
+
     return Response(json.dumps(response_body), status=200, mimetype='application/json')
 
 
