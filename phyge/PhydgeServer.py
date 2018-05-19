@@ -16,21 +16,35 @@ def index():
 
 @app.route('/search_articles', methods=['POST'])
 def search_articles():
+    global models_answer
     search_articles = request.json
-    print(search_articles)
-    query_text = search_articles["text"]
+    print('search_articles: ', search_articles)
+    query_text = search_articles["query"]
     amount = search_articles["amount"]
-    tematic_models = TematicModels(TEST_NUMBER=3)
     query_vec = tematic_models.load_query_to_vec(query_text)
     lsi_answer = tematic_models.find_article(query_vec, model='lsi', amount=amount)
+    print('\nLSI answer:')
     pprint(lsi_answer)
 
     lda_answer = tematic_models.find_article(query_vec, model='lda', amount=amount)
+    print('\nLDA answer:')
     pprint(lda_answer)
-    response_body = dict(lsi=lsi_answer, lda=lda_answer)
+    models_answer = dict(lsi=lsi_answer, lda=lda_answer)
+    return Response(json.dumps(models_answer), status=200, mimetype='application/json')
 
+
+@app.route('/check_answer', methods=['POST'])
+def check_answer():
+    global models_answer
+    check_answer = request.json
+    log_of_result.append(dict(check_answer, **models_answer))
+    pprint(log_of_result)
+
+    response_body = dict(control='Answer saved.')
     return Response(json.dumps(response_body), status=200, mimetype='application/json')
 
 
 if __name__ == "__main__":
+    log_of_result = []
+    tematic_models = TematicModels(test_number=3)
     app.run(host='0.0.0.0', port=5050, threaded=True)
