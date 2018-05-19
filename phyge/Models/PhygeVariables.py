@@ -6,3 +6,5 @@ class PhyVariables:
     articlesFileKey = 'articles.json'
     queriesFileKey = 'queries.json'
     valuesFileKey = 'values.csv'
+    modelLsiKey = 'phydge.lsi'
+    modelLdaKey = 'phydge.lda'
