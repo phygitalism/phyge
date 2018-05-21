@@ -7,8 +7,9 @@ class TextNormalizer:
     @classmethod
     def normalize(cls, text):
         text_tokens = cls.__tokenize_text(text)
-        russian_words = re.compile('[А-Яа-я]+').findall(' '.join(text_tokens))
-        russian_words = cls.__normalize_tokens(russian_words)
+        # russian_words = re.compile('[А-Яа-я]+').findall(' '.join(text_tokens))
+        # russian_words = cls.__normalize_tokens(russian_words)
+        russian_words = cls.__normalize_tokens(text_tokens)
         stopwords = cls.stopwords()
         return list(filter(lambda x: x not in stopwords and len(x) > 1, russian_words))
 
