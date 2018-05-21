@@ -25,6 +25,6 @@ class TextNormalizer:
 
     @classmethod
     def stopwords(cls):
-        with open('Resources/stopwords/russian', 'r', encoding='utf8') as file:
+        with open('Resources/stopwords/russian_english', 'r', encoding='utf8') as file:
             lines = file.readlines()
             return [line.replace('\n', '') for line in lines]
