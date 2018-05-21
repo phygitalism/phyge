@@ -2,6 +2,7 @@ from flask import Flask, request, Response
 import json
 from pprint import pprint
 from TematicModels import TematicModels
+from Models.PhygeVariables import PhyVariables
 
 app = Flask(__name__)
 logging_enabled = False
@@ -45,5 +46,5 @@ def check_answer():
 
 if __name__ == "__main__":
     log_of_result = []
-    tematic_models = TematicModels(test_number=3)
+    tematic_models = TematicModels(test_number=PhyVariables.currentTestKey)
     app.run(host='0.0.0.0', port=5050, threaded=True)

@@ -4,6 +4,7 @@ from gensim import corpora, models, similarities
 from Models.PhygeArticle import PhyArticle
 from Models.Query import Query
 from Storage import Storage
+from Models.PhygeVariables import PhyVariables
 # import sys, os # Для записи в файл
 
 
@@ -86,7 +87,7 @@ if __name__ == '__main__':
     query_text = search_articles['text']
     amount = search_articles['amount']
 
-    tematic_models = TematicModels(test_number=4)
+    tematic_models = TematicModels(test_number=PhyVariables.currentTestKey)
     query_text = tematic_models.test_case.queries[0].text
     print('TRUE TITLE', tematic_models.test_case.queries[0].title)
     query_vec = tematic_models.load_query_to_vec(query_text)
