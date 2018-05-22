@@ -9,7 +9,7 @@ from Models.PhygeVariables import PhyVariables
 
 
 class TematicModels:
-    TOPIC_NUMBER = 300
+    TOPIC_NUMBER = 120
 
     def __init__(self, test_number=1):
         self.storage = Storage(test_number)
@@ -76,7 +76,7 @@ class TematicModels:
     def __train_LDA_model(self):
         print('\nLDA model: Обучаем модель...')
         start_time_LDA = time.time()
-        lda = models.ldamodel.LdaModel(self.corpus, id2word=self.dct, num_topics=self.TOPIC_NUMBER, passes=20)
+        lda = models.ldamodel.LdaModel(self.corpus, id2word=self.dct, num_topics=self.TOPIC_NUMBER, passes=20, iterations=50)
         print('Learning time:', round((time.time() - start_time_LDA), 3), 's')
         return lda
 
