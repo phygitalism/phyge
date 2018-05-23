@@ -11,12 +11,13 @@ from ArticleFetcher import ArticleFetcher
 
 
 class TematicModels:
-    TOPIC_NUMBER = 120
+    TOPIC_NUMBER = 300
 
     def __init__(self, test_number=1):
         self.storage = Storage(test_number)
         self.corpus = self.__load_corpus()
-
+        self.dct.save(self.storage.tmp_path + '/deerwester.dict')
+        corpora.MmCorpus.serialize(self.storage.tmp_path + '/deerwester.mm', self.corpus)
         self.lsi = self.storage.load_LSI_model()
         self.lda = self.storage.load_LDA_model()
         self.train_models()
