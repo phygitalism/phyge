@@ -1,7 +1,7 @@
 
 class PhyVariables:
     testsPath = 'Tests'
-    currentTestKey = 4
+    currentTestKey = 7
     urlsFileKey = 'urls.json'
     # urlsFileKey = 'en_slack_urls_clear.json'
     articlesFileKey = 'articles.json'
