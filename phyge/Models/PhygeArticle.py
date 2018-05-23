@@ -22,8 +22,9 @@ class PhyArticle:
     def __str__(self):
         return self.title
 
-    def transform(self, article_html, downloaded_from_url):
+    def transform(self, article_html, downloaded_from_url, language):
         self.downloaded_from_url = downloaded_from_url
+        self.language = language
         self.readable_html = Document(article_html.html).summary()
         self.title = Document(article_html.html).short_title()
         self.text = self.__transform_to_single_line(self.readable_html)

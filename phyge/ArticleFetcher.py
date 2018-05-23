@@ -4,7 +4,8 @@ from newspaper import Article
 
 class ArticleFetcher:
     def __init__(self, urls):
-        self.urls = urls
+        self.urls = [x.get('url') for x in urls]
+        self.language = [x.get('language') for x in urls]
         self.articles = list()
         self.flag = False
 
@@ -19,7 +20,7 @@ class ArticleFetcher:
             if len(article_html.html) > 0:
                 # article_html = request(url=current_url, method='GET').text
                 article = PhyArticle()
-                article.transform(article_html, current_url)
+                article.transform(article_html, current_url, self.language[number-1])
                 if len(article.normalized_words) > 0:
                     self.articles.append(article)
                     self.flag = True

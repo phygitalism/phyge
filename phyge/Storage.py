@@ -25,12 +25,10 @@ class Storage:
             os.makedirs(tmp_path)
 
         urls = []
-        language = []
         with open(self.test_case_path + '/' + PhyVariables.urlsFileKey, 'r', encoding="utf8") as json_file:
             data_urls = json.load(json_file)
         for article in data_urls:
-            urls.append(article.get('url'))
-            language.append(article.get('language', ''))
+            urls.append(dict(url=article.get('url'), language=article.get('language', '')))
 
         queries = self.__load_queries(self.test_case_path + '/' + PhyVariables.queriesFileKey)
 
@@ -42,12 +40,11 @@ class Storage:
         if os.path.isfile(self.tmp_path + PhyVariables.valuesFileKey):
             values = pd.read_csv(self.tmp_path + PhyVariables.valuesFileKey, dtype='unicode')
 
-        return TestCase(self.test_case_id, {'urls': urls,
+        return TestCase(self.test_case_id, {'urls':  urls,
                                             'path': self.test_case_path,
                                             'queries': queries,
                                             'articles': saved_articles,
-                                            'values': values,
-                                            'language': language})
+                                            'values': values})
 
     def __load_queries(self, queries_json_path) -> [Query]:
         if not os.path.isfile(queries_json_path):
