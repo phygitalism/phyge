@@ -5,6 +5,8 @@ from Models.PhygeArticle import PhyArticle
 from Models.Query import Query
 from Storage import Storage
 from Models.PhygeVariables import PhyVariables
+
+from ArticleFetcher import ArticleFetcher
 # import sys, os # Для записи в файл
 
 
@@ -26,6 +28,19 @@ class TematicModels:
         if self.lda is None:
             self.lda = self.__train_LDA_model()
             self.storage.save_lda_model(self.lda)
+
+        if self.test_case.downloaded_articles is not None and self.lsi is not None:
+            print("Найдены новые статьи \n")
+            #print(self.lsi)
+            #print(self.corpus)
+            self.lsi.add_documents(self.corpus)
+            #print(self.lsi)
+            #self.storage.save_lsi_model(self.lsi.add_documents(self.corpus))
+            print("Новые статьи добавлены в модель lsi\n")
+        if self.test_case.downloaded_articles is not None and self.lda is not None:
+            print("Найдены новые статьи \n")
+            self.lda.update(self.corpus)
+            print("Новые статьи добавлены в модель lda\n")
 
     def find_article(self, query_text, model='lsi', amount=5):
         if model == 'lsi':
@@ -59,7 +74,10 @@ class TematicModels:
     def __load_corpus(self):
         self.test_case = self.storage.load_test_case()
         self.test_case.setup()
-        df = self.test_case.values
+        if self.test_case.downloaded_articles is not None:
+            df = self.test_case.downloaded_articles
+        else:
+            df = self.test_case.values
         documents = []
         for columns in df.columns:
             documents.append(df[columns].dropna().tolist())

@@ -15,6 +15,7 @@ class TestCase:
         self.articles = obj.get('articles', list())
         self.queries = obj.get('queries', list())
         self.values = obj.get('values', None)
+        self.downloaded_articles = None
 
     def setup(self):
         if len(self.articles) != len(self.urls):
@@ -22,14 +23,13 @@ class TestCase:
             filtred_urls = [x for x in self.urls if x not in existing_urls]
 
             article_fetcher = ArticleFetcher(filtred_urls)
-            downloaded_articles = article_fetcher.fetch()
+            self.downloaded_articles = article_fetcher.fetch()
 
-            self.articles += downloaded_articles
-
+            self.articles += self.downloaded_articles
+            self.downloaded_articles = self.__create_df_words()
         ArticleSerializer.serialize(self.articles, self.path + '/tmp/' + PhyVariables.articlesFileKey)
 
-        if self.values is None:
-            self.values = self.__create_df_words()
+        self.values = self.__create_df_words()
 
         self.uci_representation(self.path + '/tmp/')
 
