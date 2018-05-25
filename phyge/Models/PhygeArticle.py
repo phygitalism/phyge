@@ -3,7 +3,11 @@ from bs4 import BeautifulSoup
 
 from TextNormalizer import TextNormalizer
 
-#from googletrans import Translator
+import re as re  # для удаления символов юникода из названия
+from googletrans import Translator
+from math import ceil
+
+
 
 class PhyArticle:
     def __init__(self, obj=None):
@@ -35,12 +39,12 @@ class PhyArticle:
 
         if self.language == 'en':
             try:
-                from googletrans import Translator
+                # from googletrans import Translator
                 print('Translate')
                 if len(self.text) < 5000:
                     self.text = Translator().translate(self.text, dest='ru').text
                 else:
-                    from math import ceil
+                    # from math import ceil
                     block_number = ceil(len(self.text) / 5000) # Определяем количество блоков, которые будем переводить
                     translated_text = ''
                     for i in range(block_number):
@@ -49,7 +53,7 @@ class PhyArticle:
             except:
                 print('Error while translating')
                 with open('out_info.txt', 'a') as info:
-                    info.write("Cann't be translated " + self.title + "\n")
+                    info.write("Cann't be translated " + re.sub(r'[^\x00-\x7f]', '', self.title) + " " + self.downloaded_from_url + "\n")
 
         self.normalized_words = TextNormalizer.normalize(self.text)
 
