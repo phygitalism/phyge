@@ -105,13 +105,6 @@
     "chanel": "research"
   },
   {
-    "id": 17,
-    "data": "2017-10-22",
-    "title": "Чип от AdHawk изменит размер VR / AR устройств",
-    "url": "https://vr-j.ru/news/chip-ot-adhawk-izmenit-razmer-vr-ar-ustrojstv/",
-    "chanel": "research"
-  },
-  {
     "id": 18,
     "data": "2017-12-09",
     "title": "Руководство по дополненной реальности",
@@ -602,13 +595,6 @@
     "chanel": "cps-mbd"
   },
   {
-    "id": 99,
-    "data": "2017-03-12",
-    "title": "GMP – 2. Модельно-ориентированное проектирование",
-    "url": "https://www.youtube.com/watch?v=L234tkEHKHw",
-    "chanel": "cps-mbd"
-  },
-  {
     "id": 100,
     "data": "2017-04-11",
     "title": "Трехдневная конференция Технологии разработки и отладки сложных технических систем",
@@ -858,13 +844,6 @@
     "data": "2017-12-05",
     "title": "Аквапарк | Общественно-культурный центр \"Галактика\"",
     "url": "http://galaxy-centre.ru/aquapark/",
-    "chanel": "holidays"
-  },
-  {
-    "id": 146,
-    "data": "2017-12-18",
-    "title": "1712_сочифорния",
-    "url": "https://yadi.sk/d/7F3RjRsk3Qfwmo",
     "chanel": "holidays"
   },
   {
@@ -1253,13 +1232,6 @@
     "chanel": "ml"
   },
   {
-    "id": 204,
-    "data": "2017-06-17",
-    "title": "Олег Чумаков (Luden.io) - Машинное обучение для разработчиков игр",
-    "url": "https://www.youtube.com/watch?v=z6uhzzrj5p4",
-    "chanel": "ml"
-  },
-  {
     "id": 205,
     "data": "2017-09-27",
     "title": "OPENTadpole: первое кибернетическое животное",
@@ -1376,13 +1348,6 @@
     "data": "2017-11-01",
     "title": "Настраиваем VM Instance Google Cloud для задач машинного обучения",
     "url": "https://habrahabr.ru/post/341446/",
-    "chanel": "ml"
-  },
-  {
-    "id": 225,
-    "data": "2018-04-08",
-    "title": "Генерируем уровни для игры с помощью нейросетей - OtherMedia",
-    "url": "http://othermedia.info/?p=3494",
     "chanel": "ml"
   },
   {
@@ -1806,13 +1771,6 @@
     "chanel": "random"
   },
   {
-    "id": 290,
-    "data": "2017-08-10",
-    "title": "Что такое ICO и как это может перевернуть венчурную индустрию?",
-    "url": "https://www.youtube.com/watch?v=can3fJ4LCzI&amp;feature=share",
-    "chanel": "random"
-  },
-  {
     "id": 291,
     "data": "2017-04-25",
     "title": "Видео: подробная демонстрация работы очков дополненной реальности Meta 2 — Голографика",
@@ -1838,13 +1796,6 @@
     "data": "2017-04-08",
     "title": "Apple запатентовала дисплей из плетёной ткани",
     "url": "https://3dnews.ru/924661",
-    "chanel": "random"
-  },
-  {
-    "id": 295,
-    "data": "2017-04-28",
-    "title": "Минобороны провело учения на тренажёрах виртуальной реальности",
-    "url": "https://youtu.be/619RoJyrflM",
     "chanel": "random"
   },
   {
@@ -2013,13 +1964,6 @@
     "data": "2018-03-13",
     "title": "Конкуренция и отвага: чего не хватает России в космическом бизнесе",
     "url": "http://www.forbes.ru/tehnologii/358043-konkurenciya-i-otvaga-chego-ne-hvataet-rossii-v-kosmicheskom-biznese?utm_source=telegram&utm_medium=social&utm_campaign=targetings-forbes-tech-rus&utm_content=Технологии#0_8_3637_15023_1406_183101764",
-    "chanel": "project-tzup"
-  },
-  {
-    "id": 321,
-    "data": "2018-03-29",
-    "title": "Космический Интернет: SpaceX Starlink vs OneWeb | Море Ясности",
-    "url": "https://www.youtube.com/watch?time_continue=489&amp;v=0kCmR_u-Lx4",
     "chanel": "project-tzup"
   },
   {
