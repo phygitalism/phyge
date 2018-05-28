@@ -27,6 +27,7 @@ class TestCase:
 
         ArticleSerializer.serialize(self.articles, self.path + '/tmp/' + PhyVariables.articlesFileKey)
         if len(self.downloaded_articles) > 0:
+            self.downloaded_articles = self.__create_df_words()
             self.values = self.__create_df_words()
         self.uci_representation(self.path + '/tmp/')
 
