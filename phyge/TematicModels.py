@@ -4,6 +4,8 @@ from gensim import corpora, models, similarities
 from Models.PhygeArticle import PhyArticle
 from Storage import Storage
 
+# import sys, os # Для записи в файл
+
 if __name__ == '__main__':
 
     def find_article(model_corpus, query_vec):
@@ -25,41 +27,74 @@ if __name__ == '__main__':
     def comparison_answer(model_answer):
         if model_answer['url'] == true_answer:
             print('Article found correctly!')
+            return 1
         else:
             print('Article found NOT correctly! the first five articles:')
+            return 0
 
+    TEST_NUMBER = 3
+    TOPIC_NUMBER = 300
+
+    #sys.stdout = open('out.txt', 'w')
 
     storage = Storage()
-    test_case = storage.load_test_case(1)
+    test_case = storage.load_test_case(TEST_NUMBER)
     test_case.setup()
     df = test_case.values
-    query_normalize = test_case.queries[0].normalized_words
-
-    true_answer = test_case.queries[0].url
-    print('TRUE URL = ', true_answer, ', Title:', test_case.queries[0].title)
 
     documents = []
     for columns in df.columns:
         documents.append(df[columns].dropna().tolist())
     dct = corpora.Dictionary(documents)
-    vec_bow_query = dct.doc2bow(query_normalize)
-    # dct.save(path + '/deerwester.dict')
     corpus = [dct.doc2bow(doc) for doc in documents]
-    # corpora.MmCorpus.serialize(path + '/deerwester.mm', corpus)  # store to disk, for later use
 
     print('\nLSI model:')
-    start_time_LSI = time.time()
-    lsi = models.LsiModel(corpus, id2word=dct, num_topics=100)
-    print('Learning time:', round((time.time() - start_time_LSI), 3), 's')
-    lsi_answer = find_article(lsi[corpus], lsi[vec_bow_query])
-    pprint(lsi_answer[0:2])
-    comparison_answer(lsi_answer[0])
+    try:
+        lsi = models.lsimodel.LsiModel.load('lsimodel')
+    except:
+        print('Модель не найдена')
+        start_time_LSI = time.time()
+        lsi = models.LsiModel(corpus, id2word=dct, num_topics=TOPIC_NUMBER)
+        print('Learning time:', round((time.time() - start_time_LSI), 3), 's')
+        lsi.save('lsimodel')
 
     print('\nLDA model:')
-    start_time_LDA = time.time()
-    lda = models.ldamodel.LdaModel(corpus, id2word=dct, num_topics=100, passes=20)
-    print('Learning time:', round((time.time() - start_time_LDA), 3), 's')
-    lda_answer = find_article(lda[corpus], lda[vec_bow_query])
-    pprint(lda_answer[0:2])
-    comparison_answer(lda_answer[0])
+    try:
+        lda = models.ldamodel.LdaModel.load('ldamodel')
+    except:
+        print('Модель не найдена')
+        start_time_LDA = time.time()
+        lda = models.ldamodel.LdaModel(corpus, id2word=dct, num_topics=TOPIC_NUMBER, passes=20)
+        print('Learning time:', round((time.time() - start_time_LDA), 3), 's')
+        lda.save('ldamodel')
 
+    QUERY_NUMBER = len(test_case.queries)
+
+    TRUE_ANSWER_NUMBER_LSI,TRUE_ANSWER_NUMBER_LDA = 0,0
+
+    for i, query in enumerate(test_case.queries):
+        print('QUERY NUMBER ', i + 1, '/', QUERY_NUMBER )
+        query_normalize = query.normalized_words
+        true_answer = query.url
+        print('TRUE URL = ', query.url, ', Title:', query.title)
+
+
+        vec_bow_query = dct.doc2bow(query_normalize)
+        lsi_answer = find_article(lsi[corpus], lsi[vec_bow_query])
+        pprint(lsi_answer[0:2])
+        TRUE_ANSWER_NUMBER_LSI+= comparison_answer(lsi_answer[0])
+
+        lda_answer = find_article(lda[corpus], lda[vec_bow_query])
+        pprint(lda_answer[0:2])
+        TRUE_ANSWER_NUMBER_LDA += comparison_answer(lda_answer[0])
+        print('------------------------------------\n')
+        # dct.save(path + '/deerwester.dict')
+        # corpora.MmCorpus.serialize(path + '/deerwester.mm', corpus)  # store to disk, for later use
+    print("LSI: ",TRUE_ANSWER_NUMBER_LSI / QUERY_NUMBER )
+    print("LDA: ", TRUE_ANSWER_NUMBER_LDA / QUERY_NUMBER)
+
+    out_file = open('info.txt', 'a')
+    out_file.write(
+        'Number of topics: ' + str(TOPIC_NUMBER) + '\nLSI:' + str(TRUE_ANSWER_NUMBER_LSI / QUERY_NUMBER)+
+        '\nLDA: ' +  str(TRUE_ANSWER_NUMBER_LDA / QUERY_NUMBER)+ '\n--------------\n')
+    out_file.close()
