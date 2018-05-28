@@ -6,7 +6,7 @@ from Models.Query import Query
 from Storage import Storage
 from Models.PhygeVariables import PhyVariables
 
-from ArticleFetcher import ArticleFetcher
+
 # import sys, os # Для записи в файл
 
 
@@ -26,22 +26,18 @@ class TematicModels:
         if self.lsi is None:
             self.lsi = self.__train_LSI_model()
             self.storage.save_lsi_model(self.lsi)
+        elif len(self.test_case.downloaded_articles) > 0:
+            print("LSI. Найдены новые статьи \n")
+            self.lsi.add_documents(self.corpus)
+            print("Новые статьи добавлены в модель LSI\n")
+
         if self.lda is None:
             self.lda = self.__train_LDA_model()
             self.storage.save_lda_model(self.lda)
-
-        if self.test_case.downloaded_articles is not None and self.lsi is not None:
-            print("Найдены новые статьи \n")
-            #print(self.lsi)
-            #print(self.corpus)
-            self.lsi.add_documents(self.corpus)
-            #print(self.lsi)
-            #self.storage.save_lsi_model(self.lsi.add_documents(self.corpus))
-            print("Новые статьи добавлены в модель lsi\n")
-        if self.test_case.downloaded_articles is not None and self.lda is not None:
-            print("Найдены новые статьи \n")
+        elif len(self.test_case.downloaded_articles) > 0:
+            print("LDA. Найдены новые статьи \n")
             self.lda.update(self.corpus)
-            print("Новые статьи добавлены в модель lda\n")
+            print("Новые статьи добавлены в модель LDA\n")
 
     def find_article(self, query_text, model='lsi', amount=5):
         if model == 'lsi':
@@ -75,7 +71,7 @@ class TematicModels:
     def __load_corpus(self):
         self.test_case = self.storage.load_test_case()
         self.test_case.setup()
-        if self.test_case.downloaded_articles is not None:
+        if len(self.test_case.downloaded_articles) > 0:
             df = self.test_case.downloaded_articles
         else:
             df = self.test_case.values
@@ -95,7 +91,8 @@ class TematicModels:
     def __train_LDA_model(self):
         print('\nLDA model: Обучаем модель...')
         start_time_LDA = time.time()
-        lda = models.ldamodel.LdaModel(self.corpus, id2word=self.dct, num_topics=self.TOPIC_NUMBER, passes=20, iterations=50)
+        lda = models.ldamodel.LdaModel(self.corpus, id2word=self.dct, num_topics=self.TOPIC_NUMBER, passes=20,
+                                       iterations=50)
         print('Learning time:', round((time.time() - start_time_LDA), 3), 's')
         return lda
 
@@ -108,7 +105,7 @@ if __name__ == '__main__':
 
     tematic_models = TematicModels(test_number=PhyVariables.currentTestKey)
     query_text = tematic_models.test_case.queries[0].text
-    print('TRUE TITLE', tematic_models.test_case.queries[0].title)
+    print('\nTRUE TITLE', tematic_models.test_case.queries[0].title)
     query_vec = tematic_models.load_query_to_vec(query_text)
 
     lsi_answer = tematic_models.find_article(query_vec, model='lsi', amount=amount)
