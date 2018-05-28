@@ -1,9 +1,9 @@
 
 from Storage import Storage
-
+from Models.PhygeVariables import PhyVariables
 
 if __name__ == '__main__':
-    storage = Storage(test_case_id=4)
+    storage = Storage(test_case_id=PhyVariables.currentTestKey)
     test_case = storage.load_test_case()
     test_case.setup()
     print('\nTitle parsed article and url:')
