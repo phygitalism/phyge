@@ -222,4 +222,8 @@ $RECYCLE.BIN/
 
 
 # End of https://www.gitignore.io/api/macos,python,windows,pycharm,jupyternotebook
-phyge/Tests/*/tmp
+
+phyge/Tests/
+!*.urls.json
+!*.queries.json
+!*.description.json
