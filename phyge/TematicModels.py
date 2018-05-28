@@ -26,18 +26,18 @@ class TematicModels:
         if self.lsi is None:
             self.lsi = self.__train_LSI_model()
             self.storage.save_lsi_model(self.lsi)
-        elif len(self.test_case.downloaded_articles) > 0:
-            print("LSI. Найдены новые статьи \n")
-            self.lsi.add_documents(self.corpus)
-            print("Новые статьи добавлены в модель LSI\n")
+        # elif len(self.test_case.downloaded_articles) > 0:
+        #     print("LSI. Найдены новые статьи \n")
+        #     self.lsi.add_documents(self.corpus)
+        #     print("Новые статьи добавлены в модель LSI\n")
 
         if self.lda is None:
             self.lda = self.__train_LDA_model()
             self.storage.save_lda_model(self.lda)
-        elif len(self.test_case.downloaded_articles) > 0:
-            print("LDA. Найдены новые статьи \n")
-            self.lda.update(self.corpus)
-            print("Новые статьи добавлены в модель LDA\n")
+        # elif len(self.test_case.downloaded_articles) > 0:
+        #     print("LDA. Найдены новые статьи \n")
+        #     self.lda.update(self.corpus)
+        #     print("Новые статьи добавлены в модель LDA\n")
 
     def find_article(self, query_text, model='lsi', amount=5):
         if model == 'lsi':
@@ -104,15 +104,19 @@ if __name__ == '__main__':
     amount = search_articles['amount']
 
     tematic_models = TematicModels(test_number=PhyVariables.currentTestKey)
-    query_text = tematic_models.test_case.queries[0].text
-    print('\nTRUE TITLE', tematic_models.test_case.queries[0].title)
-    query_vec = tematic_models.load_query_to_vec(query_text)
 
-    lsi_answer = tematic_models.find_article(query_vec, model='lsi', amount=amount)
-    pprint(lsi_answer)
+    print('Колличество запросов:', len(tematic_models.test_case.queries))
+    for query in tematic_models.test_case.queries:
+        query_text = query.text
+        print('\nTRUE TITLE', query.title)
+        query_vec = tematic_models.load_query_to_vec(query_text)
+        lsi_answer = tematic_models.find_article(query_vec, model='lsi', amount=amount)
+        print('\nLSI answer')
+        pprint(lsi_answer)
 
-    lda_answer = tematic_models.find_article(query_vec, model='lda', amount=amount)
-    pprint(lda_answer)
-    print('------------------------------------\n')
+        lda_answer = tematic_models.find_article(query_vec, model='lda', amount=amount)
+        print('\nLDA answer')
+        pprint(lda_answer)
+        print('------------------------------------\n')
     # dct.save(path + '/deerwester.dict')
     # corpora.MmCorpus.serialize(path + '/deerwester.mm', corpus)  # store to disk, for later use
