@@ -5,7 +5,7 @@ from Models.PhygeArticle import PhyArticle
 from Models.Query import Query
 from Storage import Storage
 from Models.PhygeVariables import PhyVariables
-
+from ArticleFetcher import FetchState
 
 # import sys, os # Для записи в файл
 
@@ -26,18 +26,18 @@ class TematicModels:
         if self.lsi is None:
             self.lsi = self.__train_LSI_model()
             self.storage.save_lsi_model(self.lsi)
-        # elif len(self.test_case.downloaded_articles) > 0:
-        #     print("LSI. Найдены новые статьи \n")
-        #     self.lsi.add_documents(self.corpus)
-        #     print("Новые статьи добавлены в модель LSI\n")
+        elif self.test_case.fetch_state == FetchState.NewArticle:
+            print("LSI. Найдены новые статьи \n")
+            self.lsi.add_documents(self.corpus)
+            print("Новые статьи добавлены в модель LSI\n")
 
         if self.lda is None:
             self.lda = self.__train_LDA_model()
             self.storage.save_lda_model(self.lda)
-        # elif len(self.test_case.downloaded_articles) > 0:
-        #     print("LDA. Найдены новые статьи \n")
-        #     self.lda.update(self.corpus)
-        #     print("Новые статьи добавлены в модель LDA\n")
+        elif self.test_case.fetch_state == FetchState.NewArticle:
+            print("LDA. Найдены новые статьи \n")
+            self.lda.update(self.corpus)
+            print("Новые статьи добавлены в модель LDA\n")
 
     def find_article(self, query_text, model='lsi', amount=5):
         if model == 'lsi':
@@ -71,11 +71,12 @@ class TematicModels:
     def __load_corpus(self):
         self.test_case = self.storage.load_test_case()
         self.test_case.setup()
-        if len(self.test_case.downloaded_articles) > 0:
-            df = self.test_case.downloaded_articles
-        else:
+        if self.test_case.fetch_state == FetchState.OldArticle:
             df = self.test_case.values
+        if self.test_case.fetch_state == FetchState.NewArticle:
+            df = self.test_case.downloaded_articles
         documents = []
+        print('Enum = ', self.test_case.fetch_state)
         for columns in df.columns:
             documents.append(df[columns].dropna().tolist())
         self.dct = corpora.Dictionary(documents)
@@ -91,8 +92,7 @@ class TematicModels:
     def __train_LDA_model(self):
         print('\nLDA model: Обучаем модель...')
         start_time_LDA = time.time()
-        lda = models.ldamodel.LdaModel(self.corpus, id2word=self.dct, num_topics=self.TOPIC_NUMBER, passes=20,
-                                       iterations=50)
+        lda = models.ldamodel.LdaModel(self.corpus, id2word=self.dct, num_topics=self.TOPIC_NUMBER, passes=20) # ,iterations=50)
         print('Learning time:', round((time.time() - start_time_LDA), 3), 's')
         return lda
 
@@ -118,5 +118,3 @@ if __name__ == '__main__':
         print('\nLDA answer')
         pprint(lda_answer)
         print('------------------------------------\n')
-    # dct.save(path + '/deerwester.dict')
-    # corpora.MmCorpus.serialize(path + '/deerwester.mm', corpus)  # store to disk, for later use
