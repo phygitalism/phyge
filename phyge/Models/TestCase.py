@@ -5,7 +5,7 @@ from Models.BagOfWordsModel import BagOfWordsModel
 
 from ArticleFetcher import ArticleFetcher
 from ArticleSerializer import ArticleSerializer
-
+from ArticleFetcher import FetchState
 
 class TestCase:
     def __init__(self, id, obj: dict):
@@ -16,6 +16,7 @@ class TestCase:
         self.queries = obj.get('queries', list())
         self.values = obj.get('values', None)
         self.downloaded_articles = list()
+        self.fetch_state = FetchState.OldArticle
 
     def setup(self):
         if len(self.articles) != len(self.urls):
@@ -26,19 +27,22 @@ class TestCase:
             self.articles += self.downloaded_articles
 
         ArticleSerializer.serialize(self.articles, self.path + '/tmp/' + PhyVariables.articlesFileKey)
-        if len(self.downloaded_articles) > 0:
-            self.downloaded_articles = self.__create_df_words()
-            self.values = self.__create_df_words()
+        if self.values is None:
+            self.fetch_state = FetchState.OldArticle
+            self.values = self.__create_df_words(PhyVariables.valuesFileKey, self.articles)
+        elif len(self.downloaded_articles) > 0:
+            self.fetch_state = FetchState.NewArticle
+            self.downloaded_articles = self.__create_df_words('downloaded_articles.csv', self.downloaded_articles)
+
         self.uci_representation(self.path + '/tmp/')
 
-    def __create_df_words(self):
-        columns = [pd.Series(article.normalized_words) for article in self.articles]
-        pairs = zip(range(len(self.articles)), columns)
+    def __create_df_words(self, nameFileKey, data2):
+        columns = [pd.Series(article.normalized_words) for article in data2]
+        pairs = zip(range(len(data2)), columns)
         data = dict((key, value) for key, value in pairs)
-
         df_words_in_doc = pd.DataFrame(data)
         df_words_in_doc.to_csv(str.format('{0}/test_{1}/{2}/{3}', PhyVariables.testsPath, str(self.id), '/tmp/',
-                                          PhyVariables.valuesFileKey),
+                                          nameFileKey),
                                index=False,
                                encoding='utf8')
         return df_words_in_doc
