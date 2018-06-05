@@ -1,6 +1,12 @@
 from Models.PhygeArticle import PhyArticle
 from newspaper import Article
+from enum import Enum
 
+class FetchState(Enum):
+    OldArticle, NewArticle = range(2)
+
+    def __str__(self):
+        return str(self.name)
 
 class ArticleFetcher:
     def __init__(self, urls):
