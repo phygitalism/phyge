@@ -3,7 +3,7 @@ import os
 
 class PhyVariables:
     testsDir = 'Tests'
-    currentTestKey = 7
+    currentTestKey = 4
     urlsFileKey = 'urls.json'
     urlsStatusFileKey = 'urls.status.json'
     # urlsFileKey = 'en_slack_urls_clear.json'
