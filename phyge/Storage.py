@@ -4,7 +4,6 @@ import os
 from gensim import models
 
 from ArticleSerializer import ArticleSerializer
-
 from Models.PhygeVariables import PhyVariables
 from Models.TestCase import TestCase
 from Models.Query import Query
@@ -13,32 +12,35 @@ from Models.Query import Query
 class Storage:
     def __init__(self, test_case_id):
         self.test_case_id = test_case_id
-        self.test_case_path = str.format('{0}/test_{1}', PhyVariables.testsPath, self.test_case_id)
-        self.tmp_path = (self.test_case_path + '/tmp/')
-        self.lsi_path = self.tmp_path + PhyVariables.modelLsiKey
-        self.lda_path = self.tmp_path + PhyVariables.modelLdaKey
+        self.test_case_path = PhyVariables.testCasePath
+        self.tmp_path = PhyVariables.tmpPath
+        self.urls_path = PhyVariables.urlsPath
+        self.queries_path = PhyVariables.queriesPath
+        self.articles_path = PhyVariables.articlesPath
+        self.values_path = PhyVariables.valuesPath
+        self.lsi_path = PhyVariables.lsiPath
+        self.lda_path = PhyVariables.ldaPath
+        self.w2v_path = PhyVariables.w2vPath
+
+        if not os.path.exists(self.tmp_path):
+            os.makedirs(self.tmp_path)
 
     def load_test_case(self):
-        self.test_case_path = str.format('{0}/test_{1}', PhyVariables.testsPath, self.test_case_id)
-        tmp_path = (self.test_case_path + '/tmp/')
-        if not os.path.exists(tmp_path):
-            os.makedirs(tmp_path)
-
         urls = []
-        with open(self.test_case_path + '/' + PhyVariables.urlsFileKey, 'r', encoding="utf8") as json_file:
+        with open(self.urls_path, 'r', encoding="utf8") as json_file:
             data_urls = json.load(json_file)
         for article in data_urls:
             urls.append(dict(url=article.get('url'), language=article.get('language', '')))
 
-        queries = self.__load_queries(self.test_case_path + '/' + PhyVariables.queriesFileKey)
+        queries = self.__load_queries(self.queries_path)
 
         saved_articles, values = list(), None
 
-        if os.path.isfile(self.tmp_path + PhyVariables.articlesFileKey):
-            saved_articles = ArticleSerializer.deserialize(tmp_path + PhyVariables.articlesFileKey)
+        if os.path.isfile(self.articles_path):
+            saved_articles = ArticleSerializer.deserialize(self.articles_path)
 
-        if os.path.isfile(self.tmp_path + PhyVariables.valuesFileKey):
-            values = pd.read_csv(self.tmp_path + PhyVariables.valuesFileKey, dtype='unicode')
+        if os.path.isfile(self.values_path):
+            values = pd.read_csv(self.values_path, dtype='unicode')
 
         return TestCase(self.test_case_id, {'urls':  urls,
                                             'path': self.test_case_path,
