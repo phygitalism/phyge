@@ -8,12 +8,12 @@ class TestCase:
         self.parser = ArticleFetcher()
         self.new_urls = None
         # то что ниже можно убрать
-        self.articles = None
         self.id = self.storage.test_case_id
         self.path = self.storage.test_case_path  # нужен только в usi можно убрать
-        self.urls = self.storage.get_urls()
-        self.queries = self.storage.get_queries()
-        self.values = self.storage.get_words_list()
+        self.articles = None
+        self.urls = None
+        self.queries = None
+        self.values = None
 
     def check_if_new_urls(self):  # проверяет есть ли новые ссылки
         self.new_urls = self.storage.get_new_urls()
@@ -24,7 +24,11 @@ class TestCase:
     def load_by_urls(self):  # загрузка текстов по новым ссылкам
         if self.check_if_new_urls():
             self.parser.load_articles(self.storage, self.new_urls)
+        # то что ниже можно убрать
         self.articles = self.storage.get_articles()
+        self.urls = self.storage.get_urls()
+        self.queries = self.storage.get_queries()
+        self.values = self.storage.get_words_list()
 
     def setup(self):
         self.load_by_urls()
