@@ -1,7 +1,7 @@
 import pandas as pd
 import json
 import os
-from gensim import models
+from gensim import corpora, models
 
 from PhygeVariables import PhyVariables
 
@@ -19,6 +19,7 @@ class Storage:
         self.lsi_path = PhyVariables.lsiPath
         self.lda_path = PhyVariables.ldaPath
         self.w2v_path = PhyVariables.w2vPath
+        self.dct_path = PhyVariables.dctPath
 
         if not os.path.exists(self.tmp_path):
             os.makedirs(self.tmp_path)
@@ -107,30 +108,43 @@ class Storage:
                 queries.append(q)
         return queries
 
-    def load_LSI_model(self):
-        print('\nLSI model loadind...')
+    # сохраняет словарь для модели
+    def save_dct(self):
+        documents = self.get_words_list()
+        dct = corpora.Dictionary(documents)
+        dct.save(self.dct_path)
+        return dct
+
+    # загружает словарь для модели
+    def get_dct(self):
+        if os.path.isfile(self.dct_path):
+            dct = corpora.Dictionary.load(self.dct_path)
+        else:
+            dct = self.save_dct()
+        return dct
+
+    # загружаем корпус
+    def get_corpus(self):
+        dct = self.get_dct()
+        documents = self.get_words_list()
+        return [dct.doc2bow(doc) for doc in documents]
+
+    # загружаем модель из файла
+    def get_model(self, model_name, load_path):
+        print('%s model loading...' % model_name)
+        if model_name == 'lsi':
+            load_func = models.lsimodel.LsiModel.load
+        elif model_name == 'lda':
+            load_func = models.ldamodel.LdaModel.load
+        else:
+            load_func = models.Word2Vec.load
         try:
-            lsi = models.lsimodel.LsiModel.load(self.lsi_path)
+            model = load_func(load_path)
             print('Loaded')
         except:
             print('Модель не найдена.')
-            lsi = None
-        return lsi
+            model = None
+        return model
 
-    def load_LDA_model(self):
-        print('\nLDA model loading...')
-        try:
-            lda = models.ldamodel.LdaModel.load(self.lda_path)
-            print('Loaded')
-        except:
-            print('Модель не найдена.')
-            lda = None
-        return lda
-
-    def save_lsi_model(self, model):
-        model.save(self.lsi_path)
-        print('Model saved ')
-
-    def save_lda_model(self, model):
-        model.save(self.lda_path)
-        print('Model saved ')
+    def save_model(self, model, save_path):
+        model.save(save_path)
