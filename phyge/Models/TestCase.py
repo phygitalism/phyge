@@ -41,7 +41,7 @@ class TestCase:
         pairs = zip(range(len(data2)), columns)
         data = dict((key, value) for key, value in pairs)
         df_words_in_doc = pd.DataFrame(data)
-        df_words_in_doc.to_csv(str.format('{0}/test_{1}/{2}/{3}', PhyVariables.testsPath, str(self.id), '/tmp/',
+        df_words_in_doc.to_csv(str.format('{0}/test_{1}/{2}/{3}', PhyVariables.testsDir, str(self.id), '/tmp/',
                                           nameFileKey),
                                index=False,
                                encoding='utf8')
