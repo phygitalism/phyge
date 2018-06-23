@@ -6,6 +6,7 @@ from Models.Query import Query
 from Storage import Storage
 from Models.PhygeVariables import PhyVariables
 from ArticleFetcher import FetchState
+from TextNormalizer import TextNormalizer
 
 # import sys, os # Для записи в файл
 
@@ -64,8 +65,7 @@ class TematicModels:
         return found_articles
 
     def load_query_to_vec(self, query_text):
-        query = Query({'text': query_text})
-        query_normalize = query.normalized_words
+        query_normalize = TextNormalizer.normalize(query_text)
         return self.dct.doc2bow(query_normalize)
 
     def __load_corpus(self):
@@ -107,8 +107,8 @@ if __name__ == '__main__':
 
     print('Колличество запросов:', len(tematic_models.test_case.queries))
     for query in tematic_models.test_case.queries:
-        query_text = query.text
-        print('\nTRUE TITLE', query.title)
+        query_text = query['text']
+        print('\nTRUE TITLE', query['title'])
         query_vec = tematic_models.load_query_to_vec(query_text)
         lsi_answer = tematic_models.find_article(query_vec, model='lsi', amount=amount)
         print('\nLSI answer')

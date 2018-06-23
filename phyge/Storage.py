@@ -32,7 +32,7 @@ class Storage:
         for article in data_urls:
             urls.append(dict(url=article.get('url'), language=article.get('language', '')))
 
-        queries = self.__load_queries(self.queries_path)
+        queries = self.get_queries()
 
         saved_articles, values = list(), None
 
@@ -48,13 +48,13 @@ class Storage:
                                             'articles': saved_articles,
                                             'values': values})
 
-    def __load_queries(self, queries_json_path) -> [Query]:
-        if not os.path.isfile(queries_json_path):
-            return list()
-
-        with open(queries_json_path, 'r', encoding='utf8') as file:
-            queries = json.load(file)
-            return [Query(obj) for obj in queries]
+    def get_queries(self):
+        queries = list()
+        with open(self.queries_path, 'r', encoding='utf8') as file:
+            data_queries = json.load(file)
+            for q in data_queries:
+                queries.append(q)
+        return queries
 
     def load_LSI_model(self):
         print('\nLSI model loadind...')
