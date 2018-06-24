@@ -3,11 +3,12 @@ from TextNormalizer import TextNormalizer
 from readability.readability import Document
 from bs4 import BeautifulSoup
 
+from Models.PhygeTranslate import PhyTranslate
 
 class ArticleFetcher:
     def __init__(self):
         self.urls = None
-
+        self.word_limit = 30
     def load_articles(self, storage, urls_new):
         urls_number = len(urls_new)
         urls_status = []
@@ -18,9 +19,11 @@ class ArticleFetcher:
             article_html = self.load_html(current_url)
             if len(article_html) > 0:
                 current_article = self.parse_html(current_url, article_html)
-                if len(current_article['normalized_words']) > 0:
+                if len(current_article['normalized_words']) > self.word_limit:
                     articles.append(current_article)
                     current_url_status["status"] = "OK"
+                elif len(current_article['normalized_words']) > 0:
+                    current_url_status["status"] = " LESS_THAN_LIMIT"
                 else:
                     current_url_status["status"] = "LOAD_ERR"
             else:
@@ -40,6 +43,10 @@ class ArticleFetcher:
         readable_html = Document(article_html).summary()
         title = Document(article_html).short_title()
         text = self.__transform_to_single_line(readable_html)
+
+        if PhyTranslate.detect_language(text) == 'en':
+            text = PhyTranslate.translate(text, title, current_url)
+
         normalized_words = TextNormalizer.normalize(text)
         return {'url': current_url,
                 'title': title,
