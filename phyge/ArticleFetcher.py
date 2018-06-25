@@ -19,11 +19,12 @@ class ArticleFetcher:
             article_html = self.load_html(current_url)
             if len(article_html) > 0:
                 current_article = self.parse_html(current_url, article_html)
-                if len(current_article['normalized_words']) > self.word_limit:
+                #if len(current_article['normalized_words']) > self.word_limit:
+                #    articles.append(current_article)
+                #    current_url_status["status"] = "OK"
+                if len(current_article['normalized_words']) > 0:
                     articles.append(current_article)
                     current_url_status["status"] = "OK"
-                elif len(current_article['normalized_words']) > 0:
-                    current_url_status["status"] = " LESS_THAN_LIMIT"
                 else:
                     current_url_status["status"] = "LOAD_ERR"
             else:

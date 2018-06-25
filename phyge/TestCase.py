@@ -24,14 +24,14 @@ class TestCase:
     def load_by_urls(self):  # загрузка текстов по новым ссылкам
         if self.check_if_new_urls():
             self.parser.load_articles(self.storage, self.new_urls)
-        # то что ниже можно убрать
+
+    # то что ниже можно убрать
+    def setup(self):
+        self.load_by_urls()
         self.articles = self.storage.get_articles()
         self.urls = self.storage.get_urls()
         self.queries = self.storage.get_queries()
         self.values = self.storage.get_words_list()
-
-    def setup(self):
-        self.load_by_urls()
 
     #def uci_representation(self, path):
     #    pairs = zip(range(len(self.articles)), self.articles)

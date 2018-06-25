@@ -22,7 +22,8 @@ class BaseModel:
         self.model_name = model_name
         self.path = path
         #self.load_func = load_func
-        self.train_models()
+
+        #self.train_models()
 
     # нормализуем запрос
     def query_to_vec(self, query_text):
@@ -132,6 +133,9 @@ if __name__ == '__main__':
     lsi = LSImodel(test_case.storage)
     lda = LDAmodel(test_case.storage)
     w2v = W2Vmodel(test_case.storage)
+    lsi.train_models()
     lsi.main_test_write()
+    lda.train_models()
     lda.main_test_write()
+    w2v.train_models()
     w2v.main_test_write()
