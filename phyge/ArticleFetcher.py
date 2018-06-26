@@ -4,15 +4,18 @@ from readability.readability import Document
 from bs4 import BeautifulSoup
 
 from Models.PhygeTranslate import PhyTranslate
+import os
 
 class ArticleFetcher:
     def __init__(self):
-        self.urls = None
         self.word_limit = 30
+        self.articles_new = list()
+        self.urls_status_new = list()
+
     def load_articles(self, storage, urls_new):
         urls_number = len(urls_new)
-        urls_status = []
-        articles = list()
+        #urls_status_new = list()
+        #articles_new = list()
         for i, current_url in enumerate(urls_new, start=1):
             current_url_status = {"url": current_url}
             print(str.format('Downloading article {0} from {1} {2}', i, urls_number, current_url))
@@ -20,18 +23,20 @@ class ArticleFetcher:
             if len(article_html) > 0:
                 current_article = self.parse_html(current_url, article_html)
                 #if len(current_article['normalized_words']) > self.word_limit:
-                #    articles.append(current_article)
+                #    articles_new.append(current_article)
                 #    current_url_status["status"] = "OK"
                 if len(current_article['normalized_words']) > 0:
-                    articles.append(current_article)
+                    self.articles_new.append(current_article)
                     current_url_status["status"] = "OK"
                 else:
                     current_url_status["status"] = "LOAD_ERR"
             else:
                 current_url_status["status"] = "PARSE_ERR"
-            urls_status.append(current_url_status)
+            self.urls_status_new.append(current_url_status)
+        urls_status = storage.get_urls_status() + self.urls_status_new  # конкатенация статуса новых ссылок к старым
         storage.save_urls_status(urls_status)
-        storage.save_articles(articles)
+        articles = storage.get_articles() + self.articles_new  # конкатенация старых и новых статей
+        storage.save_articles(self.articles_new)
         return articles
 
     def load_html(self, current_url):
