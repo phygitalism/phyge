@@ -33,11 +33,11 @@ class ArticleFetcher:
             else:
                 current_url_status["status"] = "PARSE_ERR"
             self.urls_status_new.append(current_url_status)
-        urls_status = storage.get_urls_status() + self.urls_status_new  # конкатенация статуса новых ссылок к старым
-        storage.save_urls_status(urls_status)
-        articles = storage.get_articles() + self.articles_new  # конкатенация старых и новых статей
+        #urls_status = storage.get_urls_status() + self.urls_status_new  # конкатенация статуса новых ссылок к старым
+        storage.save_urls_status(self.urls_status_new)
+        #articles = storage.get_articles() + self.articles_new  # конкатенация старых и новых статей
         storage.save_articles(self.articles_new)
-        return articles
+        return self.articles_new
 
     def load_html(self, current_url):
         article_html = Article(url=current_url, language='ru')
