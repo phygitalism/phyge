@@ -1,12 +1,21 @@
 from ArticleFetcher import ArticleFetcher
 from Storage import Storage
 
+from enum import Enum
+
+
+class FetchState(Enum):
+    OldArticle, NewArticle = range(2)
+
+    def __str__(self):
+        return str(self.name)
+
 
 class TestCase:
     def __init__(self, test_case_id):
         self.storage = Storage(test_case_id)
         self.parser = ArticleFetcher()
-        self.new_urls = None
+        self.new_urls = self.get_new_urls()
         # то что ниже можно убрать
         self.id = self.storage.test_case_id
         self.path = self.storage.test_case_path  # нужен только в usi можно убрать
@@ -15,14 +24,20 @@ class TestCase:
         self.queries = None
         self.values = None
 
-    def check_if_new_urls(self):  # проверяет есть ли новые ссылки
-        self.new_urls = self.storage.get_new_urls()
         if self.new_urls:
-            return True
-        return False
+            self.fetch_state = FetchState.NewArticle
+        else:
+            self.fetch_state = FetchState.OldArticle
+
+    def get_new_urls(self):
+        db_urls = [x.get('url') for x in self.storage.get_urls()]
+        old_urls = [x.get('url') for x in self.storage.get_urls_status()]
+        sbuf = set(old_urls)
+        new_urls = [x for x in db_urls if x not in sbuf]
+        return new_urls
 
     def load_by_urls(self):  # загрузка текстов по новым ссылкам
-        if self.check_if_new_urls():
+        if self.fetch_state == FetchState.NewArticle:
             self.parser.load_articles(self.storage, self.new_urls)
 
     # то что ниже можно убрать
