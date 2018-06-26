@@ -14,7 +14,7 @@ class FetchState(Enum):
 class TestCase:
     def __init__(self, test_case_id):
         self.storage = Storage(test_case_id)
-        self.parser = ArticleFetcher()
+        self.article_fetcher = ArticleFetcher()
         self.new_urls = self.get_new_urls()
         # то что ниже можно убрать
         self.id = self.storage.test_case_id
@@ -36,14 +36,12 @@ class TestCase:
         new_urls = [x for x in db_urls if x not in sbuf]
         return new_urls
 
-    def load_by_urls(self):  # загрузка текстов по новым ссылкам
+    def setup(self):  # загрузка текстов по новым ссылкам
         if self.fetch_state == FetchState.NewArticle:
-            self.parser.load_articles(self.storage, self.new_urls)
-
-    # то что ниже можно убрать
-    def setup(self):
-        self.load_by_urls()
-        self.articles = self.storage.get_articles()
+            self.articles = self.article_fetcher.load_articles(self.storage, self.new_urls)
+        # то что ниже можно убрать
+        else:
+            self.articles = self.storage.get_articles()
         self.urls = self.storage.get_urls()
         self.queries = self.storage.get_queries()
         self.values = self.storage.get_words_list()
