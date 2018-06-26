@@ -9,17 +9,17 @@ from PhygeVariables import PhyVariables
 class Storage:
     def __init__(self, test_case_id):
         self.test_case_id = test_case_id
-        self.test_case_path = PhyVariables.testCasePath
-        self.tmp_path = PhyVariables.tmpPath
-        self.urls_path = PhyVariables.urlsPath
-        self.urls_status_path = PhyVariables.urlsStatusPath
-        self.queries_path = PhyVariables.queriesPath
-        self.articles_path = PhyVariables.articlesPath
-        self.values_path = PhyVariables.valuesPath
-        self.lsi_path = PhyVariables.lsiPath
-        self.lda_path = PhyVariables.ldaPath
-        self.w2v_path = PhyVariables.w2vPath
-        self.dct_path = PhyVariables.dctPath
+        self.test_case_path = str.format('{0}/test_{1}', PhyVariables.testsDir, PhyVariables.currentTestKey)
+        self.tmp_path = self.test_case_path + '/tmp'
+        self.urls_path = os.path.join(self.test_case_path, PhyVariables.urlsFileKey)
+        self.urls_status_path = os.path.join(self.tmp_path, PhyVariables.urlsStatusFileKey)
+        self.queries_path = os.path.join(self.test_case_path, PhyVariables.queriesFileKey)
+        self.articles_path = os.path.join(self.tmp_path, PhyVariables.articlesFileKey)
+        self.values_path = os.path.join(self.tmp_path, PhyVariables.valuesFileKey)
+        self.lsi_path = os.path.join(self.tmp_path, PhyVariables.modelLsiKey)
+        self.lda_path = os.path.join(self.tmp_path, PhyVariables.modelLdaKey)
+        self.w2v_path = os.path.join(self.tmp_path, PhyVariables.modelW2vKey)
+        self.dct_path = os.path.join(self.tmp_path, PhyVariables.dctFileKey)
 
         if not os.path.exists(self.tmp_path):
             os.makedirs(self.tmp_path)
@@ -31,8 +31,8 @@ class Storage:
             return list()
         with open(self.urls_path, 'r', encoding="utf8") as json_file:
             data_urls = json.load(json_file)
-            for u in data_urls:
-                urls.append(dict(url=u.get('url'), language=u.get('language', '')))
+            for url in data_urls:
+                urls.append(dict(url=url.get('url'), language=url.get('language', '')))
         return urls
 
     def get_urls_status(self):
@@ -41,8 +41,8 @@ class Storage:
             return list()
         with open(self.urls_status_path, 'r', encoding="utf8") as json_file:
             data_urls = json.load(json_file)
-            for u in data_urls:
-                urls.append(dict(url=u.get('url'), status=u.get('status', '')))
+            for url in data_urls:
+                urls.append(dict(url=url.get('url'), status=url.get('status', '')))
         return urls
 
     def get_new_urls(self):
@@ -52,23 +52,24 @@ class Storage:
         new_urls = [x for x in db_urls if x not in sbuf]
         return new_urls
 
-    # во время скачивания страница может не загрузиться, может не распарситься
-    # зоздается файл с информацией о загрузке текста по ссылкам
-    # дозаписываем информацию о скачивании по новым ссылкам в файл
+    # работает как ДОЗАПИСЬ поэтому вполне логично остаить конкатенацию тут,
+    # артикл фетчер просто передает новораспарсеный список
     def save_urls_status(self, urls_status_new):
-        urls_status = []
+        urls_status_old = []
         if os.path.isfile(self.urls_status_path):
-            urls_status = self.get_urls_status()
-        urls_status = urls_status + urls_status_new
+            urls_status_old = self.get_urls_status()
+        urls_status = urls_status_old + urls_status_new
         with open(self.urls_status_path, 'w', encoding="utf8") as file:
             s = json.dumps(urls_status, indent=2, ensure_ascii=False)
             file.write(s)
 
-    def save_articles(self, articles_list):
-        articles = []
+    # работает как ДОЗАПИСЬ поэтому вполне логично остаить конкатенацию тут,
+    # артикл фетчер просто передает новые распарсенные articles_new
+    def save_articles(self, articles_new):
+        articles_old = []
         if os.path.isfile(self.articles_path):
-            articles = self.get_articles()
-        articles = articles + articles_list
+            articles_old = self.get_articles()
+        articles = articles_old + articles_new
         with open(self.articles_path, 'w', encoding="utf8") as file:
             s = json.dumps(articles, indent=2, ensure_ascii=False)
             file.write(s)
@@ -77,8 +78,8 @@ class Storage:
         saved_articles = list()
         with open(self.articles_path, 'r', encoding='utf8') as file:
             data_articles = json.load(file)
-            for a in data_articles:
-                saved_articles.append(a)
+            for article in data_articles:
+                saved_articles.append(article)
         return saved_articles
 
     def get_words_df_json(self):
