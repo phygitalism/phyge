@@ -45,15 +45,6 @@ class Storage:
                 urls.append(dict(url=url.get('url'), status=url.get('status', '')))
         return urls
 
-    def get_new_urls(self):
-        db_urls = [x.get('url') for x in self.get_urls()]
-        old_urls = [x.get('url') for x in self.get_urls_status()]
-        sbuf = set(old_urls)
-        new_urls = [x for x in db_urls if x not in sbuf]
-        return new_urls
-
-    # работает как ДОЗАПИСЬ поэтому вполне логично остаить конкатенацию тут,
-    # артикл фетчер просто передает новораспарсеный список
     def save_urls_status(self, urls_status_new):
         urls_status_old = []
         if os.path.isfile(self.urls_status_path):
@@ -63,8 +54,6 @@ class Storage:
             s = json.dumps(urls_status, indent=2, ensure_ascii=False)
             file.write(s)
 
-    # работает как ДОЗАПИСЬ поэтому вполне логично остаить конкатенацию тут,
-    # артикл фетчер просто передает новые распарсенные articles_new
     def save_articles(self, articles_new):
         articles_old = []
         if os.path.isfile(self.articles_path):
