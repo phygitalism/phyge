@@ -2,7 +2,7 @@ from TestCase import TestCase
 from TematicModels import LDAmodel, LSImodel, W2Vmodel
 from Storage import Storage
 from PhygeVariables import PhyVariables
-from TextNormalizer import TextNormalizer
+from Models.PhygeArticle import PhyArticle
 
 from gensim import similarities
 import time
@@ -21,8 +21,6 @@ class ServerState(Enum):
 # query will be taken from interface but now we take it from storage
 class SearchEngine:
     def __init__(self, query, model_name, test_case_id):
-        #self.test_case = TestCase(test_case_id)
-        #self.new_urls = None
         self.query = query
         self.model_name = model_name
         self.test_case_id = test_case_id
@@ -53,16 +51,9 @@ class SearchEngine:
         if not self.base_model:
             self.model.train_models()
 
-    # так как докачка будет происходить отдельно эта функция временная
-    def get_result(self):  # возвращает результат
-        self.test_case = TestCase(self.test_case_id)
-        self.test_case.setup()
-        # self.train_model()
-        return self.write_answers()
-
     # нормализуем запрос
-    def query_to_vec(self, query_text):
-        query_normalize = TextNormalizer.normalize(query_text)
+    def query_to_vec(self, query):
+        query_normalize = query.normalized_words
         dct = self.storage.get_dct()
         return dct.doc2bow(query_normalize)
 
@@ -77,30 +68,28 @@ class SearchEngine:
         sims = index[query_vec]
         sims = sorted(enumerate(sims), key=lambda item: -item[1])
         answer_time = round((time.time() - start_time), 3)
-        articles = self.storage.get_articles()
+        articles: [PhyArticle] = self.storage.get_articles()
         found_articles = []
-        for i, similarity in sims[:amount]:
-            article_similarity = articles[i].copy()
-            article_similarity.update({'id': i,
-                                       'similarity': round(float(similarity), 3)})
-            article_similarity['text'] = (articles[i]['text'][:200]).replace("', '", '').replace("['", '') + '...'
-            article_similarity.pop('normalized_words')
+        for index, similarity in sims[:amount]:
+            article_similarity = {'id': index,
+                                  'title': articles[index].title,
+                                  'url': articles[index].url,
+                                  'text': (articles[index].text[0:200]).replace("', '", '').replace("['", '') + '...',
+                                  'similarity': round(float(similarity), 3)}
             found_articles.append(article_similarity)
         return answer_time, self.model_name, found_articles
 
     def queries_result(self, amount=3):
         answers = []
         for query in self.storage.get_queries():
-            query_text = query['text']
-            query_vec = self.query_to_vec(query_text)
+            query_vec = self.query_to_vec(query)
             answer_time, model_name, answer_articles = self.find_article(query_vec, amount=amount)
             answers.append({'answer_time': answer_time,
                             'model_name': model_name,
                             'answer_articles': answer_articles})
         return answers
 
-    #  функция чтобы посмотреть результат, потом ее не будет
-    def write_answers(self, amount=3):
+    def get_result(self, amount=3):
         query_num = 1
         path = os.path.join(self.storage.tmp_path, 'answers')
         if not os.path.exists(path):
@@ -117,6 +106,8 @@ class SearchEngine:
 
 if __name__ == '__main__':
     test_case_id = PhyVariables.currentTestKey
+    test_case = TestCase(test_case_id)
+    test_case.setup()
     search = SearchEngine(query=None, test_case_id=test_case_id, model_name='w2v')
     if search.server_state == ServerState.Stop:
         print("\nCan't start server, model didn't loaded\n")
