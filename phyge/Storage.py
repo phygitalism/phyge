@@ -4,6 +4,8 @@ import os
 from gensim import corpora, models
 
 from PhygeVariables import PhyVariables
+from Models.PhygeArticle import PhyArticle
+from Models.Query import Query
 
 
 class Storage:
@@ -45,35 +47,31 @@ class Storage:
                 urls.append(dict(url=url.get('url'), status=url.get('status', '')))
         return urls
 
-    def save_urls_status(self, urls_status_new):
-        urls_status_old = []
-        if os.path.isfile(self.urls_status_path):
-            urls_status_old = self.get_urls_status()
-        urls_status = urls_status_old + urls_status_new
+    def save_urls_status(self, urls_status):
+        #urls_status_old = []
+        #if os.path.isfile(self.urls_status_path):
+        #    urls_status_old = self.get_urls_status()
+        #urls_status = urls_status_old + urls_status_new
         with open(self.urls_status_path, 'w', encoding="utf8") as file:
             s = json.dumps(urls_status, indent=2, ensure_ascii=False)
             file.write(s)
 
-    def save_articles(self, articles_new):
-        articles_old = []
-        if os.path.isfile(self.articles_path):
-            articles_old = self.get_articles()
-        articles = articles_old + articles_new
+    def save_articles(self, phy_articles):
+        articles = list(map(lambda x: x.deserialize_to_dict(), phy_articles))
         with open(self.articles_path, 'w', encoding="utf8") as file:
             s = json.dumps(articles, indent=2, ensure_ascii=False)
             file.write(s)
 
-    def get_articles(self):
-        saved_articles = list()
-        with open(self.articles_path, 'r', encoding='utf8') as file:
-            data_articles = json.load(file)
-            for article in data_articles:
-                saved_articles.append(article)
-        return saved_articles
+    def get_articles(self) -> [PhyArticle]:
+        if not os.path.isfile(self.articles_path):
+            return list()
+        with open(self.articles_path, 'r', encoding="utf8") as file:
+            articles = json.load(file)
+        return [PhyArticle(obj) for obj in articles]
 
     def get_words_df_json(self):
         articles_list = self.get_articles()
-        columns = [pd.Series(article["normalized_words"]) for article in articles_list]
+        columns = [pd.Series(article.normalized_words) for article in articles_list]
         pairs = zip(range(len(articles_list)), columns)
         data = dict((key, value) for key, value in pairs)
         df_words_in_doc = pd.DataFrame(data)
@@ -88,15 +86,12 @@ class Storage:
             words_list.append(df[columns].dropna().tolist())
         return words_list
 
-    def get_queries(self):
+    def get_queries(self) -> [Query]:
         if not os.path.isfile(self.queries_path):
             return list()
-        queries = list()
         with open(self.queries_path, 'r', encoding='utf8') as file:
-            data_queries = json.load(file)
-            for q in data_queries:
-                queries.append(q)
-        return queries
+            queries = json.load(file)
+        return [Query(obj) for obj in queries]
 
     # сохраняет словарь для модели
     def save_dct(self):
