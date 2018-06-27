@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 from Models.PhygeTranslate import PhyTranslate
 from Models.PhygeArticle import PhyArticle
 import os
+import re
 
 
 class ArticleFetcher:
@@ -56,6 +57,7 @@ class ArticleFetcher:
         readable_html = Document(article_html).summary()
         title = Document(article_html).short_title()
         text = self.__transform_to_single_line(readable_html)
+        text = re.sub(r'\{[^*]*\}', '', text)
         #if PhyTranslate.detect_language(text) == 'en':
         if language == 'en':
             text = PhyTranslate.translate(text, title, current_url)
@@ -68,4 +70,4 @@ class ArticleFetcher:
 
     def __transform_to_single_line(self, raw_html):
         soup = BeautifulSoup(raw_html, "lxml")
-        return str(soup.findAll(text=True)).replace("\\n", "").replace("\\r", "").replace('\\xa0', '').replace('\'', '')
+        return str(soup.findAll(text=True)).replace("\\n", "").replace("\\r", "").replace('\\xa0', '').replace('\'', '').replace('\\t', '')
