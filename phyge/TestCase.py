@@ -25,10 +25,10 @@ class TestCase:
         self.fetch_state = DownloadArticlesState.OldArticle
 
     def setup(self):
-        if len(self.articles) != len(self.urls):
+        existing_urls = [article.url for article in self.articles]
+        filtred_urls = [x for x in self.urls if x['url'] not in existing_urls]
+        if len(filtred_urls) > 0:
             self.fetch_state = DownloadArticlesState.NewArticle
-            existing_urls = [article.url for article in self.articles]
-            filtred_urls = [x for x in self.urls if x['url'] not in existing_urls]
             self.downloaded_articles = self.article_fetcher.load_articles(filtred_urls)
             self.articles += self.downloaded_articles
 
