@@ -59,7 +59,7 @@ class SearchEngine:
     # нормализуем запрос
     def query_to_vec(self, query):
         query_normalize = query.normalized_words
-        dct = self.storage.get_dct()
+        dct = self.storage.get_dct_for_model()
         return dct.doc2bow(query_normalize)
 
     def find_article(self, query_text, amount=5):
