@@ -10,6 +10,11 @@ import json
 import os
 from enum import Enum
 
+## Test
+from gensim.matutils import hellinger, cossim, jaccard
+from gensim.similarities import WmdSimilarity
+##
+
 
 class ServerState(Enum):
     Start, Stop = range(2)
@@ -65,17 +70,38 @@ class SearchEngine:
     def perform_search(self, corpus_model, query_vec, amount):
         start_time = time.time()
         index = similarities.MatrixSimilarity(corpus_model)
+
+        # Change this to change simularity function
+        # sims = [(document, my_sim_fnc(document, query)) for document in index]
+
+
         sims = index[query_vec]
         sims = sorted(enumerate(sims), key=lambda item: -item[1])
+
         answer_time = round((time.time() - start_time), 3)
         articles: [PhyArticle] = self.storage.get_articles()
         found_articles = []
+
+
         for index, similarity in sims[:amount]:
             article_similarity = {'id': index,
                                   'title': articles[index].title,
                                   'url': articles[index].url,
                                   'text': (articles[index].text[0:200]).replace("', '", '').replace("['", '') + '...',
-                                  'similarity': round(float(similarity), 3)}
+                                  'similarity': round(float(similarity), 3),
+                                 # 'Hellinger': round(float(hellinger(query_vec, corpus_model[index])), 3),
+                                  'Cosine similarity': round(cossim(query_vec, corpus_model[index]), 3)}
+                                  #,'Jaccard distance(less is better)': round(float(jaccard(query_vec, corpus_model[index])), 3)}
+
+            if self.model_name == 'lda':
+                article_similarity['Hellinger'] = round(float(hellinger(query_vec, corpus_model[index])), 3)
+                article_similarity['Jaccard distance(less is better)'] = round(float(jaccard(query_vec, corpus_model[index])), 3)
+            elif self.model_name == 'w2v':
+                article_similarity['Jaccard distance(less is better)'] = round(float(jaccard(query_vec, corpus_model[index])), 3)
+            else:
+                continue
+
+
             found_articles.append(article_similarity)
         return answer_time, self.model_name, found_articles
 
