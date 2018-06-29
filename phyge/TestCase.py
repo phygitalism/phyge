@@ -3,7 +3,7 @@ from ArticleFetcher import ArticleFetcher
 from Storage import Storage
 
 
-class FetchState(Enum):
+class DownloadArticlesState(Enum):
     OldArticle, NewArticle = range(2)
 
     def __str__(self):
@@ -22,11 +22,11 @@ class TestCase:
         self.values = self.storage.get_words_df_json()
         self.dct = self.storage.get_dct_for_model()
         self.corpus = self.storage.get_corpus()
-        self.fetch_state = FetchState.OldArticle
+        self.fetch_state = DownloadArticlesState.OldArticle
 
     def setup(self):
         if len(self.articles) != len(self.urls):
-            self.fetch_state = FetchState.NewArticle
+            self.fetch_state = DownloadArticlesState.NewArticle
             existing_urls = [article.url for article in self.articles]
             filtred_urls = [x for x in self.urls if x['url'] not in existing_urls]
             self.downloaded_articles = self.article_fetcher.load_articles(filtred_urls)
