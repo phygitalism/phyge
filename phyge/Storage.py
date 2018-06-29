@@ -48,10 +48,6 @@ class Storage:
         return urls
 
     def save_urls_status(self, urls_status):
-        #urls_status_old = []
-        #if os.path.isfile(self.urls_status_path):
-        #    urls_status_old = self.get_urls_status()
-        #urls_status = urls_status_old + urls_status_new
         with open(self.urls_status_path, 'w', encoding="utf8") as file:
             s = json.dumps(urls_status, indent=2, ensure_ascii=False)
             file.write(s)
@@ -84,6 +80,10 @@ class Storage:
         words_list = []
         for columns in df.columns:
             words_list.append(df[columns].dropna().tolist())
+        # remove words that appear only once IN DOCUMENT!!!
+        all_tokens = sum(words_list, [])
+        tokens_once = set(word for word in set(all_tokens) if all_tokens.count(word) == 1)
+        words_list = [[word for word in text if word not in tokens_once] for text in words_list]
         return words_list
 
     def get_queries(self) -> [Query]:
