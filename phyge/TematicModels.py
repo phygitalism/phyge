@@ -11,7 +11,7 @@ class BaseModel:
 
     def __init__(self, storage: Storage, model_name='model', path=None):
         self.storage = storage
-        self.dct = self.storage.get_dct()
+        self.dct = self.storage.get_dct_for_model()
         self.corpus = storage.get_corpus().copy()
         #corpora.MmCorpus.serialize(self.storage.tmp_path + '/deerwester.mm', self.corpus)
         self.base_model = storage.get_model(model_name, path)
@@ -32,6 +32,7 @@ class LSImodel(BaseModel):
     def train_model(self):
         print('\nLSI model: Обучаем модель...')
         start_time = time.time()
+        print(self.corpus)
         lsi = models.LsiModel(self.corpus, id2word=self.dct, num_topics=self.TOPIC_NUMBER)
         print('Learning time:', round((time.time() - start_time), 3), 's')
         return lsi
@@ -53,9 +54,6 @@ class LDAmodel(BaseModel):
 class W2Vmodel(BaseModel):
     def __init__(self, storage: Storage):
         BaseModel.__init__(self, storage=storage, model_name='w2v', path=storage.w2v_path)
-
-    #def find_article(self, query_text, amount=5):
-    #    return super().perform_search(self.corpus, query_text, amount)
 
     def train_model(self):
         print('\nWord2vec model: Обучаем модель...')

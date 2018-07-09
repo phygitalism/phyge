@@ -10,6 +10,12 @@ from Models.Query import Query
 
 class Storage:
     def __init__(self, test_case_id):
+
+        """Operates files on disk. Only this class knows the path to the files
+
+        Args:
+            test_case_id: folder test number
+        """
         self.test_case_id = test_case_id
         self.test_case_path = str.format('{0}/test_{1}', PhyVariables.testsDir, PhyVariables.currentTestKey)
         self.tmp_path = self.test_case_path + '/tmp'
@@ -26,7 +32,7 @@ class Storage:
         if not os.path.exists(self.tmp_path):
             os.makedirs(self.tmp_path)
 
-    # сохранение и зашрузка файлов на комп все в storage
+
     def get_urls(self):
         urls = []
         if not os.path.isfile(self.urls_path):
@@ -80,7 +86,7 @@ class Storage:
         words_list = []
         for columns in df.columns:
             words_list.append(df[columns].dropna().tolist())
-        # remove words that appear only once IN DOCUMENT!!!
+        #TODO remove words that appear only once IN DOCUMENT!!!
         all_tokens = sum(words_list, [])
         tokens_once = set(word for word in set(all_tokens) if all_tokens.count(word) == 1)
         words_list = [[word for word in text if word not in tokens_once] for text in words_list]
@@ -93,28 +99,24 @@ class Storage:
             queries = json.load(file)
         return [Query(obj) for obj in queries]
 
-    # сохраняет словарь для модели
-    def save_dct(self):
+    def save_dct_for_model(self):
         documents = self.get_words_list()
         dct = corpora.Dictionary(documents)
         dct.save(self.dct_path)
         return dct
 
-    # загружает словарь для модели
-    def get_dct(self):
+    def get_dct_for_model(self):
         if os.path.isfile(self.dct_path):
             dct = corpora.Dictionary.load(self.dct_path)
         else:
-            dct = self.save_dct()
+            dct = self.save_dct_for_model()
         return dct
 
-    # загружаем корпус
     def get_corpus(self):
-        dct = self.get_dct()
+        dct = self.get_dct_for_model()
         documents = self.get_words_list()
         return [dct.doc2bow(doc) for doc in documents]
 
-    # загружаем модель из файла
     def get_model(self, model_name, load_path):
         print('%s model loading...' % model_name)
         if model_name == 'lsi':
