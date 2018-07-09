@@ -9,6 +9,7 @@ import time
 import json
 import os
 from enum import Enum
+from pprint import pprint
 
 ## Test
 from gensim.matutils import hellinger, cossim, jaccard
@@ -88,9 +89,9 @@ class SearchEngine:
                                   'title': articles[index].title,
                                   'url': articles[index].url,
                                   'text': (articles[index].text[0:200]).replace("', '", '').replace("['", '') + '...',
-                                  'similarity': round(float(similarity), 3),
+                                  'Cosine similarity': round(float(similarity), 3)}
                                  # 'Hellinger': round(float(hellinger(query_vec, corpus_model[index])), 3),
-                                  'Cosine similarity': round(cossim(query_vec, corpus_model[index]), 3)}
+                                 #  'Cosine similarity': round(cossim(query_vec, corpus_model[index]), 3)}
                                   #,'Jaccard distance(less is better)': round(float(jaccard(query_vec, corpus_model[index])), 3)}
 
             if self.model_name == 'lda':
@@ -105,39 +106,30 @@ class SearchEngine:
             found_articles.append(article_similarity)
         return answer_time, self.model_name, found_articles
 
-    def queries_result(self, amount=3):
+    def get_answers(self, amount=3):
         answers = []
-        for query in self.storage.get_queries():
+        for query in self.query:
             query_vec = self.query_to_vec(query)
             answer_time, model_name, answer_articles = self.find_article(query_vec, amount=amount)
+            print('%s answer time for %s' % (answer_time, model_name))
             answers.append({'answer_time': answer_time,
                             'model_name': model_name,
-                            'answer_articles': answer_articles})
+                            'answer_articles': answer_articles,
+                            'query': str(query)})
+        self.storage.save_answers(answers)
         return answers
-
-    def get_result(self, amount=3):
-        query_num = 1
-        path = os.path.join(self.storage.tmp_path, 'answers')
-        if not os.path.exists(path):
-            os.makedirs(path)
-        for answer_info in self.queries_result(amount):
-            print('%s answer time for %s' % (answer_info["answer_time"], answer_info["model_name"]))
-            file_name = 'answer.' + answer_info["model_name"] + str(query_num) + ".json"
-            with open(os.path.join(path, file_name), 'w', encoding="utf8") as file:
-                query_num += 1
-                s = json.dumps(dict(model_name=self.model_name,
-                                    answers=answer_info["answer_articles"]), indent=2, ensure_ascii=False)
-                file.write(s)
 
 
 if __name__ == '__main__':
     test_case_id = PhyVariables.currentTestKey
     test_case = TestCase(test_case_id)
     test_case.setup()
-    search = SearchEngine(query=None, test_case_id=test_case_id, model_name='w2v')
+    storage = Storage(test_case_id)
+    queries = storage.get_queries()
+    search = SearchEngine(query=queries, test_case_id=test_case_id, model_name='lda')
     if search.server_state == ServerState.Stop:
         print("\nCan't start server, model didn't loaded\n")
         search.train_model()
     else:
         print("\nStart server\n")
-        search.get_result()
+        pprint(search.get_answers(amount=2))

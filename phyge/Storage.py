@@ -32,7 +32,6 @@ class Storage:
         if not os.path.exists(self.tmp_path):
             os.makedirs(self.tmp_path)
 
-
     def get_urls(self):
         urls = []
         if not os.path.isfile(self.urls_path):
@@ -86,7 +85,7 @@ class Storage:
         words_list = []
         for columns in df.columns:
             words_list.append(df[columns].dropna().tolist())
-        #TODO remove words that appear only once IN DOCUMENT!!!
+        # TODO remove words that appear only once IN DOCUMENT!!!
         all_tokens = sum(words_list, [])
         tokens_once = set(word for word in set(all_tokens) if all_tokens.count(word) == 1)
         words_list = [[word for word in text if word not in tokens_once] for text in words_list]
@@ -135,3 +134,13 @@ class Storage:
 
     def save_model(self, model, save_path):
         model.save(save_path)
+
+    def save_answers(self, answers=dict):
+        path = os.path.join(self.tmp_path)
+        if not os.path.exists(path):
+            os.makedirs(path)
+        file_name = 'answers.json'
+        with open(os.path.join(path, file_name), 'w', encoding="utf8") as file:
+            s = json.dumps(answers, indent=2, ensure_ascii=False)
+            file.write(s)
+        return s
