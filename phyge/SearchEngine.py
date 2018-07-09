@@ -83,7 +83,6 @@ class SearchEngine:
         articles: [PhyArticle] = self.storage.get_articles()
         found_articles = []
 
-
         for index, similarity in sims[:amount]:
             article_similarity = {'id': index,
                                   'title': articles[index].title,
@@ -93,16 +92,13 @@ class SearchEngine:
                                  # 'Hellinger': round(float(hellinger(query_vec, corpus_model[index])), 3),
                                  #  'Cosine similarity': round(cossim(query_vec, corpus_model[index]), 3)}
                                   #,'Jaccard distance(less is better)': round(float(jaccard(query_vec, corpus_model[index])), 3)}
-
-            if self.model_name == 'lda':
+            if self.model_name == 'lda' or 'lsi':
                 article_similarity['Hellinger'] = round(float(hellinger(query_vec, corpus_model[index])), 3)
                 article_similarity['Jaccard distance(less is better)'] = round(float(jaccard(query_vec, corpus_model[index])), 3)
             elif self.model_name == 'w2v':
                 article_similarity['Jaccard distance(less is better)'] = round(float(jaccard(query_vec, corpus_model[index])), 3)
             else:
                 continue
-
-
             found_articles.append(article_similarity)
         return answer_time, self.model_name, found_articles
 
@@ -126,7 +122,7 @@ if __name__ == '__main__':
     test_case.setup()
     storage = Storage(test_case_id)
     queries = storage.get_queries()
-    search = SearchEngine(query=queries, test_case_id=test_case_id, model_name='lda')
+    search = SearchEngine(query=queries, test_case_id=test_case_id, model_name='lsi')
     if search.server_state == ServerState.Stop:
         print("\nCan't start server, model didn't loaded\n")
         search.train_model()
