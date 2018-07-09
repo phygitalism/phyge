@@ -32,7 +32,6 @@ class LSImodel(BaseModel):
     def train_model(self):
         print('\nLSI model: Обучаем модель...')
         start_time = time.time()
-        print(self.corpus)
         lsi = models.LsiModel(self.corpus, id2word=self.dct, num_topics=self.TOPIC_NUMBER)
         print('Learning time:', round((time.time() - start_time), 3), 's')
         return lsi

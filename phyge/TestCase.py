@@ -20,8 +20,6 @@ class TestCase:
         self.queries = self.storage.get_queries()
         self.articles = self.storage.get_articles()
         self.values = self.storage.get_words_df_json()
-        self.dct = self.storage.save_dct_for_model()
-        self.corpus = self.storage.get_corpus()
         self.fetch_state = DownloadArticlesState.OldArticle
 
     def setup(self):
