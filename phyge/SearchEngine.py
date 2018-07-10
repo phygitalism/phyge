@@ -84,7 +84,7 @@ class SearchEngine:
                                   'title': articles[index].title,
                                   'url': articles[index].url,
                                   'text': (articles[index].text[0:200]).replace("', '", '').replace("['", '') + '...',
-                                  'Cosine similarity': round(float(similarity), 3)}
+                                  'similarity': round(float(similarity), 3)}
                                  # 'Hellinger': round(float(hellinger(query_vec, corpus_model[index])), 3),
                                  #  'Cosine similarity': round(cossim(query_vec, corpus_model[index]), 3)}
                                   #,'Jaccard distance(less is better)': round(float(jaccard(query_vec, corpus_model[index])), 3)}
