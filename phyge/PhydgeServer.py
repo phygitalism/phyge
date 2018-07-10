@@ -1,8 +1,8 @@
 from flask import Flask, request, Response
 import json
 from pprint import pprint
-from TematicModels import TematicModels
-from Models.PhygeVariables import PhyVariables
+from SearchEngine import SearchEngine, ServerState
+from Models.Query import Query
 
 app = Flask(__name__)
 logging_enabled = False
@@ -21,15 +21,15 @@ def search_articles():
     print('search_articles: ', search_articles)
     query_text = search_articles["query"]
     amount = search_articles["amount"]
-    query_vec = tematic_models.load_query_to_vec(query_text)
-    lsi_answer = tematic_models.find_article(query_vec, model='lsi', amount=amount)
-    print('\nLSI answer:')
-    pprint(lsi_answer)
+    queries = [Query({'text': query_text, 'id': 1})]
+    search = SearchEngine(query=queries, test_case_id=4, model_name='w2v')
+    if search.server_state == ServerState.Stop:
+        print("\nCan't start server, model didn't loaded\n")
+        search.train_model()
+    else:
+        print("\nStart server\n")
+        models_answer = search.get_answers(amount=amount)
 
-    lda_answer = tematic_models.find_article(query_vec, model='lda', amount=amount)
-    print('\nLDA answer:')
-    pprint(lda_answer)
-    models_answer = dict(lsi=lsi_answer, lda=lda_answer)
     return Response(json.dumps(models_answer, ensure_ascii=False), status=200, mimetype='application/json')
 
 
@@ -46,5 +46,5 @@ def check_answer():
 
 if __name__ == "__main__":
     log_of_result = []
-    tematic_models = TematicModels(test_number=PhyVariables.currentTestKey)
+    # tematic_models = TematicModels(test_number=PhyVariables.currentTestKey)
     app.run(host='0.0.0.0', port=5050, threaded=True)
