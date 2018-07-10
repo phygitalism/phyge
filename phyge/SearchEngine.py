@@ -3,11 +3,8 @@ from TematicModels import LDAmodel, LSImodel, W2Vmodel
 from Storage import Storage
 from PhygeVariables import PhyVariables
 from Models.PhygeArticle import PhyArticle
-
 from gensim import similarities
 import time
-import json
-import os
 from enum import Enum
 from pprint import pprint
 
@@ -57,7 +54,6 @@ class SearchEngine:
         if not self.base_model:
             self.model.train_models()
 
-    # нормализуем запрос
     def query_to_vec(self, query):
         query_normalize = query.normalized_words
         dct = self.storage.get_dct_for_model()
@@ -122,7 +118,7 @@ if __name__ == '__main__':
     test_case.setup()
     storage = Storage(test_case_id)
     queries = storage.get_queries()
-    search = SearchEngine(query=queries, test_case_id=test_case_id, model_name='lsi')
+    search = SearchEngine(query=queries, test_case_id=test_case_id, model_name='w2v')
     if search.server_state == ServerState.Stop:
         print("\nCan't start server, model didn't loaded\n")
         search.train_model()

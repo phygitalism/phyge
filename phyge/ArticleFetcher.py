@@ -30,8 +30,10 @@ class ArticleFetcher:
                     current_url_status["status"] = "OK"
                 else:
                     current_url_status["status"] = "LOAD_ERR"
+                    print('LOAD ERR')
             else:
                 current_url_status["status"] = "PARSE_ERR"
+                print('PARSE ERR')
             self.urls_status.append(current_url_status)
         return self.articles
 
