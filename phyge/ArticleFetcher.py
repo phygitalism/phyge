@@ -1,37 +1,64 @@
-from Models.PhygeArticle import PhyArticle
 from newspaper import Article
-from enum import Enum
+from TextNormalizer import TextNormalizer
+from readability.readability import Document
+from bs4 import BeautifulSoup
 
-class FetchState(Enum):
-    OldArticle, NewArticle = range(2)
+from Models.PhygeTranslate import PhyTranslate
+from Models.PhygeArticle import PhyArticle
+import re
 
-    def __str__(self):
-        return str(self.name)
 
 class ArticleFetcher:
-    def __init__(self, urls):
-        self.urls = [x.get('url') for x in urls]
-        self.language = [x.get('language') for x in urls]
+    def __init__(self):
+        self.word_limit = 30
         self.articles = list()
-        self.flag = False
+        self.urls_status = list()
 
-    def fetch(self):
-        length = len(self.urls)
-        for number, current_url in enumerate(self.urls, start=1):
-            #print(str.format('Downloading article {0} from {1} {2}', number, length, current_url))
-            #current_url = current_url.replace('habrahabr.ru', 'habr.com')
-            print(str.format('Downloading article {0} from {1} {2}', number, length, current_url))
-            article_html = Article(url=current_url, language='ru')
-            article_html.download()
-            if len(article_html.html) > 0:
-                # article_html = request(url=current_url, method='GET').text
-                article = PhyArticle()
-                article.transform(article_html, current_url, self.language[number-1])
-                if len(article.normalized_words) > 0:
-                    self.articles.append(article)
-                    self.flag = True
+    def load_articles(self, urls_new):
+        urls_number = len(urls_new)
+        for i, current_url in enumerate(urls_new, start=1):
+            current_url_status = {"url": current_url['url']}
+            print(str.format('Downloading article {0} from {1} {2}', i, urls_number, current_url['url']))
+            article_html = self.load_html(current_url['url'])
+            if len(article_html) > 0:
+                current_article = self.parse_html(current_url['url'], article_html, current_url['language'])
+                # if len(current_article['normalized_words']) > self.word_limit:
+                #    articles_new.append(current_article)
+                #    current_url_status["status"] = "OK"
+                if len(current_article.normalized_words) > 0:
+                    self.articles.append(current_article)
+                    current_url_status["status"] = "OK"
                 else:
-                    print('NO FOUND words in the article', number, 'url:', current_url)
+                    current_url_status["status"] = "LOAD_ERR"
+                    print('LOAD ERR')
             else:
-                print('article', number, 'doesn\'t parsed! Url:', current_url)
+                current_url_status["status"] = "PARSE_ERR"
+                print('PARSE ERR')
+            self.urls_status.append(current_url_status)
         return self.articles
+
+    def load_html(self, current_url):
+        article_html = Article(url=current_url, language='ru')
+        article_html.download()
+        return article_html.html
+
+    def parse_html(self, current_url, article_html, language):
+        readable_html = Document(article_html).summary()
+        title = Document(article_html).short_title()
+        text = self.__transform_to_single_line(readable_html)
+        text = re.sub(r'\{[^*]*\}', '', text)
+        # if PhyTranslate.detect_language(text) == 'en':
+        if language == 'en':
+            text = PhyTranslate.translate(text, title, current_url)
+        normalized_words = TextNormalizer.normalize(text)
+        return PhyArticle({'url': current_url,
+                           'title': title,
+                           'text': text,
+                           'language': language,
+                           'normalized_words': normalized_words})
+
+    def __transform_to_single_line(self, raw_html):
+        soup = BeautifulSoup(raw_html, "lxml")
+        return str(soup.findAll(text=True)).replace("\\n", "").replace("\\r", "").replace('\\xa0', '').replace('\'',
+                                                                                                               '').replace(
+            '\\t', '')
