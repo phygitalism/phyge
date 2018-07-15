@@ -48,8 +48,8 @@ class ArticleFetcher:
         text = self.__transform_to_single_line(readable_html)
         text = re.sub(r'\{[^*]*\}', '', text)
         # if PhyTranslate.detect_language(text) == 'en':
-        if language == 'en':
-            text = PhyTranslate.translate(text, title, current_url)
+        # if language == 'en':
+        text = PhyTranslate.translate(text, title, current_url)
         normalized_words = TextNormalizer.normalize(text)
         return PhyArticle({'url': current_url,
                            'title': title,
