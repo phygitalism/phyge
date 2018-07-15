@@ -16,6 +16,7 @@ class TestCase:
         self.article_fetcher = ArticleFetcher()
         self.id = self.storage.test_case_id
         self.path = self.storage.test_case_path
+        self.path_tmp = self.storage.tmp_path
         self.urls = self.storage.get_urls()
         self.queries = self.storage.get_queries()
         self.articles = self.storage.get_articles()

@@ -3,7 +3,7 @@ import os
 
 class PhyVariables:
     testsDir = 'Tests'
-    currentTestKey = 4
+    currentTestKey = 8
     urlsFileKey = 'urls.json'
     urlsStatusFileKey = 'urls.status.json'
     # urlsFileKey = 'en_slack_urls_clear.json'
@@ -14,6 +14,7 @@ class PhyVariables:
     modelLdaKey = 'phydge.lda'
     modelW2vKey = 'phyge.w2v'
     dctFileKey = 'deerwester.dict'
+    corpusFileKey = 'deerwester.mm'
 
     resourcesDir = 'Resources'
     stopwordsDir = 'stopwords'
