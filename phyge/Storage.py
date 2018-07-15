@@ -28,6 +28,7 @@ class Storage:
         self.lda_path = os.path.join(self.tmp_path, PhyVariables.modelLdaKey)
         self.w2v_path = os.path.join(self.tmp_path, PhyVariables.modelW2vKey)
         self.dct_path = os.path.join(self.tmp_path, PhyVariables.dctFileKey)
+        self.corpus_path = os.path.join(self.tmp_path, PhyVariables.corpusFileKey)
 
         if not os.path.exists(self.tmp_path):
             os.makedirs(self.tmp_path)
@@ -114,7 +115,9 @@ class Storage:
     def get_corpus(self):
         dct = self.get_dct_for_model()
         documents = self.get_words_list()
-        return [dct.doc2bow(doc) for doc in documents]
+        corpus = [dct.doc2bow(doc) for doc in documents]
+        corpora.MmCorpus.serialize(self.corpus_path, corpus)
+        return corpus
 
     def get_model(self, model_name, load_path):
         print('%s model loading...' % model_name)
