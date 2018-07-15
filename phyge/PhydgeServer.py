@@ -22,15 +22,22 @@ def search_articles():
     query_text = search_articles["query"]
     amount = search_articles["amount"]
     queries = [Query({'text': query_text, 'id': 1})]
-    search = SearchEngine(query=queries, test_case_id=4, model_name='lda')
-    if search.server_state == ServerState.Stop:
+    print('MODEL', search_articles['model'])
+    search_lsi = SearchEngine(query=queries, test_case_id=4, model_name='lsi')
+    search_lda = SearchEngine(query=queries, test_case_id=4, model_name='lda')
+    if search_lsi.server_state == ServerState.Stop:
         print("\nCan't start server, model didn't loaded\n")
-        search.train_model()
+        search_lsi.train_model()
+    if search_lda.server_state == ServerState.Stop:
+        print("\nCan't start server, model didn't loaded\n")
+        search_lda.train_model()
     else:
         print("\nStart server\n")
-        answers = search.get_answers(amount=amount)
-        models_answer = {answers[0]['model_name']:answers[0]["answer_articles"]}
-
+        answer_lsi = search_lsi.get_answers(amount=amount)
+        answer_lda = search_lda.get_answers(amount=amount)
+        models_answer = {'lda': answer_lda[0]["answer_articles"], 'lsi': []}
+    print('models answer')
+    pprint(models_answer)
     return Response(json.dumps(models_answer, ensure_ascii=False), status=200, mimetype='application/json')
 
 
