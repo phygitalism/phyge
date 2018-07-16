@@ -1,0 +1,9 @@
+pymorphy2 == 0.8
+newspaper3k == 0.2.6
+beautifulsoup4 == 4.6.0
+pandas == 0.22.0
+gensim == 3.4.0
+googletrans == 2.3.0
+sklearn
+flask == 1.0.2
+
