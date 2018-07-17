@@ -3,7 +3,7 @@ class PhyArticle:
         if obj is None:
             obj = dict()
 
-        self.url = obj.get('url', '')
+        self.source = obj.get('source', '')
         self.title = obj.get('title', '')
         self.text = obj.get('text', '')
         self.language = obj.get('language', '')
@@ -13,7 +13,7 @@ class PhyArticle:
         return PhyArticle(obj)
 
     def deserialize_to_dict(self):
-        return {'url': self.url,
+        return {'source': self.source,
                 'title': self.title,
                 'text': self.text,
                 'language': self.language,

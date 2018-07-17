@@ -30,9 +30,10 @@ class Storage:
         self.dct_path = os.path.join(self.tmp_path, PhyVariables.dctFileKey)
         self.corpus_path = os.path.join(self.tmp_path, PhyVariables.corpusFileKey)
 
+        self.db_path = os.path.join(self.test_case_path, PhyVariables.dbFileKey)
         if not os.path.exists(self.tmp_path):
             os.makedirs(self.tmp_path)
-
+    # УБРАТЬ
     def get_urls(self):
         urls = []
         if not os.path.isfile(self.urls_path):
@@ -42,6 +43,18 @@ class Storage:
             for url in data_urls:
                 urls.append(dict(url=url.get('url'), language=url.get('language', '')))
         return urls
+
+    def get_db(self):
+        db = []
+        if not os.path.isfile(self.db_path):
+            return list()
+        with open(self.db_path, 'r', encoding="utf8") as json_file:
+            data = json.load(json_file)
+            for current_data in data:
+                db.append(dict(id=current_data.get('id'), data_type=current_data.get('data_type'),
+                               source=current_data.get('source'), title=current_data.get('title', ''),
+                               text=current_data.get('text', ''), language=current_data.get('language', '')))
+        return db
 
     def get_urls_status(self):
         urls = []

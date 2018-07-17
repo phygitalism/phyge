@@ -1,6 +1,9 @@
 from enum import Enum
+import re
 from ArticleFetcher import ArticleFetcher
 from Storage import Storage
+from TextNormalizer import TextNormalizer
+from Models.PhygeArticle import PhyArticle
 
 
 class DownloadArticlesState(Enum):
@@ -23,19 +26,35 @@ class TestCase:
         self.values = self.storage.get_words_df_json()
         self.fetch_state = DownloadArticlesState.OldArticle
 
-    def setup(self):
-        existing_urls = [article.url for article in self.articles]
-        filtred_urls = [x for x in self.urls if x['url'] not in existing_urls]
-        if len(filtred_urls) > 0:
-            self.fetch_state = DownloadArticlesState.NewArticle
-            self.downloaded_articles = self.article_fetcher.load_articles(filtred_urls)
-            self.articles += self.downloaded_articles
+        self.db = self.storage.get_db()
 
+    def setup(self):
+        existing_data = [article.source for article in self.articles]
+        filtred_data = [x for x in self.db if x['source'] not in existing_data]
+        data_number = len(filtred_data)
+        if data_number > 0:
+            for i, current_data in enumerate(filtred_data, start=1):
+                print(str.format('Downloading article {0} from {1} {2}', i, data_number, current_data['source']))
+                if current_data["data_type"] == "web_article":
+                    current_article = self.article_fetcher.load_article(current_data)
+                else:
+                    current_article = self.load_note_article(current_data)
+                if current_article:
+                    self.articles.append(current_article)
+                else:
+                    print("Error while download article", i)
         self.storage.save_articles(self.articles)
         self.values = self.storage.get_words_list()
 
-    # def uci_representation(self, path):
-    #    pairs = zip(range(len(self.articles)), self.articles)
-    #    data = dict((key, value.normalized_words) for key, value in pairs)
-    #    bag_of_words = BagOfWordsModel(data)
-    #    bag_of_words.to_uci(model_name='articles', save_folder=path + '/uci')
+    def load_note_article(self, current_data):
+        title = current_data['title']
+        text = current_data['text']
+        source = current_data['source']
+        language = current_data['language']
+        text = re.sub(r'\{[^*]*\}', '', text)
+        normalized_words = TextNormalizer.normalize(text)
+        return PhyArticle({'source': source,
+                           'title': title,
+                           'text': text,
+                           'language': language,
+                           'normalized_words': normalized_words})

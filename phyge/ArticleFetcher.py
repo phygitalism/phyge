@@ -11,31 +11,23 @@ import re
 class ArticleFetcher:
     def __init__(self):
         self.word_limit = 30
-        self.articles = list()
-        self.urls_status = list()
 
-    def load_articles(self, urls_new):
-        urls_number = len(urls_new)
-        for i, current_url in enumerate(urls_new, start=1):
-            current_url_status = {"url": current_url['url']}
-            print(str.format('Downloading article {0} from {1} {2}', i, urls_number, current_url['url']))
-            article_html = self.load_html(current_url['url'])
-            if len(article_html) > 0:
-                current_article = self.parse_html(current_url['url'], article_html, current_url['language'])
-                # if len(current_article['normalized_words']) > self.word_limit:
-                #    articles_new.append(current_article)
-                #    current_url_status["status"] = "OK"
-                if len(current_article.normalized_words) > 0:
-                    self.articles.append(current_article)
-                    current_url_status["status"] = "OK"
-                else:
-                    current_url_status["status"] = "LOAD_ERR"
-                    print('LOAD ERR')
+    def load_article(self, data_new):
+        url_status = {"url": data_new['source']}
+        article_html = self.load_html(data_new['source'])
+        if len(article_html) > 0:
+            article = self.parse_html(data_new['source'], article_html, data_new['language'])
+            if len(article.normalized_words) > 0:
+                url_status["status"] = "OK"
             else:
-                current_url_status["status"] = "PARSE_ERR"
-                print('PARSE ERR')
-            self.urls_status.append(current_url_status)
-        return self.articles
+                url_status["status"] = "LOAD_ERR"
+                print('LOAD ERR')
+                article = None
+        else:
+            url_status["status"] = "PARSE_ERR"
+            print('PARSE ERR')
+            article = None
+        return article
 
     def load_html(self, current_url):
         article_html = Article(url=current_url, language='ru')
@@ -51,7 +43,7 @@ class ArticleFetcher:
         # if language == 'en':
         text = PhyTranslate.translate(text, title, current_url)
         normalized_words = TextNormalizer.normalize(text)
-        return PhyArticle({'url': current_url,
+        return PhyArticle({'source': current_url,
                            'title': title,
                            'text': text,
                            'language': language,
