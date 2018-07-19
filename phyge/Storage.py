@@ -100,9 +100,9 @@ class Storage:
         for columns in df.columns:
             words_list.append(df[columns].dropna().tolist())
         # TODO remove words that appear only once IN DOCUMENT!!!
-        all_tokens = sum(words_list, [])
-        tokens_once = set(word for word in set(all_tokens) if all_tokens.count(word) == 1)
-        words_list = [[word for word in text if word not in tokens_once] for text in words_list]
+        #all_tokens = sum(words_list, [])
+        #tokens_once = set(word for word in set(all_tokens) if all_tokens.count(word) == 1)
+        #words_list = [[word for word in text if word not in tokens_once] for text in words_list]
         return words_list
 
     def get_queries(self) -> [Query]:

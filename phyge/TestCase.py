@@ -20,7 +20,7 @@ class TestCase:
         self.id = self.storage.test_case_id
         self.path = self.storage.test_case_path
         self.path_tmp = self.storage.tmp_path
-        self.urls = self.storage.get_urls()
+        #self.urls = self.storage.get_urls()
         self.queries = self.storage.get_queries()
         self.articles = self.storage.get_articles()
         self.values = self.storage.get_words_df_json()
@@ -37,8 +37,11 @@ class TestCase:
                 print(str.format('Downloading article {0} from {1} {2}', i, data_number, current_data['source']))
                 if current_data["data_type"] == "web_article":
                     current_article = self.article_fetcher.load_article(current_data)
-                else:
+                elif current_data["data_type"] == "note":
                     current_article = self.load_note_article(current_data)
+                else:
+                    print("Key error in data base\n")
+                    current_article = None
                 if current_article:
                     self.articles.append(current_article)
                 else:
@@ -47,14 +50,11 @@ class TestCase:
         self.values = self.storage.get_words_list()
 
     def load_note_article(self, current_data):
-        title = current_data['title']
         text = current_data['text']
-        source = current_data['source']
-        language = current_data['language']
         text = re.sub(r'\{[^*]*\}', '', text)
         normalized_words = TextNormalizer.normalize(text)
-        return PhyArticle({'source': source,
-                           'title': title,
+        return PhyArticle({'source': current_data['source'],
+                           'title': current_data['title'],
                            'text': text,
-                           'language': language,
+                           'language': current_data['language'],
                            'normalized_words': normalized_words})
