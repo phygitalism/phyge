@@ -19,7 +19,6 @@ class Storage:
         self.test_case_id = test_case_id
         self.test_case_path = str.format('{0}/test_{1}', PhyVariables.testsDir, PhyVariables.currentTestKey)
         self.tmp_path = self.test_case_path + '/tmp'
-        self.urls_path = os.path.join(self.test_case_path, PhyVariables.urlsFileKey)
         self.urls_status_path = os.path.join(self.tmp_path, PhyVariables.urlsStatusFileKey)
         self.queries_path = os.path.join(self.test_case_path, PhyVariables.queriesFileKey)
         self.articles_path = os.path.join(self.tmp_path, PhyVariables.articlesFileKey)
@@ -29,19 +28,21 @@ class Storage:
         self.w2v_path = os.path.join(self.tmp_path, PhyVariables.modelW2vKey)
         self.dct_path = os.path.join(self.tmp_path, PhyVariables.dctFileKey)
         self.corpus_path = os.path.join(self.tmp_path, PhyVariables.corpusFileKey)
-
+        self.db_path = os.path.join(self.test_case_path, PhyVariables.dbFileKey)
         if not os.path.exists(self.tmp_path):
             os.makedirs(self.tmp_path)
 
-    def get_urls(self):
-        urls = []
-        if not os.path.isfile(self.urls_path):
+    def get_db(self):
+        db = []
+        if not os.path.isfile(self.db_path):
             return list()
-        with open(self.urls_path, 'r', encoding="utf8") as json_file:
-            data_urls = json.load(json_file)
-            for url in data_urls:
-                urls.append(dict(url=url.get('url'), language=url.get('language', '')))
-        return urls
+        with open(self.db_path, 'r', encoding="utf8") as json_file:
+            data = json.load(json_file)
+            for current_data in data:
+                db.append(dict(id=current_data.get('id'), data_type=current_data.get('data_type'),
+                               source=current_data.get('source'), title=current_data.get('title', ''),
+                               text=current_data.get('text', ''), language=current_data.get('language', '')))
+        return db
 
     def get_urls_status(self):
         urls = []
@@ -87,9 +88,9 @@ class Storage:
         for columns in df.columns:
             words_list.append(df[columns].dropna().tolist())
         # TODO remove words that appear only once IN DOCUMENT!!!
-        all_tokens = sum(words_list, [])
-        tokens_once = set(word for word in set(all_tokens) if all_tokens.count(word) == 1)
-        words_list = [[word for word in text if word not in tokens_once] for text in words_list]
+        #all_tokens = sum(words_list, [])
+        #tokens_once = set(word for word in set(all_tokens) if all_tokens.count(word) == 1)
+        #words_list = [[word for word in text if word not in tokens_once] for text in words_list]
         return words_list
 
     def get_queries(self) -> [Query]:

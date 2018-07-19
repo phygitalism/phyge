@@ -15,6 +15,7 @@ class PhyVariables:
     modelW2vKey = 'phyge.w2v'
     dctFileKey = 'deerwester.dict'
     corpusFileKey = 'deerwester.mm'
+    dbFileKey = 'db.json'
 
     resourcesDir = 'Resources'
     stopwordsDir = 'stopwords'
