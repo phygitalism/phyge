@@ -82,7 +82,7 @@ class SearchEngine:
         for index, similarity in sims[:amount]:
             article_similarity = {'id': index,
                                   'title': articles[index].title,
-                                  'url': articles[index].url,
+                                  'url': articles[index].source,
                                   'text': (articles[index].text[0:200]).replace("', '", '').replace("['", '') + '...',
                                   'similarity': round(float(similarity), 3)}
                                  # 'Hellinger': round(float(hellinger(query_vec, corpus_model[index])), 3),
