@@ -19,7 +19,6 @@ class Storage:
         self.test_case_id = test_case_id
         self.test_case_path = str.format('{0}/test_{1}', PhyVariables.testsDir, PhyVariables.currentTestKey)
         self.tmp_path = self.test_case_path + '/tmp'
-        self.urls_path = os.path.join(self.test_case_path, PhyVariables.urlsFileKey)
         self.urls_status_path = os.path.join(self.tmp_path, PhyVariables.urlsStatusFileKey)
         self.queries_path = os.path.join(self.test_case_path, PhyVariables.queriesFileKey)
         self.articles_path = os.path.join(self.tmp_path, PhyVariables.articlesFileKey)
@@ -29,20 +28,9 @@ class Storage:
         self.w2v_path = os.path.join(self.tmp_path, PhyVariables.modelW2vKey)
         self.dct_path = os.path.join(self.tmp_path, PhyVariables.dctFileKey)
         self.corpus_path = os.path.join(self.tmp_path, PhyVariables.corpusFileKey)
-
         self.db_path = os.path.join(self.test_case_path, PhyVariables.dbFileKey)
         if not os.path.exists(self.tmp_path):
             os.makedirs(self.tmp_path)
-    # УБРАТЬ
-    def get_urls(self):
-        urls = []
-        if not os.path.isfile(self.urls_path):
-            return list()
-        with open(self.urls_path, 'r', encoding="utf8") as json_file:
-            data_urls = json.load(json_file)
-            for url in data_urls:
-                urls.append(dict(url=url.get('url'), language=url.get('language', '')))
-        return urls
 
     def get_db(self):
         db = []

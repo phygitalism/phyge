@@ -20,7 +20,6 @@ class TestCase:
         self.id = self.storage.test_case_id
         self.path = self.storage.test_case_path
         self.path_tmp = self.storage.tmp_path
-        #self.urls = self.storage.get_urls()
         self.queries = self.storage.get_queries()
         self.articles = self.storage.get_articles()
         self.values = self.storage.get_words_df_json()
