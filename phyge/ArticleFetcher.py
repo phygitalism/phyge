@@ -13,18 +13,13 @@ class ArticleFetcher:
         self.word_limit = 30
 
     def load_article(self, data_new):
-        url_status = {"url": data_new['source']}
         article_html = self.load_html(data_new['source'])
         if len(article_html) > 0:
             article = self.parse_html(data_new['source'], article_html, data_new['language'])
-            if len(article.normalized_words) > 0:
-                url_status["status"] = "OK"
-            else:
-                url_status["status"] = "LOAD_ERR"
+            if len(article.normalized_words) == 0:
                 print('LOAD ERR')
                 article = None
         else:
-            url_status["status"] = "PARSE_ERR"
             print('PARSE ERR')
             article = None
         return article
