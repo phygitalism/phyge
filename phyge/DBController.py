@@ -30,13 +30,17 @@ class DBController:
             '_id': str(uuid),
             'serial_id': cls.get_next_number_in_sequence(cls.article_serial_id_sequence_key),
             'title': article.title,
-            'source': article.source
+            'source': article.source,
+            'text': article.text,
+            'language': article.language,
+            'normalized_words': article.normalized_words
         })
 
     @classmethod
-    def get_all_articles(cls, filter_fields=None) -> [dict]:
+    def get_all_articles(cls, filter_fields=None) -> [PhyArticle]:
         filter_fields = filter_fields or {}
-        return [x for x in cls.articles.find(filter_fields).sort('serial_id', pymongo.ASCENDING)]
+        articles = [x for x in cls.articles.find(filter_fields).sort('serial_id', pymongo.ASCENDING)]
+        return [PhyArticle(obj) for obj in articles]
 
     @classmethod
     def get_article(cls, uuid) -> dict:
