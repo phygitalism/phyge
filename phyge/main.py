@@ -1,5 +1,7 @@
 from flask import Flask, request, Response
 import json
+import time
+
 from pprint import pprint
 from SearchEngine import SearchEngine
 from Models.Query import Query
@@ -8,12 +10,12 @@ from DatabaseSeeder import DatabaseSeeder
 from DBController import DBController
 
 from TrainingSample import TrainingSample
-from TematicModels import LSImodel, LDAmodel, W2Vmodel
+from TematicModels import LsiModel, LdaModel
 
 app = Flask(__name__)
 logging_enabled = False
 
-search_lsi: SearchEngine = None
+search_engine: SearchEngine = None
 
 
 @app.route('/')
@@ -23,13 +25,18 @@ def index():
 
 @app.route('/search_articles', methods=['POST'])
 def search_articles():
-    global search_lsi
+    global search_engine
     request_body = request.json
     print('search_articles: ', request_body)
     query_text = request_body["query"]
     amount = request_body["amount"]
     query = Query({'text': query_text, 'id': 1})
-    search_results = search_lsi.find_article(query, amount=amount)
+
+    start_time = time.time()
+    search_results = search_engine.find_article(query, amount=amount)
+    answer_time = round((time.time() - start_time), 3)
+    search_results['search_time'] = answer_time
+
     print('search_results')
     pprint(search_results)
     return Response(json.dumps(search_results, ensure_ascii=False), status=200, mimetype='application/json')
@@ -55,7 +62,8 @@ if __name__ == "__main__":
 
     testing_sample = TrainingSample()
 
-    lsi = LSImodel(testing_sample)
-    search_lsi = SearchEngine(model=lsi)
+    lsi = LsiModel(testing_sample)
+    lda = LdaModel(testing_sample)
+    search_engine = SearchEngine(models=[lsi, lda])
 
     app.run(host='0.0.0.0', port=5050, threaded=True)
