@@ -12,10 +12,11 @@ class ArticleFetcher:
     def __init__(self):
         self.word_limit = 30
 
-    def load_article(self, data_new):
-        article_html = self.load_html(data_new['source'])
+    def download_article(self, url: str) -> PhyArticle:
+        print('download from:', url)
+        article_html = self.load_html(url)
         if len(article_html) > 0:
-            article = self.parse_html(data_new['source'], article_html, data_new['language'])
+            article = self.parse_html(url, article_html)
             if len(article.normalized_words) == 0:
                 print('LOAD ERR')
                 article = None
@@ -29,14 +30,15 @@ class ArticleFetcher:
         article_html.download()
         return article_html.html
 
-    def parse_html(self, current_url, article_html, language):
+    def parse_html(self, current_url, article_html, language='ru'):
         readable_html = Document(article_html).summary()
         title = Document(article_html).short_title()
         text = self.__transform_to_single_line(readable_html)
         text = re.sub(r'\{[^*]*\}', '', text)
-        # if PhyTranslate.detect_language(text) == 'en':
-        # if language == 'en':
-        text = PhyTranslate.translate(text, title, current_url)
+
+        if language == 'en':
+            text = PhyTranslate.translate(text, title, current_url)
+
         normalized_words = TextNormalizer.normalize(text)
         return PhyArticle({'source': current_url,
                            'title': title,
