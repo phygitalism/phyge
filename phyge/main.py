@@ -1,15 +1,19 @@
 from flask import Flask, request, Response
 import json
 from pprint import pprint
-from SearchEngine import SearchEngine, ServerState
+from SearchEngine import SearchEngine
 from Models.Query import Query
 
 from DatabaseSeeder import DatabaseSeeder
 from DBController import DBController
 
+from TrainingSample import TrainingSample
+from TematicModels import LSImodel, LDAmodel, W2Vmodel
+
 app = Flask(__name__)
 logging_enabled = False
-simulation_thread = None
+
+search_lsi: SearchEngine = None
 
 
 @app.route('/')
@@ -19,36 +23,23 @@ def index():
 
 @app.route('/search_articles', methods=['POST'])
 def search_articles():
-    global models_answer
-    search_articles = request.json
-    print('search_articles: ', search_articles)
-    query_text = search_articles["query"]
-    amount = search_articles["amount"]
-    queries = [Query({'text': query_text, 'id': 1})]
-    # print('MODEL', search_articles['model'])
-    search_lsi = SearchEngine(query=queries, test_case_id=3, model_name='lsi')
-    search_lda = SearchEngine(query=queries, test_case_id=3, model_name='lda')
-    if search_lsi.server_state == ServerState.Stop:
-        print("\nCan't start server, model didn't loaded\n")
-        search_lsi.train_model()
-    if search_lda.server_state == ServerState.Stop:
-        print("\nCan't start server, model didn't loaded\n")
-        search_lda.train_model()
-    else:
-        print("\nStart server\n")
-        answer_lsi = search_lsi.get_answers(amount=amount)
-        answer_lda = search_lda.get_answers(amount=amount)
-        models_answer = {'lda': answer_lda[0]["answer_articles"], 'lsi': []}
-    print('models answer')
-    pprint(models_answer)
-    return Response(json.dumps(models_answer, ensure_ascii=False), status=200, mimetype='application/json')
+    global search_lsi
+    request_body = request.json
+    print('search_articles: ', request_body)
+    query_text = request_body["query"]
+    amount = request_body["amount"]
+    query = Query({'text': query_text, 'id': 1})
+    search_results = search_lsi.find_article(query, amount=amount)
+    print('search_results')
+    pprint(search_results)
+    return Response(json.dumps(search_results, ensure_ascii=False), status=200, mimetype='application/json')
 
 
 @app.route('/check_answer', methods=['POST'])
 def check_answer():
-    global models_answer
+    global search_results
     check_answer = request.json
-    log_of_result.append(dict(check_answer, **models_answer))
+    log_of_result.append(dict(check_answer, **search_results))
     pprint(log_of_result)
 
     response_body = dict(control='Answer saved.')
@@ -61,5 +52,10 @@ if __name__ == "__main__":
     if len(DBController.get_all_articles()) == 0:
         print('Seeding database...')
         DatabaseSeeder.seed()
+
+    testing_sample = TrainingSample()
+
+    lsi = LSImodel(testing_sample)
+    search_lsi = SearchEngine(model=lsi)
 
     app.run(host='0.0.0.0', port=5050, threaded=True)
