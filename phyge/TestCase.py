@@ -35,7 +35,7 @@ class TestCase:
             for i, current_data in enumerate(filtred_data, start=1):
                 print(str.format('Downloading article {0} from {1} {2}', i, data_number, current_data['source']))
                 if current_data["data_type"] == "web_article":
-                    current_article = self.article_fetcher.load_article(current_data)
+                    current_article = self.article_fetcher.download_article(current_data)
                 elif current_data["data_type"] == "note":
                     current_article = self.load_note_article(current_data)
                 else:
