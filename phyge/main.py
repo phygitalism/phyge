@@ -9,9 +9,7 @@ from Models.Query import BaseQuery
 from DatabaseSeeder import DatabaseSeeder
 from DBController import DBController
 
-from Models.TrainingSample import TrainingSample
 from Storage import Storage
-from TematicModels import LsiModel, LdaModel
 
 app = Flask(__name__)
 logging_enabled = False

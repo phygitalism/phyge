@@ -12,7 +12,7 @@ class DatabaseSeeder:
     def seed(cls):
         DBController.first_setup()
 
-        data_path = 'Resources/ru_slack_short_urls_list.json'
+        data_path = 'Resources/ru_slack_urls_clear.json'
 
         if not os.path.isfile(data_path):
             return list()
@@ -23,8 +23,9 @@ class DatabaseSeeder:
 
             article_fetcher = ArticleFetcher()
 
-            for article_data in data:
+            for index, article_data in enumerate(data):
                 url = article_data['url']
+                print(f'download {index+1} of the {len(data)}: {url}')
                 article = article_fetcher.download_article(url)
 
                 if article is not None:

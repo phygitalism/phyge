@@ -13,7 +13,6 @@ class ArticleFetcher:
         self.word_limit = 30
 
     def download_article(self, url: str) -> PhyArticle:
-        print('download from:', url)
         article_html = self.load_html(url)
         if len(article_html) > 0:
             article = self.parse_html(url, article_html)
