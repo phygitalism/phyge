@@ -1,10 +1,9 @@
 import time
 import abc
 
-from gensim import models
-from gensim import similarities
+from gensim import models, similarities
 
-from TrainingSample import TrainingSample
+from Models.TrainingSample import TrainingSample
 
 
 class BaseModel(object):
@@ -12,18 +11,30 @@ class BaseModel(object):
 
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self, training_sample: TrainingSample, model_name='model'):
-        self.name = model_name
-        self.training_sample = training_sample
-        self.dictionary = training_sample.dictionary
-        self.corpus = training_sample.corpus
+    @classmethod
+    def trained(cls, name, model, corpus, dictionary, training_sample: TrainingSample):
+        instance = cls(name)
 
-        self.model = self.train_model()
+        instance.model = model
+        instance.corpus = corpus
+        instance.dictionary = dictionary
+
+        instance.training_sample = training_sample
+
+        return instance
+
+    def __init__(self, name, model_type):
+        self.name = name
+        self.type = model_type
+
+        self.model = None
+        self.training_sample = None
+        self.dictionary = None
+        self.corpus = None
 
     @abc.abstractmethod
-    def train_model(self):
+    def train_model(self, training_sample: TrainingSample):
         """Train model."""
-        return
 
     def perform_search(self, normalized_query: [str]):
         index = similarities.MatrixSimilarity(self.model[self.corpus])
@@ -39,32 +50,35 @@ class BaseModel(object):
 
 
 class LsiModel(BaseModel):
-    def __init__(self, training_sample: TrainingSample):
-        BaseModel.__init__(self, training_sample=training_sample, model_name='lsi')
+    def __init__(self, model_name: str):
+        BaseModel.__init__(self, name=model_name, model_type='lsi')
 
-    def train_model(self):
+    def train_model(self, training_sample: TrainingSample):
+        self.training_sample = training_sample
+        self.dictionary = training_sample.dictionary
+        self.corpus = training_sample.corpus
+
         print('\nLSI model: Обучаем модель...')
         start_time = time.time()
-        lsi = models.LsiModel(self.corpus, id2word=self.dictionary, num_topics=self.TOPIC_NUMBER)
+        self.model = models.LsiModel(self.corpus, id2word=self.dictionary, num_topics=self.TOPIC_NUMBER)
         print('Learning time:', round((time.time() - start_time), 3), 's')
-        return lsi
 
 
 class LdaModel(BaseModel):
-    def __init__(self, training_sample: TrainingSample):
-        BaseModel.__init__(self, training_sample=training_sample, model_name='lda')
+    def __init__(self, model_name: str):
+        BaseModel.__init__(self, name=model_name, model_type='lda')
 
-    def train_model(self):
+    def train_model(self, training_sample: TrainingSample):
+        self.training_sample = training_sample
+        self.dictionary = training_sample.dictionary
+        self.corpus = training_sample.corpus
+
         print('\nLDA model: Обучаем модель...')
         start_time = time.time()
-        lda = models.ldamodel.LdaModel(self.corpus, id2word=self.dictionary, num_topics=self.TOPIC_NUMBER,
-                                       passes=20)  # ,iterations=50)
+        self.model = models.ldamodel.LdaModel(self.corpus, id2word=self.dictionary, num_topics=self.TOPIC_NUMBER,
+                                              passes=20)
         print('Learning time:', round((time.time() - start_time), 3), 's')
-        return lda
 
 
 if __name__ == '__main__':
-    testing_sample = TrainingSample()
-
-    lsi = LsiModel(testing_sample)
-    lda = LdaModel(testing_sample)
+    pass
