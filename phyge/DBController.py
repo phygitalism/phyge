@@ -38,8 +38,8 @@ class DBController:
 
     @classmethod
     def get_all_articles(cls, filter_fields=None) -> [PhyArticle]:
-        filter_fields = filter_fields or {}
-        articles = [x for x in cls.articles.find(filter_fields).sort('serial_id', pymongo.ASCENDING)]
+        filter_fields = filter_fields if filter_fields is not None else dict()
+        articles = cls.articles.find(filter_fields).sort('serial_id', pymongo.ASCENDING)
         return [PhyArticle(obj) for obj in articles]
 
     @classmethod
