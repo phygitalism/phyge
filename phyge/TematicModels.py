@@ -9,8 +9,6 @@ from Models.TrainingSample import TrainingSample
 class BaseModel(object):
     TOPIC_NUMBER = 300
 
-    __metaclass__ = abc.ABCMeta
-
     @classmethod
     def trained(cls, name, model, corpus, dictionary, training_sample: TrainingSample):
         instance = cls(name)
