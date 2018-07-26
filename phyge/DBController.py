@@ -7,7 +7,7 @@ from Models.PhygeArticle import AbstractArticle, PhyWebArticle, PhyPdfArticle
 class DBController:
 
     mongo_client = MongoClient('mongo-db', 27017)
-    db = mongo_client.phydge
+    db = mongo_client.phyge
     articles = db.articles
     counters = db.counters
 
