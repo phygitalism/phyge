@@ -14,8 +14,8 @@ if __name__ == "__main__":
     articles = DBController.get_all_articles()
     testing_sample = TrainingSample(articles)
 
-    lsi = LsiModel(model_name='phydge')
-    lda = LdaModel(model_name='phydge')
+    lsi = LsiModel(model_name='phyge')
+    lda = LdaModel(model_name='phyge')
 
     lsi.train_model(testing_sample)
     lda.train_model(testing_sample)
