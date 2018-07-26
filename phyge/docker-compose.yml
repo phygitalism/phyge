@@ -1,4 +1,9 @@
 version: "2"
+
+volumes:
+  # for persistence between restarts
+  mongo_data: {}
+
 services:
   web:
     build: .
@@ -24,4 +29,5 @@ services:
     ports:
       - "127.0.0.1:27017:27017"
     volumes:
-      - ./db:/data/db
+      - mongo_data:/data/db
+
