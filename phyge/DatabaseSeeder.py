@@ -4,6 +4,7 @@ import os
 
 from DBController import DBController
 from ArticleFetcher import ArticleFetcher
+from TextNormalizer import TextNormalizer
 
 
 class DatabaseSeeder:
@@ -11,11 +12,15 @@ class DatabaseSeeder:
     @classmethod
     def seed(cls):
         DBController.first_setup()
+        cls.__seed_web_articles()
 
-        data_path = 'Resources/ru_slack_urls_clear.json'
+    @classmethod
+    def __seed_web_articles(cls):
+        data_path = 'Resources/ru_slack_short_urls_list.json'
 
         if not os.path.isfile(data_path):
-            return list()
+            print('Resource does not exist!')
+            return
 
         with open(data_path, 'r', encoding='utf8') as data_file:
 
@@ -29,4 +34,5 @@ class DatabaseSeeder:
                 article = article_fetcher.download_article(url)
 
                 if article is not None:
-                    DBController.add_article(article, str(uuid.uuid4()))
+                    DBController.add_document(article, str(uuid.uuid4()))
+
