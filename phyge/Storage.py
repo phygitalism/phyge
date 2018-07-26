@@ -5,6 +5,7 @@ import os
 
 from gensim import corpora, models
 
+from PhygeVariables import PhyVariables
 from DBController import DBController
 from TematicModels import BaseModel, LsiModel, LdaModel
 from Models.TrainingSample import TrainingSample
@@ -57,7 +58,7 @@ class Storage:
 
     @classmethod
     def load_articles_id(cls, path: str) -> [int]:
-        file_path = os.path.join(path, 'articles_id.json')
+        file_path = os.path.join(path, PhyVariables.articlesIdFileName)
 
         with open(file_path, 'r', encoding='utf8') as file:
             return json.load(file)
