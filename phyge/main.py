@@ -43,7 +43,7 @@ def search_articles():
 if __name__ == "__main__":
     log_of_result = []
 
-    if len(DBController.get_all_articles()) == 0:
+    if len(DBController.get_all_documents()) == 0:
         print('Seeding database...')
         DatabaseSeeder.seed()
 
