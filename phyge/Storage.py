@@ -9,7 +9,7 @@ from PhygeVariables import PhyVariables
 from DBController import DBController
 from TematicModels import BaseModel, LsiModel, LdaModel
 from Models.TrainingSample import TrainingSample
-from Models.PhygeArticle import PhyArticle
+from Models.PhygeArticle import PhyWebArticle
 
 
 class Storage:
@@ -30,7 +30,7 @@ class Storage:
         corpus = corpora.MmCorpus(os.path.join(path, f'{model_name}.mm'))
 
         articles_id = cls.load_articles_id(path)
-        articles = DBController.get_all_articles({'serial_id': {'$in': articles_id}})
+        articles = DBController.get_all_documents({'serial_id': {'$in': articles_id}})
         training_sample = TrainingSample(articles)
 
         def load_func(model_path: str, model_type: str):
@@ -49,7 +49,7 @@ class Storage:
         return model
 
     @classmethod
-    def save_articles_id(cls, articles: [PhyArticle], path: str):
+    def save_articles_id(cls, articles: [PhyWebArticle], path: str):
         file_path = os.path.join(path, 'articles_id.json')
         articles_id = [x.id for x in articles]
 
