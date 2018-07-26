@@ -4,7 +4,7 @@ from readability.readability import Document
 from bs4 import BeautifulSoup
 
 from Models.PhygeTranslate import PhyTranslate
-from Models.PhygeArticle import PhyArticle
+from Models.PhygeArticle import PhyWebArticle
 import re
 
 
@@ -12,7 +12,7 @@ class ArticleFetcher:
     def __init__(self):
         self.word_limit = 30
 
-    def download_article(self, url: str) -> PhyArticle:
+    def download_article(self, url: str) -> PhyWebArticle:
         article_html = self.load_html(url)
         if len(article_html) > 0:
             article = self.parse_html(url, article_html)
@@ -39,14 +39,24 @@ class ArticleFetcher:
             text = PhyTranslate.translate(text, title, current_url)
 
         normalized_words = TextNormalizer.normalize(text)
-        return PhyArticle({'source': current_url,
-                           'title': title,
-                           'text': text,
-                           'language': language,
-                           'normalized_words': normalized_words})
+        web_article = PhyWebArticle({
+            PhyWebArticle.source_key: current_url,
+            PhyWebArticle.title_key: title,
+            PhyWebArticle.text_key: text,
+            PhyWebArticle.language_key: language,
+            PhyWebArticle.normalized_words_key: normalized_words
+        })
 
-    def __transform_to_single_line(self, raw_html):
-        soup = BeautifulSoup(raw_html, "lxml")
-        return str(soup.findAll(text=True)).replace("\\n", "").replace("\\r", "").replace('\\xa0', '').replace('\'',
-                                                                                                               '').replace(
-            '\\t', '')
+        return web_article
+
+    @staticmethod
+    def __transform_to_single_line(raw_html):
+        soup = BeautifulSoup(raw_html, 'lxml')
+        result = str(soup.findAll(text=True))\
+            .replace("\\n", '')\
+            .replace("\\r", '')\
+            .replace('\\xa0', '')\
+            .replace('\'', '')\
+            .replace('\\t', '')
+
+        return result
