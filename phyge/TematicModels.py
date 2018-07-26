@@ -39,8 +39,8 @@ class BaseModel(object):
     def perform_search(self, normalized_query: [str]):
         index = similarities.MatrixSimilarity(self.model[self.corpus])
         query_vec = self.query_to_vec(normalized_query)
-        query_lsi = self.model[query_vec]
-        sims = index[query_lsi]
+        query = self.model[query_vec]
+        sims = index[query]
         sims = sorted(enumerate(sims), key=lambda item: -item[1])
 
         return sims
