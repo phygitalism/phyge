@@ -1,7 +1,7 @@
 import pymongo
 from pymongo import MongoClient
 
-from Models.PhygeArticle import PhyArticle
+from Models.PhygeArticle import AbstractArticle, PhyWebArticle, PhyPdfArticle
 
 
 class DBController:
@@ -25,22 +25,31 @@ class DBController:
         return number['seq']
 
     @classmethod
-    def add_article(cls, article: PhyArticle, uuid):
-        cls.articles.insert_one({
-            '_id': str(uuid),
-            'serial_id': cls.get_next_number_in_sequence(cls.article_serial_id_sequence_key),
-            'title': article.title,
-            'source': article.source,
-            'text': article.text,
-            'language': article.language,
-            'normalized_words': article.normalized_words
-        })
+    def add_document(cls, doc: AbstractArticle, uuid):
+        cls.articles.insert_one({**doc.serialize(),
+                                 '_id': uuid,
+                                 'serial_id': cls.get_next_number_in_sequence(cls.article_serial_id_sequence_key)})
+
 
     @classmethod
-    def get_all_articles(cls, filter_fields=None) -> [PhyArticle]:
+    def get_all_documents(cls, filter_fields=None) -> [AbstractArticle]:
         filter_fields = filter_fields if filter_fields is not None else dict()
         articles = cls.articles.find(filter_fields).sort('serial_id', pymongo.ASCENDING)
-        return [PhyArticle(obj) for obj in articles]
+        return [AbstractArticle(obj) for obj in articles]
+
+    @classmethod
+    def get_all_web_articles(cls, filter_fields=None) -> [PhyWebArticle]:
+        web_article_filter = {'type': 'web_article'}
+        filter_fields = dict(**filter_fields, **web_article_filter) if filter_fields is not None else web_article_filter
+        articles = cls.articles.find(filter_fields).sort('serial_id', pymongo.ASCENDING)
+        return [PhyWebArticle(obj) for obj in articles]
+
+    @classmethod
+    def get_all_pdf_articles(cls, filter_fields=None) -> [PhyPdfArticle]:
+        pdf_article_filter = {'type': 'pdf_article'}
+        filter_fields = dict(**filter_fields, **pdf_article_filter) if filter_fields is not None else pdf_article_filter
+        articles = cls.articles.find(filter_fields).sort('serial_id', pymongo.ASCENDING)
+        return [PhyPdfArticle(obj) for obj in articles]
 
     @classmethod
     def get_article(cls, uuid) -> dict:
