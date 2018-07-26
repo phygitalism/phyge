@@ -3,18 +3,7 @@ import os
 
 class PhyVariables:
     testsDir = 'Tests'
-    currentTestKey = 8
-    urlsStatusFileKey = 'urls.status.json'
-    # urlsFileKey = 'en_slack_urls_clear.json'
-    articlesFileKey = 'articles.json'
-    queriesFileKey = 'queries.json'
-    valuesFileKey = 'values.csv'
-    modelLsiKey = 'phydge.lsi'
-    modelLdaKey = 'phydge.lda'
-    modelW2vKey = 'phyge.w2v'
-    dctFileKey = 'deerwester.dict'
-    corpusFileKey = 'deerwester.mm'
-    dbFileKey = 'db.json'
+    articlesIdFileName = 'articles_id.json'
 
     resourcesDir = 'Resources'
     stopwordsDir = 'stopwords'
