@@ -1,13 +1,35 @@
 # MLX
 
-## Instalation for Phyge
-- В корне папки проекта Phyge лежат файлы для Docker'a    
-- Запускаете приложение Docker от админа    
-- В терминале переходите в папку с проектом    
-- Собираете билд докера командой: ***$ docker build --no-cache -t phyge .***    
-- Запускаете докер: ***$ docker run --rm -it -v $(pwd):/app phyge***    
-- Переходите в папку с проектом внутри Docker'a: ***$ cd app***    
-- Запускате сервер: ***$ python PhydgeServer.py***    
+
+### Run (with Docker)
+
+Bringing all containers up with:
+
+```sh
+$ cd phyge
+$ ./run.sh
+``` 
+This script will install development environment and start services.
+
+### Training model
+
+Just run:
+
+```sh
+$ ./train.sh
+```
+
+It will seed database and train both model LSI and LDA.
+### Dropping database volume
+
+If you need to reimport data, run:
+
+```sh
+$ ./drop_db.sh
+```
+
+### Installation (with venv)
+**IN PROGRESS**
 
 *Версии модулей:* 
 Для ручной установки.
