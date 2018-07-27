@@ -1,6 +1,7 @@
 import uuid
 import json
 import os
+import asyncio
 
 from DBController import DBController
 from ArticleFetcher import ArticleFetcher
@@ -9,7 +10,6 @@ from TextNormalizer import TextNormalizer
 
 
 class DatabaseSeeder:
-
     @classmethod
     def seed(cls):
         DBController.first_setup()
@@ -30,13 +30,17 @@ class DatabaseSeeder:
 
             article_fetcher = ArticleFetcher()
 
-            for index, article_data in enumerate(data):
-                url = article_data['url']
-                print(f'download {index+1} of the {len(data)}: {url}')
-                article = article_fetcher.download_article(url)
+            ioloop = asyncio.get_event_loop()
+            tasks = [ioloop.create_task(article_fetcher.download_article(url['url'])) for url in data]
+            articles = ioloop.run_until_complete(asyncio.gather(*tasks))
+            wait_tasks = asyncio.wait(tasks)
+            ioloop.run_until_complete(wait_tasks)
+            ioloop.close()
 
+            for index, article in enumerate(articles):
                 if article is not None:
                     DBController.add_document(article, str(uuid.uuid4()))
+                    # print(f'add {index+1} of the {len(articles)} articles: {article.title}')
 
     @classmethod
     def __seed_pdf_articles(cls):
