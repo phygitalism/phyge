@@ -1,6 +1,6 @@
 
 
-class AbstractArticle(object):
+class BaseArticle(object):
     id_key = 'serial_id'
     title_key = 'title'
     text_key = 'text'
@@ -37,18 +37,18 @@ class AbstractArticle(object):
         return self.title
 
 
-class PhyWebArticle(AbstractArticle):
+class PhyWebArticle(BaseArticle):
 
     def __init__(self, obj=None):
-        AbstractArticle.__init__(self, obj)
+        BaseArticle.__init__(self, obj)
         self.type = 'web_article'
 
 
-class PhyPdfArticle(AbstractArticle):
+class PhyPdfArticle(BaseArticle):
     abstract_key = 'abstract'
 
     def __init__(self, obj=None):
-        AbstractArticle.__init__(self, obj)
+        BaseArticle.__init__(self, obj)
 
         if obj is None:
             obj = dict()
