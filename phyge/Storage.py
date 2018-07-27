@@ -9,7 +9,7 @@ from PhygeVariables import PhyVariables
 from DBController import DBController
 from TematicModels import BaseModel, LsiModel, LdaModel
 from Models.TrainingSample import TrainingSample
-from Models.PhygeArticle import PhyWebArticle
+from Models.PhygeArticle import BaseArticle
 
 
 class Storage:
@@ -49,7 +49,7 @@ class Storage:
         return model
 
     @classmethod
-    def save_articles_id(cls, articles: [PhyWebArticle], path: str):
+    def save_articles_id(cls, articles: [BaseArticle], path: str):
         file_path = os.path.join(path, 'articles_id.json')
         articles_id = [x.id for x in articles]
 
