@@ -7,7 +7,7 @@ from Models.PhygeArticle import BaseArticle, PhyWebArticle, PhyPdfArticle
 class DBController:
 
     mongo_client = MongoClient('mongo-db', 27017)
-    db = mongo_client.phydge
+    db = mongo_client.phyge
     articles = db.articles
     counters = db.counters
 
@@ -29,8 +29,7 @@ class DBController:
         cls.articles.insert_one({**doc.serialize(),
                                  '_id': uuid,
                                  'serial_id': cls.get_next_number_in_sequence(cls.article_serial_id_sequence_key)})
-
-
+  
     @classmethod
     def get_all_documents(cls, filter_fields=None) -> [BaseArticle]:
         filter_fields = filter_fields if filter_fields else dict()
