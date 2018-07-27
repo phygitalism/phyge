@@ -2,11 +2,11 @@
 import pandas as pd
 from gensim import corpora
 
-from Models.PhygeArticle import AbstractArticle
+from Models.PhygeArticle import BaseArticle
 
 
 class TrainingSample:
-    def __init__(self, articles: [AbstractArticle]):
+    def __init__(self, articles: [BaseArticle]):
         self.articles = articles
         self.values = self.as_data_frame()
         self.dictionary = self.build_dictionary()
