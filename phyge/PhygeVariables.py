@@ -4,6 +4,9 @@ import os
 class PhyVariables:
     testsDir = 'Tests'
     articlesIdFileName = 'articles_id.json'
+    queriesFileName = 'queries.json'
+    answersFileName = 'answers.json'
+    queriesId = 1
 
     resourcesDir = 'Resources'
     stopwordsDir = 'stopwords'
