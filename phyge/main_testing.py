@@ -9,6 +9,7 @@ from DatabaseSeeder import DatabaseSeeder
 from DBController import DBController
 
 from Storage import Storage
+from PhygeVariables import PhyVariables
 import os
 
 search_engine: SearchEngine = None
@@ -43,9 +44,7 @@ def search_article(query, amount):
 
 
 def save_results(result_path, search_results, query_list):
-    if not os.path.exists(result_path):
-        os.makedirs(result_path)
-    with open(os.path.join(result_path, 'first_test.json'), 'w', encoding='utf8') as file:
+    with open(result_path, 'w', encoding='utf8') as file:
         output_answer = []
         for i, answer in enumerate(search_results):
             for model_name in answer.keys():
@@ -65,4 +64,5 @@ if __name__ == "__main__":
     lda = Storage.load_model('out/lda', 'phyge', 'lda')
 
     search_engine = SearchEngine(models=[lsi, lda])
-    run_search('queries.json', 'answers', 1)
+    test_path = os.path.join(PhyVariables.testsDir, 'test'+str(PhyVariables.queriesId))
+    run_search(os.path.join(test_path, PhyVariables.queriesFileName), os.path.join(test_path, PhyVariables.answersFileName), 1)
