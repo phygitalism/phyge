@@ -2,7 +2,6 @@ from DBController import DBController
 from DatabaseSeeder import DatabaseSeeder
 from Models.TrainingSample import TrainingSample
 from TematicModels import LsiModel, LdaModel
-from Models.PhygeArticle import PhyWebArticle, PhyPdfArticle
 
 from Storage import Storage
 
@@ -12,8 +11,7 @@ if __name__ == "__main__":
         print('Seeding database...')
         DatabaseSeeder.seed()
 
-    pdf_articles = DBController.get_all_documents({'type': 'pdf_article'})
-    testing_sample = TrainingSample(pdf_articles)
+    testing_sample = TrainingSample()
 
     lsi = LsiModel(model_name='phyge')
     lda = LdaModel(model_name='phyge')
