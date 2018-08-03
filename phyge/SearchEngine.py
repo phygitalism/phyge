@@ -1,4 +1,3 @@
-
 from Models.Query import BaseQuery
 
 from TematicModels import BaseModel
@@ -16,10 +15,16 @@ class SearchEngine:
             found_articles = list()
 
             for index, similarity in similarities[:amount]:
-                answer = {'id': articles[index].id,
-                          'title': articles[index].title,
-                          'source': articles[index].source,
-                          'text': (articles[index].text[0:200]).replace("', '", '').replace("['", '') + '...',
+                answer = {'id': articles[index]['serial_id'],
+                          'title': articles[index]['title'],
+                          'source': articles[index]['source'],
+                          'text': (articles[index]['text'][0:200])\
+                                      .replace("', '", '')\
+                                      .replace("[, ", '')\
+                                      .replace("'", '')\
+                                      .replace(", ,", '')\
+                                      .replace("[", '')\
+                                  + '...',
                           'similarity': round(float(similarity), 3)}
                 found_articles.append(answer)
             search_results[model.type] = found_articles

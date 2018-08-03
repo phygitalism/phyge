@@ -33,7 +33,7 @@ class DBController:
     @classmethod
     def get_all_documents(cls, filter_fields=None) -> [BaseArticle]:
         filter_fields = filter_fields if filter_fields else dict()
-        articles = cls.articles.find(filter_fields).sort('serial_id', pymongo.ASCENDING)
+        articles = cls.articles.find(filter_fields)#.sort('serial_id', pymongo.ASCENDING)
         return [BaseArticle(obj) for obj in articles]
 
     @classmethod
@@ -51,5 +51,12 @@ class DBController:
         return [PhyPdfArticle(obj) for obj in articles]
 
     @classmethod
-    def get_article(cls, uuid) -> dict:
-        return cls.articles.find_one({'_id': str(uuid)})
+    def get_article(cls, serial) -> dict:
+        return cls.articles.find_one({'serial_id': serial})
+
+#замена get_all_documents?
+    @classmethod
+    def get_all_articles(cls, filter_fields=None) -> [BaseArticle]:
+        filter_fields = filter_fields if filter_fields else dict()
+        articles = cls.articles.find(filter_fields)#.sort('serial_id', pymongo.ASCENDING)
+        return articles
