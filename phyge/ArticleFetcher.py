@@ -7,6 +7,9 @@ from Models.PhygeTranslate import PhyTranslate
 from Models.PhygeArticle import PhyWebArticle
 import re
 
+import uuid
+from DBController import DBController
+
 import aiohttp
 import async_timeout
 import sys
@@ -17,16 +20,20 @@ class ArticleFetcher:
         self.word_limit = 30
         self.number_of_downloads = 0
 
-    async def download_article(self, url: str) -> PhyWebArticle:
-        article_html = await self.load_html(url)
-        if len(article_html) > 0:
-            article = self.parse_html(url, article_html)
-            if len(article.normalized_words) == 0:
-                print(f'url {url} PARSE ERR')
+    async def download_article(self, url: str, sem) -> PhyWebArticle:
+        async with sem:
+            article_html = await self.load_html(url)
+            if len(article_html) > 0:
+                article = self.parse_html(url, article_html)
+                if len(article.normalized_words) == 0:
+                    print(f'url {url} PARSE ERR')
+                    article = None
+            else:
                 article = None
-        else:
-            article = None
-        return article
+
+            if article is not None:
+                DBController.add_document(article, str(uuid.uuid4()))
+
 
     async def load_html(self, url):
         article_html = Article(url=url, language='ru')
@@ -35,11 +42,12 @@ class ArticleFetcher:
         return article_html.html
 
     async def session_get_html(self, url):
+
         async with aiohttp.ClientSession() as session:
             return await self.__get_html(session, url)
 
     async def __get_html(self, session, url):
-        with async_timeout.timeout(30):
+        with async_timeout.timeout(15):
             try:
                 async with session.get(url) as response:
                     self.number_of_downloads += 1
@@ -47,6 +55,9 @@ class ArticleFetcher:
                     return await response.text()
             except:
                 e = sys.exc_info()[0]
+                file = open('file.txt', 'a')
+                file.write('{\'url\': \'' + url + '\'}, \n')
+                file.close()
                 print(f'For url: {url} - ERROR', e)
 
     def parse_html(self, current_url, article_html, language='ru'):

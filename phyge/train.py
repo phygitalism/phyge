@@ -12,8 +12,8 @@ if __name__ == "__main__":
         print('Seeding database...')
         DatabaseSeeder.seed()
 
-    pdf_articles = DBController.get_all_documents({'type': 'pdf_article'})
-    testing_sample = TrainingSample(pdf_articles)
+    web_articles = DBController.get_all_documents({'type': 'web_article'})
+    testing_sample = TrainingSample(web_articles)
 
     lsi = LsiModel(model_name='phyge')
     lda = LdaModel(model_name='phyge')
