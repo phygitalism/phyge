@@ -31,16 +31,13 @@ class DatabaseSeeder:
             article_fetcher = ArticleFetcher()
 
             ioloop = asyncio.get_event_loop()
-            tasks = [ioloop.create_task(article_fetcher.download_article(url['url'])) for url in data]
-            articles = ioloop.run_until_complete(asyncio.gather(*tasks))
+
+            sem = asyncio.Semaphore(5)
+
+            tasks = [ioloop.create_task(article_fetcher.download_article(url['url'], sem)) for url in data]
             wait_tasks = asyncio.wait(tasks)
             ioloop.run_until_complete(wait_tasks)
             ioloop.close()
-
-            for index, article in enumerate(articles):
-                if article is not None:
-                    DBController.add_document(article, str(uuid.uuid4()))
-                    # print(f'add {index+1} of the {len(articles)} articles: {article.title}')
 
     @classmethod
     def __seed_pdf_articles(cls):
