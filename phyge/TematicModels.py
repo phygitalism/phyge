@@ -1,6 +1,6 @@
 import time
 import abc
-
+import os
 from gensim import models, similarities
 
 from Models.TrainingSample import TrainingSample
@@ -8,6 +8,7 @@ from Models.TrainingSample import TrainingSample
 
 class BaseModel(object):
     TOPIC_NUMBER = 300
+    SHARD_SIZE = 500
 
     @classmethod
     def trained(cls, name, model, corpus, dictionary, training_sample: TrainingSample):
@@ -35,7 +36,12 @@ class BaseModel(object):
         """Train model."""
 
     def perform_search(self, normalized_query: [str]):
-        index = similarities.MatrixSimilarity(self.model[self.corpus])
+        # index = similarities.MatrixSimilarity(self.model[self.corpus])
+        index = similarities.Similarity(output_prefix=os.path.join('out', self.type, 'index_shard'),
+                                        corpus=self.model[self.corpus],
+                                        shardsize=self.SHARD_SIZE,
+                                        num_features=self.dictionary.num_pos)
+
         query_vec = self.query_to_vec(normalized_query)
         query = self.model[query_vec]
         sims = index[query]
