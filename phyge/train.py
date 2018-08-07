@@ -10,9 +10,9 @@ if __name__ == "__main__":
     if len(DBController.get_all_documents()) == 0:
         print('Seeding database...')
         DatabaseSeeder.seed()
-
+        
     testing_sample = TrainingSample()
-
+    
     lsi = LsiModel(model_name='phyge')
     lda = LdaModel(model_name='phyge')
 

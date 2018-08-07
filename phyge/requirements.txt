@@ -7,3 +7,5 @@ googletrans == 2.3.0
 scikit-learn == 0.19.2
 flask == 1.0.2
 pymongo == 3.7.1
+aiohttp == 3.3.2
+
