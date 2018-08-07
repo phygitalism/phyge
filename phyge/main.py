@@ -37,6 +37,10 @@ def search_articles():
 
     print('search_results')
     pprint(search_results)
+    file = open('history_request.txt', 'a')
+    file.write('\n QUERY \n' + str(query_text) + ' \n RESPONSE \n' + str(search_results) + '\n_______\n\n\n')
+    file.close()
+
     return Response(json.dumps(search_results, ensure_ascii=False), status=200, mimetype='application/json')
 
 
