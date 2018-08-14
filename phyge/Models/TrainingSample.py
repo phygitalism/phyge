@@ -21,6 +21,10 @@ class TrainingSample:
         corpus = IterCorpus(my_dict=self.dictionary, limit=self.LIMIT)
         return corpus
 
+    def get_documents(self):
+        documents = IterDocuments(limit=self.LIMIT)
+        return documents
+
 
 class IterDocuments:
     def __init__(self, limit):

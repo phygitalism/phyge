@@ -7,7 +7,7 @@ from gensim import corpora, models
 
 from PhygeVariables import PhyVariables
 from DBController import DBController
-from TematicModels import BaseModel, LsiModel, LdaModel
+from TematicModels import BaseModel, LsiModel, LdaModel, D2vModel
 from Models.TrainingSample import TrainingSample
 from Models.PhygeArticle import BaseArticle
 
@@ -18,8 +18,9 @@ class Storage:
     def save_model(cls, model: BaseModel, path: str):
         if not os.path.exists(path):
             os.makedirs(path)
-        model.dictionary.save(os.path.join(path, f'{model.name}.dict'))
-        corpora.MmCorpus.serialize(os.path.join(path, f'{model.name}.mm'), model.corpus)
+        if model.type is not 'd2v':
+            model.dictionary.save(os.path.join(path, f'{model.name}.dict'))
+            corpora.MmCorpus.serialize(os.path.join(path, f'{model.name}.mm'), model.corpus)
         model.model.save(os.path.join(path, f'{model.name}.{model.type}'))
         cls.save_articles_id(model.training_sample.articles, path)
 
@@ -42,7 +43,10 @@ class Storage:
                 model = models.ldamodel.LdaModel.load(model_path)
                 return LdaModel.trained(name=model_name, model=model,
                                         corpus=corpus, dictionary=dictionary, training_sample=training_sample)
-
+            elif model_type == 'd2v':
+                model = models.doc2vec.Doc2Vec.load(model_path)
+                return D2vModel.trained(name=model_name, model=model, corpus=None, dictionary=None,
+                                        training_sample=training_sample)
         model = load_func(os.path.join(path, f'{model_name}.{model_type}'), model_type=model_type)
         print('Loaded')
 
