@@ -27,11 +27,12 @@ class Storage:
     @classmethod
     def load_model(cls, path: str, model_name: str, model_type: str) -> BaseModel:
         print(f'{model_name}.{model_type} model loading...')
-        dictionary = corpora.Dictionary.load(os.path.join(path, f'{model_name}.dict'))
-        corpus = corpora.MmCorpus(os.path.join(path, f'{model_name}.mm'))
+        if model_type != 'd2v':
+            dictionary = corpora.Dictionary.load(os.path.join(path, f'{model_name}.dict'))
+            corpus = corpora.MmCorpus(os.path.join(path, f'{model_name}.mm'))
 
         articles_id = cls.load_articles_id(path)
-        articles = DBController.get_all_documents({'serial_id': {'$in': articles_id}})
+        #articles = DBController.get_all_documents({'serial_id': {'$in': articles_id}})
         training_sample = TrainingSample()
 
         def load_func(model_path: str, model_type: str):
