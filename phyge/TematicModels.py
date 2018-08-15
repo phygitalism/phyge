@@ -97,7 +97,7 @@ class D2vModel(BaseModel):
         alpha = 0.025
         self.training_sample = training_sample
         self.documents = training_sample.get_documents() #Разобраться с articles в классе TrainingSample
-        tagged_data = [models.doc2vec.TaggedDocument(words=_d, tags=[str(i)]) for i, _d in enumerate(self.documents)]
+        tagged_data = [models.doc2vec.TaggedDocument(words=_d, tags=[i]) for i, _d in enumerate(self.documents)]
         self.model = models.doc2vec.Doc2Vec(size=vec_size,
                         alpha=alpha,
                         #window=3,
