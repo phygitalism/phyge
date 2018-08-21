@@ -32,8 +32,8 @@ class Storage:
             corpus = corpora.MmCorpus(os.path.join(path, f'{model_name}.mm'))
 
         articles_id = cls.load_articles_id(path)
-        #articles = DBController.get_all_documents({'serial_id': {'$in': articles_id}})
-        training_sample = TrainingSample()
+        articles = DBController.get_all_documents({'serial_id': {'$in': articles_id}})
+        training_sample = TrainingSample(articles)
 
         def load_func(model_path: str, model_type: str):
             if model_type == 'lsi':
@@ -56,7 +56,7 @@ class Storage:
     @classmethod
     def save_articles_id(cls, articles, path: str):
         file_path = os.path.join(path, 'articles_id.json')
-        articles_id = [BaseArticle(obj).id for obj in articles]
+        articles_id = [obj.id for obj in articles]
 
         with open(file_path, 'w+', encoding='utf8') as file:
             json.dump(articles_id, file, indent=2)

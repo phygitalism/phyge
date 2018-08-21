@@ -5,12 +5,12 @@ from Models.PhygeArticle import BaseArticle
 
 
 class TrainingSample:
-    LIMIT = 100
+    LIMIT = 10
 
-    def __init__(self):
+    def __init__(self,articles):
         self.dictionary = self.build_dictionary()
         self.corpus = self.get_corpus()
-        self.articles = DBController.get_all_articles()  # НЕ СООТВЕТСВУЕТ ДЕЙСТВИТЕЛЬНОСТИ
+        self.articles = articles
 
     def build_dictionary(self):
         documents = IterDocuments(limit=self.LIMIT)
@@ -29,11 +29,8 @@ class TrainingSample:
 class IterDocuments:
     def __init__(self, limit):
         self.limit = limit
-        # self.articles = DBController.get_all_articles()
-        # print(type(self.articles))
 
     def __iter__(self):
-        # for article in self.articles:
         for id in range(self.limit):
             article = DBController.get_article(id)
             if article:
@@ -47,7 +44,6 @@ class IterCorpus:
         self.articles = DBController.get_all_articles()
 
     def __iter__(self):
-        # for article in self.articles:
         for id in range(self.limit):
             article = DBController.get_article(id)
             if article:
