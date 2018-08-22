@@ -32,7 +32,7 @@ class Storage:
             corpus = corpora.MmCorpus(os.path.join(path, f'{model_name}.mm'))
 
         articles_id = cls.load_articles_id(path)
-        articles = DBController.get_all_documents({'serial_id': {'$in': articles_id}})
+        articles = DBController.get_all_articles({'serial_id': {'$in': articles_id}})
         training_sample = TrainingSample(articles)
 
         def load_func(model_path: str, model_type: str):
