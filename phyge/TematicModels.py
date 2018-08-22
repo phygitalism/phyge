@@ -96,10 +96,12 @@ class D2vModel(BaseModel):
         vec_size = 30
         alpha = 0.025
         self.training_sample = training_sample
-        self.documents = training_sample.get_documents() #Разобраться с articles в классе TrainingSample
+        self.documents = training_sample.articles
         print('\nD2V model: Обучаем модель...')
         start_time = time.time()
-        tagged_data = [models.doc2vec.TaggedDocument(words=_d, tags=[i]) for i, _d in enumerate(self.documents)]
+        tagged_data = [models.doc2vec.TaggedDocument(words=doc.normalized_words, 
+                    tags=[str(doc.id)]) 
+                    for doc in self.documents]
         self.model = models.doc2vec.Doc2Vec(size=vec_size,
                         alpha=alpha,
                         #window=3,

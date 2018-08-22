@@ -5,46 +5,57 @@ from Models.PhygeArticle import BaseArticle
 
 
 class TrainingSample:
-    LIMIT = 10
+    #LIMIT = 10
 
     def __init__(self,articles):
+        self.articles_id = self.get_articles_id(articles)
+        self.articles = self.get_articles()
         self.dictionary = self.build_dictionary()
         self.corpus = self.get_corpus()
-        self.articles = articles
+    
+    def get_articles_id(self,articles):
+        articles_id = []
+        for article in articles:
+            articles_id.append(article['serial_id'])
+        return articles_id
+
+    def get_articles(self):
+        return IterArticles(self.articles_id)
 
     def build_dictionary(self):
-        documents = IterDocuments(limit=self.LIMIT)
+        documents = IterDict(self.articles)
         dct = corpora.Dictionary(documents)
         return dct
 
-    def get_corpus(self):
-        corpus = IterCorpus(my_dict=self.dictionary, limit=self.LIMIT)
-        return corpus
+    def get_corpus(self): 
+        return IterCorpus(my_dict=self.dictionary,my_artilces=self.articles)
 
     def get_documents(self):
-        documents = IterDocuments(limit=self.LIMIT)
-        return documents
+        return IterDict(self.articles)
 
 
-class IterDocuments:
-    def __init__(self, limit):
-        self.limit = limit
+class IterArticles:
+    def __init__(self,articles_id):
+        self.articles_id = articles_id
+    def __iter__(self):
+        for id in self.articles_id:
+            yield BaseArticle(DBController.get_article(id))
+
+class IterDict:
+    def __init__(self, my_articles):
+        self.articles = my_articles
 
     def __iter__(self):
-        for id in range(self.limit):
-            article = DBController.get_article(id)
-            if article:
-                yield article['normalized_words']
+        for article in self.articles:
+            yield article.normalized_words
 
 
 class IterCorpus:
-    def __init__(self, my_dict, limit):
+    def __init__(self, my_dict, my_artilces):
         self.dictionary = my_dict
-        self.limit = limit
-        self.articles = DBController.get_all_articles()
+        self.articles = my_artilces
 
     def __iter__(self):
-        for id in range(self.limit):
-            article = DBController.get_article(id)
-            if article:
-                yield self.dictionary.doc2bow(article['normalized_words'])
+        for article in self.articles:
+            yield self.dictionary.doc2bow(article.normalized_words)
+
