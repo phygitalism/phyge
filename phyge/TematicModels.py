@@ -92,7 +92,7 @@ class D2vModel(BaseModel):
         BaseModel.__init__(self, name=model_name, model_type='d2v')
 
     def train_model(self,training_sample: TrainingSample):
-        max_epochs = 10
+        max_epochs = 100
         vec_size = 30
         alpha = 0.025
         self.training_sample = training_sample
@@ -100,8 +100,8 @@ class D2vModel(BaseModel):
         print('\nD2V model: Обучаем модель...')
         start_time = time.time()
         tagged_data = [models.doc2vec.TaggedDocument(words=doc.normalized_words, 
-                    tags=[str(doc.id)]) 
-                    for doc in self.documents]
+                    tags=[num]) 
+                    for num, doc in enumerate(self.documents)]
         self.model = models.doc2vec.Doc2Vec(size=vec_size,
                         alpha=alpha,
                         #window=3,
