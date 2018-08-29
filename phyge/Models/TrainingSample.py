@@ -37,6 +37,23 @@ class TrainingSample:
 class IterArticles:
     def __init__(self,articles_id):
         self.articles_id = articles_id
+    
+    def __len__(self):
+        return len(self.articles_id)
+    
+    def __getitem__(self,key):
+        if isinstance(key,slice):
+            return [BaseArticle(DBController.get_article(self.articles_id[ii])) 
+                for ii in range(*key.indices(len(self)))]
+        elif isinstance(key,int):
+            if key < 0:
+                key += len(self)
+            if key < 0 or key >= len(self):
+                raise IndexError("The index {} is out of range.".format(key))
+            return BaseArticle(DBController.get_article(self.articles_id[key])) 
+        else:
+            raise TypeError("Invalid argument type.")
+
     def __iter__(self):
         for id in self.articles_id:
             yield BaseArticle(DBController.get_article(id))
