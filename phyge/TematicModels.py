@@ -39,6 +39,11 @@ class BaseModel(object):
         if self.type == 'd2v':
             query_vec = self.model.infer_vector(normalized_query)
             sims = self.model.docvecs.most_similar([query_vec])
+        elif self.type == 'w2v':
+            similarity_matrix = self.model.wv.similarity_matrix(self.training_sample.dictionary)  # construct similarity matrix
+            index = similarities.SoftCosineSimilarity(self.training_sample.corpus, similarity_matrix, num_best=5)
+            query = self.query_to_vec(normalized_query)
+            sims = index[query]
         else:
             index = similarities.Similarity(output_prefix=os.path.join('out', self.type, 'index_shard'),
                                             corpus=self.model[self.corpus],
@@ -91,7 +96,7 @@ class D2vModel(BaseModel):
     def __init__(self, model_name: str):
         BaseModel.__init__(self, name=model_name, model_type='d2v')
 
-    def train_model(self,training_sample: TrainingSample):
+    def train_model(self, training_sample: TrainingSample):
         max_epochs = 100
         vec_size = 30
         alpha = 0.025
@@ -120,6 +125,23 @@ class D2vModel(BaseModel):
             self.model.alpha -= 0.0002
             # fix the learning rate, no decay
             self.model.min_alpha = self.model.alpha
+        print('Learning time:', round((time.time() - start_time), 3), 's')
+
+
+class W2vModel(BaseModel):
+    def __init__(self, model_name: str):
+        BaseModel.__init__(self, name=model_name, model_type='w2v')
+
+    def train_model(self, training_sample: TrainingSample):
+        #import pdb; pdb.set_trace()
+        self.training_sample = training_sample
+        #self.dictionary = training_sample.dictionary
+        self.documents = training_sample.get_documents()
+        #self.corpus = training_sample.corpus
+        print('\nW2V model: Обучаем модель...')
+        start_time = time.time()
+        self.model = models.Word2Vec(self.documents, size=20, min_count=1, alpha=0.025, window=5, negative=5,
+                                     min_alpha=0.0001, sg=0, iter=50)
         print('Learning time:', round((time.time() - start_time), 3), 's')
 
 if __name__ == '__main__':

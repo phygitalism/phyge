@@ -2,7 +2,7 @@ import pandas as pd
 from gensim import corpora
 from DBController import DBController
 from Models.PhygeArticle import BaseArticle
-
+import numpy as np
 
 class TrainingSample:
     #LIMIT = 10
@@ -41,17 +41,18 @@ class IterArticles:
     def __len__(self):
         return len(self.articles_id)
     
-    def __getitem__(self,key):
-        if isinstance(key,slice):
+    def __getitem__(self, key):
+        if isinstance(key, slice):
             return [BaseArticle(DBController.get_article(self.articles_id[ii])) 
                 for ii in range(*key.indices(len(self)))]
-        elif isinstance(key,int):
+        elif isinstance(key, int) or isinstance(key, np.int64):
             if key < 0:
                 key += len(self)
             if key < 0 or key >= len(self):
                 raise IndexError("The index {} is out of range.".format(key))
             return BaseArticle(DBController.get_article(self.articles_id[key])) 
         else:
+            print(type(key))
             raise TypeError("Invalid argument type.")
 
     def __iter__(self):
@@ -71,6 +72,9 @@ class IterCorpus:
     def __init__(self, my_dict, my_artilces):
         self.dictionary = my_dict
         self.articles = my_artilces
+
+    def __len__(self):
+        return len(self.articles)
 
     def __iter__(self):
         for article in self.articles:

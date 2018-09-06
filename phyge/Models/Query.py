@@ -5,7 +5,7 @@ from TextNormalizer import TextNormalizer
 
 class BaseQuery(object):
     idKey = 'id'
-    textKey = 'text'
+    textKey = 'abstract'
 
     def __init__(self, obj: dict):
         self.id = obj.get(self.idKey, None)
