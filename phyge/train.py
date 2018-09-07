@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
     check_db_status()
     
-    articles = DBController.get_all_articles(limit=300)
+    articles = DBController.get_all_articles()
     testing_sample = TrainingSample(articles)
 
     #lsi = LsiModel(model_name='phyge')

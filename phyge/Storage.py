@@ -10,6 +10,7 @@ from DBController import DBController
 from TematicModels import BaseModel, LsiModel, LdaModel, D2vModel, W2vModel
 from Models.TrainingSample import TrainingSample
 from Models.PhygeArticle import BaseArticle
+from scipy import sparse
 
 
 class Storage:
@@ -21,6 +22,8 @@ class Storage:
         if model.type is not 'd2v':
             model.training_sample.dictionary.save(os.path.join(path, f'{model.name}.dict'))
             corpora.MmCorpus.serialize(os.path.join(path, f'{model.name}.mm'), model.training_sample.corpus)
+        if model.type == 'w2v':
+            sparse.save_npz(os.path.join(path,f'{model.name}.mat'),model.similarity_matrix)
         model.model.save(os.path.join(path, f'{model.name}.{model.type}'))
         cls.save_articles_id(model.training_sample.articles, path)
 
@@ -30,6 +33,9 @@ class Storage:
         if model_type != 'd2v':
             dictionary = corpora.Dictionary.load(os.path.join(path, f'{model_name}.dict'))
             corpus = corpora.MmCorpus(os.path.join(path, f'{model_name}.mm'))
+
+        if model_type == 'w2v':
+            similarity_matrix = sparse.load_npz(os.path.join(path,f'{model_name}.mat.npz'))
 
         articles_id = cls.load_articles_id(path)
         articles = DBController.get_all_articles({'serial_id': {'$in': articles_id}})
@@ -51,7 +57,7 @@ class Storage:
             elif model_type == 'w2v':
                 model = models.Word2Vec.load(model_path)
                 return W2vModel.trained(name=model_name, model=model,
-                                        corpus=corpus, dictionary=dictionary, training_sample=training_sample)
+                                        corpus=corpus, dictionary=dictionary, training_sample=training_sample, similarity_matrix = similarity_matrix)
         model = load_func(os.path.join(path, f'{model_name}.{model_type}'), model_type=model_type)
         print('Loaded')
 

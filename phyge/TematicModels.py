@@ -11,12 +11,13 @@ class BaseModel(object):
     SHARD_SIZE = 500
 
     @classmethod
-    def trained(cls, name, model, corpus, dictionary, training_sample: TrainingSample):
+    def trained(cls, name, model, corpus, dictionary, training_sample: TrainingSample, similarity_matrix = None):
         instance = cls(name)
 
         instance.model = model
         instance.corpus = corpus
         instance.dictionary = dictionary
+        instance.similarity_matrix = similarity_matrix
 
         instance.training_sample = training_sample
 
@@ -40,8 +41,7 @@ class BaseModel(object):
             query_vec = self.model.infer_vector(normalized_query)
             sims = self.model.docvecs.most_similar([query_vec])
         elif self.type == 'w2v':
-            similarity_matrix = self.model.wv.similarity_matrix(self.training_sample.dictionary)  # construct similarity matrix
-            index = similarities.SoftCosineSimilarity(self.training_sample.corpus, similarity_matrix, num_best=5)
+            index = similarities.SoftCosineSimilarity(self.training_sample.corpus, self.similarity_matrix, num_best=5)
             query = self.query_to_vec(normalized_query)
             sims = index[query]
         else:
@@ -140,9 +140,14 @@ class W2vModel(BaseModel):
         #self.corpus = training_sample.corpus
         print('\nW2V model: Обучаем модель...')
         start_time = time.time()
-        self.model = models.Word2Vec(self.documents, size=20, min_count=1, alpha=0.025, window=5, negative=5,
-                                     min_alpha=0.0001, sg=0, iter=50)
+        self.model = models.Word2Vec(self.documents, size=100, min_count=3, alpha=0.025, window=5, negative=5, hs = 1,
+                                     min_alpha=0.0001, sg=1, iter=50)
         print('Learning time:', round((time.time() - start_time), 3), 's')
+        print('\nW2V model: Building w2v matrix...')
+        start_time = time.time()
+        self.similarity_matrix = self.model.wv.similarity_matrix(self.training_sample.dictionary)  # construct similarity matrix
+        print('W2v matrix time:', round((time.time() - start_time), 3), 's')
+
 
 if __name__ == '__main__':
     pass
