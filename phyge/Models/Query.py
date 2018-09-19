@@ -5,11 +5,15 @@ from TextNormalizer import TextNormalizer
 
 class BaseQuery(object):
     idKey = 'id'
-    textKey = 'abstract'
+    textKey = 'text'
+    titleKey = 'title'
+    sourceKey = 'url'
 
     def __init__(self, obj: dict):
         self.id = obj.get(self.idKey, None)
         self.text = obj.get(self.textKey, None)
+        self.title = obj.get(self.titleKey, None)
+        self.source = obj.get(self.sourceKey,None)
 
     def __str__(self):
         return ' '.join(self.normalized_words)
