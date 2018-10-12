@@ -17,9 +17,9 @@ class DatabaseSeeder:
     @classmethod
     def seed(cls):
         DBController.first_setup()
-        # cls.__seed_web_articles()
+        cls.__seed_web_articles()
         # cls.__seed_pdf_articles()
-        cls.__seed_books()
+        # cls.__seed_books()
 
     @classmethod
     def __seed_web_articles(cls):
