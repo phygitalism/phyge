@@ -78,7 +78,7 @@ class DatabaseSeeder:
 
             with open('phy-books/phy_books.json', 'r', encoding='utf8') as fh:  # собранные с сайта МИФ данные
                 books = json.load(fh)
-            book_fetcher = BooksFetcher(books[1:5])
+            book_fetcher = BooksFetcher(books)
             phy_books = book_fetcher.create_phy_book()
             books_list = []
             for obj in phy_books:
