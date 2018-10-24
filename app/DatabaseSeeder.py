@@ -71,7 +71,7 @@ class DatabaseSeeder:
     @classmethod
     def __seed_books(cls):
 
-        data_path = 'phy-books/articles_books.json'
+        data_path = 'phy-books/out/articles_books.json'
 
         if not os.path.isfile(data_path):
             print('Resource books does not exist! Сreation is in progress...')
@@ -84,17 +84,15 @@ class DatabaseSeeder:
             for obj in phy_books:
                 books_list.append(obj.serialize())
 
-            with open('phy-books/articles_books.json', 'w+',
+            with open(data_path, 'w+',
                       encoding='utf8') as file:  # сереализованные обьекты PhyBooks
                 json.dump(books_list, file, indent=2)
             print('Resource created')
-
 
         with open(data_path, 'r', encoding='utf8') as data_file:
             books = json.load(data_file)
 
             for index, book in enumerate(books):
-                # current_book = book_fetcher.create_phy_book(book)
                 phy_book = PhyBook(book)
                 print(f'add {index+1} of the {len(books)} books: {phy_book.title}')
                 if phy_book is not None:
