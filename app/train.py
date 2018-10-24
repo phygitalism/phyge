@@ -1,7 +1,7 @@
 from DBController import DBController
 from DatabaseSeeder import DatabaseSeeder
 from Models.TrainingSample import TrainingSample
-from TematicModels import LsiModel, LdaModel, D2vModel, FastTextModel
+from TematicModels import LsiModel
 
 from Storage import Storage
 

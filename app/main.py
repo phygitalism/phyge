@@ -1,6 +1,7 @@
-from flask import Flask, request, Response
 import json
 import time
+
+from quart import Quart, request, Response
 
 from pprint import pprint
 from SearchEngine import SearchEngine
@@ -11,27 +12,27 @@ from DBController import DBController
 
 from Storage import Storage
 
-app = Flask(__name__)
+app = Quart(__name__)
 
 search_engine: SearchEngine = None
 
 
 @app.route('/')
-def index():
-    return Response('Server is running', status=200)
+async def index():
+    return 'OK'
 
 
 @app.route('/search_articles', methods=['POST'])
-def search_articles():
+async def search_articles():
     global search_engine
-    request_body = request.json
+    request_body = await request.get_json()
     print('search_articles: ', request_body)
     query_text = request_body['query']
     amount = request_body['amount']
     query = BaseQuery({'text': query_text, 'id': 1})
 
     start_time = time.time()
-    search_results = search_engine.find_article(query, amount=amount)
+    search_results = await search_engine.find_article(query, amount=amount)
     answer_time = round((time.time() - start_time), 3)
     search_results['search_time'] = answer_time
 
@@ -53,6 +54,7 @@ def check_db_status():
         print('Seeding database...')
         DatabaseSeeder.seed()
 
+
 if __name__ == "__main__":
     log_of_result = []
 
@@ -64,4 +66,4 @@ if __name__ == "__main__":
 
     search_engine = SearchEngine(models=[lsi])
 
-    app.run(host='0.0.0.0', port=5050, threaded=True)
+    app.run(host='0.0.0.0', port=5050)
