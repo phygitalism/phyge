@@ -1,5 +1,6 @@
 import json
 import time
+import os
 
 from quart import Quart, request, Response
 
@@ -15,6 +16,10 @@ from Storage import Storage
 app = Quart(__name__)
 
 search_engine: SearchEngine = None
+
+feature_toggles = {
+    'save_search_results': True
+}
 
 if not os.path.exists('tmp'):
     os.makedirs('tmp')
@@ -41,9 +46,12 @@ async def search_articles():
 
     print('search_results')
     pprint(search_results)
-    file = open('tmp/history_request.txt', 'a')
-    file.write('\n QUERY \n' + str(query_text) + ' \n RESPONSE \n' + str(search_results) + '\n_______\n\n\n')
-    file.close()
+
+    if feature_toggles['save_search_results']:
+        file = open('tmp/history_request.txt', 'a')
+        file.write('\n QUERY \n' + str(query_text) + ' \n RESPONSE \n' + str(search_results) + '\n_______\n\n\n')
+        file.close()
+
     search_results['lda'] = []
 
     return Response(json.dumps(search_results, ensure_ascii=False), status=200, mimetype='application/json')
