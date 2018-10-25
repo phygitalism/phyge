@@ -1,17 +1,18 @@
-FROM python:3.6
+FROM python:3.6.1
 
-COPY app/requirements.txt /usr/tmp/
-RUN pip install --upgrade pip
-RUN cat /usr/tmp/requirements.txt
-RUN pip install -r /usr/tmp/requirements.txt
+RUN set -ex
 
-RUN cd /tmp && \
-		git clone https://github.com/buriy/python-readability && \
-		cd python-readability && \
-		python setup.py install
+RUN pip install -U pip pipenv
 
-# Make project dir
-RUN mkdir /apps
+RUN mkdir /app
+
+COPY app/Pipfile /app/Pipfile
+COPY app/Pipfile.lock /app/Pipfile.lock
+
+WORKDIR /app
+
+RUN cat Pipfile && cat Pipfile.lock
+RUN pipenv install --verbose
 
 CMD ["/bin/bash"]
 
