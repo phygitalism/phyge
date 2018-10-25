@@ -4,12 +4,12 @@ RUN set -ex
 
 RUN pip install -U pip pipenv
 
-RUN mkdir /app
+RUN mkdir -p project/app
 
-COPY app/Pipfile /app/Pipfile
-COPY app/Pipfile.lock /app/Pipfile.lock
+COPY Pipfile /project/Pipfile
+COPY Pipfile.lock /project/Pipfile.lock
 
-WORKDIR /app
+WORKDIR /project
 
 RUN cat Pipfile && cat Pipfile.lock
 RUN pipenv install --verbose

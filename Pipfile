@@ -4,8 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [scripts]
-start = "python main.py"
-train = "python train.py"
+start = "bash -c \"cd app && python main.py\""
+train = "bash -c \"cd app && python train.py\""
 
 [packages]
 numpy = "*"
