@@ -71,7 +71,11 @@ class DatabaseSeeder:
     @classmethod
     def __seed_books(cls):
 
-        data_path = 'phy-books/out/articles_books.json'
+        out_path = 'phy-books/out'
+        data_path = out_path + '/articles_books.json'
+
+        if not os.path.exists(out_path):
+            os.makedirs(out_path)
 
         if not os.path.isfile(data_path):
             print('Resource books does not exist! Сreation is in progress...')

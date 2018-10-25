@@ -16,6 +16,9 @@ app = Quart(__name__)
 
 search_engine: SearchEngine = None
 
+if not os.path.exists('tmp'):
+    os.makedirs('tmp')
+
 
 @app.route('/')
 async def index():
