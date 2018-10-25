@@ -1,0 +1,27 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[scripts]
+start = "bash -c \"cd app && python main.py\""
+train = "bash -c \"cd app && python train.py\""
+
+[packages]
+numpy = "*"
+"pymorphy2" = "*"
+"newspaper3k" = "*"
+pandas = "*"
+"beautifulsoup4" = "*"
+gensim = "*"
+googletrans = "*"
+scikit-learn = "*"
+pymongo = "*"
+aiohttp = "*"
+quart = "*"
+readability-lxml = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.6"

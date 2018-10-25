@@ -7,7 +7,7 @@ class SearchEngine:
     def __init__(self, models: [BaseModel]):
         self.models = models
 
-    def find_article(self, query: BaseQuery, amount=5):
+    async def find_article(self, query: BaseQuery, amount=5):
         search_results = dict()
         for model in self.models:
             similarities = model.perform_search(normalized_query=query.normalized_words)
