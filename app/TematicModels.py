@@ -7,7 +7,7 @@ from Models.TrainingSample import TrainingSample
 
 
 class BaseModel(object):
-    TOPIC_NUMBER = 30
+    TOPIC_NUMBER = 300
     SHARD_SIZE = 500
 
     @classmethod
