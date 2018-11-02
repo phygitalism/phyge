@@ -1,5 +1,5 @@
 # PHYGE
-
+<p align="center"> <img src="./icon.jpg" width="250"> </p>
 
 ### Run (with Docker)
 
@@ -9,7 +9,7 @@ Bringing all containers up with:
 $ cd phyge
 $ ./run.sh
 ```
-This script will install development environment and start services.
+This script will install development environment and start services (with pipevn). // may take considerable time
 
 ### Training model
 
@@ -19,7 +19,7 @@ Just run:
 $ ./train.sh
 ```
 
-It will seed database and train both model LSI and LDA.
+It will seed database and train both model LSI.
 ### Dropping database volume
 
 If you need to reimport data, run:
@@ -28,5 +28,4 @@ If you need to reimport data, run:
 $ ./drop_db.sh
 ```
 
-### Installation (with venv)
-**IN PROGRESS**
+Read more in [Description.md](./app/Description.md)
