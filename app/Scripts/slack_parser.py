@@ -1,6 +1,8 @@
 import json
 import os
 
+PATH_TO_SLACK_HISTORY = ''  # your path
+
 
 def main():
     result = []
@@ -8,13 +10,14 @@ def main():
     data = []
     chanel = []
     id = 0
-    folders = os.listdir('/Users/kate_s/Desktop/PHYGITALISM/MLX/phyge/Resources/slack_history/')
+    folders = os.listdir(PATH_TO_SLACK_HISTORY)
 
     for folder in folders:
         if folder[0] != '.':
-            files = os.listdir('/Users/kate_s/Desktop/PHYGITALISM/MLX/phyge/Resources/slack_history/' + folder)
+            files = os.listdir(PATH_TO_SLACK_HISTORY + folder)
             for file in files:
-                with open('/Users/kate_s/Desktop/PHYGITALISM/MLX/phyge/Resources/slack_history/' + folder + '/' + file, 'r', encoding="utf8") as json_file:
+                with open(PATH_TO_SLACK_HISTORY + folder + '/' + file,
+                          'r', encoding="utf8") as json_file:
                     research.append(json.load(json_file))
                 data.append(file.replace('.json', ''))
                 chanel.append(folder)
@@ -29,7 +32,8 @@ def main():
                                chanel=chanel[index]))
             id += 1
 
-    with open('/Users/kate_s/Desktop/PHYGITALISM/MLX/phyge/Resources/slack_urls_handbook.json', 'w+', encoding="utf8") as file:
+    with open(PATH_TO_SLACK_HISTORY, 'w+',
+              encoding="utf8") as file:
         json.dump(result, file, indent=2, ensure_ascii=False)
 
 

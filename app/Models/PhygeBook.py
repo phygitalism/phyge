@@ -1,4 +1,4 @@
-class PhyBook():
+class PhyBook:
     id_key = 'serial_id'
     tema_key = 'tema'
     title_key = "title"

@@ -1,5 +1,4 @@
 from Models.BagOfWordsModel import BagOfWordsModel
-
 from TextNormalizer import TextNormalizer
 
 

@@ -34,7 +34,6 @@ class ArticleFetcher:
             if article is not None:
                 DBController.add_document(article, str(uuid.uuid4()))
 
-
     async def load_html(self, url):
         article_html = Article(url=url, language='ru')
         html = await self.session_get_html(url)

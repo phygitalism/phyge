@@ -14,5 +14,3 @@ class PhyVariables:
     enStopwordsKey = 'russian_english'
     ruStopwordsPath = os.path.join(resourcesDir, stopwordsDir, ruStopwordsKey)
     enStopwordsPath = os.path.join(resourcesDir, stopwordsDir, enStopwordsKey)
-
-

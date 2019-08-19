@@ -1,8 +1,7 @@
-import pandas as pd
+import numpy as np
 from gensim import corpora
 from DBController import DBController
 from Models.PhygeArticle import BaseArticle
-import numpy as np
 
 
 class TrainingSample:

@@ -17,9 +17,9 @@ class DatabaseSeeder:
     @classmethod
     def seed(cls):
         DBController.first_setup()
-        # cls.__seed_web_articles()
+        cls.__seed_web_articles()
         # cls.__seed_pdf_articles()
-        cls.__seed_books()
+        # cls.__seed_books()
 
     @classmethod
     def __seed_web_articles(cls):
@@ -63,7 +63,7 @@ class DatabaseSeeder:
                                          'lang': 'en',
                                          'normalized_words': normalized_words})
 
-                print(f'add {index+1} of the {len(data)} articles: {title}')
+                print(f'add {index + 1} of the {len(data)} articles: {title}')
 
                 if article is not None:
                     DBController.add_document(article, str(uuid.uuid4()))
@@ -98,6 +98,6 @@ class DatabaseSeeder:
 
             for index, book in enumerate(books):
                 phy_book = PhyBook(book)
-                print(f'add {index+1} of the {len(books)} books: {phy_book.title}')
+                print(f'add {index + 1} of the {len(books)} books: {phy_book.title}')
                 if phy_book is not None:
                     DBController.add_document(phy_book, str(uuid.uuid4()))

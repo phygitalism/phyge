@@ -33,14 +33,16 @@ async def index():
 @app.route('/search_articles', methods=['POST'])
 async def search_articles():
     global search_engine
-    request_body = await request.get_json()
+    request_body = await
+    request.get_json()
     print('search_articles: ', request_body)
     query_text = request_body['query']
     amount = request_body['amount']
     query = BaseQuery({'text': query_text, 'id': 1})
 
     start_time = time.time()
-    search_results = await search_engine.find_article(query, amount=amount)
+    search_results = await
+    search_engine.find_article(query, amount=amount)
     answer_time = round((time.time() - start_time), 3)
     search_results['search_time'] = answer_time
 

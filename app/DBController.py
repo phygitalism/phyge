@@ -4,8 +4,8 @@ from pymongo import MongoClient
 from Models.PhygeArticle import BaseArticle, PhyWebArticle, PhyPdfArticle
 from Models.PhygeBook import PhyBook
 
-class DBController:
 
+class DBController:
     mongo_client = MongoClient('mongo-db', 27017)
     db = mongo_client.phyge
     articles = db.articles
@@ -29,11 +29,11 @@ class DBController:
         cls.articles.insert_one({**doc.serialize(),
                                  '_id': uuid,
                                  'serial_id': cls.get_next_number_in_sequence(cls.article_serial_id_sequence_key)})
-  
+
     @classmethod
     def get_all_documents(cls, filter_fields=None) -> [BaseArticle]:
         filter_fields = filter_fields if filter_fields else dict()
-        articles = cls.articles.find(filter_fields)#.sort('serial_id', pymongo.ASCENDING)
+        articles = cls.articles.find(filter_fields)  # .sort('serial_id', pymongo.ASCENDING)
         return [BaseArticle(obj) for obj in articles]
 
     @classmethod
@@ -61,13 +61,12 @@ class DBController:
     def get_article(cls, serial) -> dict:
         return cls.articles.find_one({'serial_id': serial})
 
-#замена get_all_documents?
+    # замена get_all_documents?
     @classmethod
-    def get_all_articles(cls, filter_fields=None, limit = None) -> [BaseArticle]:
+    def get_all_articles(cls, filter_fields=None, limit=None) -> [BaseArticle]:
         filter_fields = filter_fields if filter_fields else dict()
         if limit:
             articles = cls.articles.find(filter_fields).limit(limit)
         else:
             articles = cls.articles.find(filter_fields)
         return articles
-    

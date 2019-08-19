@@ -28,4 +28,4 @@ If you need to reimport data, run:
 $ ./drop_db.sh
 ```
 
-Read more in [Description.md](./app/Description.md)
+READ MORE IN [Description.md](./app/Description.md)

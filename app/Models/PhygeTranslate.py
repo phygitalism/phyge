@@ -10,15 +10,17 @@ class PhyTranslate:
         print('Translate')
 
     @classmethod
-    def detect_language(self, text):
+    def detect_language(cls, text):
         try:
-            return Translator().detect(text[:SYMBOL_LIMIT]).lang # Смотрим на первые 5000 символов, чтобы не было переполнения у гугловского сервера
+            # Смотрим на первые 5000 символов, чтобы не было переполнения у гугловского сервера
+            return Translator().detect(text[
+                                       :SYMBOL_LIMIT]).lang
         except:
             print('Error while detecting')
             return ''
 
     @classmethod
-    def translate(self, text, title, downloaded_from_url):
+    def translate(cls, text, title, downloaded_from_url):
         try:
             if len(text) < SYMBOL_LIMIT:
                 return Translator().translate(text, dest='ru').text
@@ -33,5 +35,5 @@ class PhyTranslate:
             print('Error while translating')
             with open('out_info.txt', 'a') as info:
                 info.write(
-                    "Cann't be translated " + re.sub(r'[^\x00-\x7f]', '', title) + " " + downloaded_from_url + "\n")
+                    "Can not be translated " + re.sub(r'[^\x00-\x7f]', '', title) + " " + downloaded_from_url + "\n")
             return text

@@ -10,7 +10,6 @@ from Models.TrainingSample import TrainingSample
 from Models.PhygeArticle import BaseArticle
 
 
-
 class Storage:
 
     @classmethod
@@ -52,9 +51,10 @@ class Storage:
                                         training_sample=training_sample)
             elif model_type == 'ft':
                 model = models.FastText.load(model_path)
-                #similarity_matrix = sparse.load_npz(os.path.join(path, f'{model_name}.mat.npz'))
+                # similarity_matrix = sparse.load_npz(os.path.join(path, f'{model_name}.mat.npz'))
                 return FastTextModel.trained(name=model_name, model=model, corpus=corpus, dictionary=dictionary,
                                              similarity_matrix=similarity_matrix, training_sample=training_sample)
+
         model = load_func(os.path.join(path, f'{model_name}.{model_type}'), model_type=model_type)
         print('Loaded')
 

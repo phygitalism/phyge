@@ -18,12 +18,12 @@ class SearchEngine:
                 answer = {'id': articles[index].id,
                           'title': articles[index].title,
                           'source': articles[index].source,
-                          'text': (articles[index].text[0:200])\
-                                      .replace("', '", '')\
-                                      .replace("[, ", '')\
-                                      .replace("'", '')\
-                                      .replace(", ,", '')\
-                                      .replace("[", '')\
+                          'text': (articles[index].text[0:200]) \
+                                      .replace("', '", '') \
+                                      .replace("[, ", '') \
+                                      .replace("'", '') \
+                                      .replace(", ,", '') \
+                                      .replace("[", '') \
                                   + '...',
                           'similarity': round(float(similarity), 3)}
                 found_articles.append(answer)

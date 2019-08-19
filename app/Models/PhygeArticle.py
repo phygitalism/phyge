@@ -1,5 +1,3 @@
-
-
 class BaseArticle(object):
     id_key = 'serial_id'
     title_key = 'title'

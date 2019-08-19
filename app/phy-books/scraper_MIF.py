@@ -7,8 +7,8 @@ import json
 import re
 
 
-# список книг с главной страницы
 def create_list_books():
+    # список книг с главной страницы
     list_urls_books = []
     all_books_html = []
     for page in range(1, 100 + 1):
@@ -75,7 +75,6 @@ def create_book_json(url='https://www.mann-ivanov-ferber.ru/books/mashina-pravdy
     return books
 
 
-# список ссылок на книжки с главной страницы
 list_urls_books = create_list_books()
 print(list_urls_books)
 with open('list_urls_books.json', 'w+') as file:

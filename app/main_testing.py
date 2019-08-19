@@ -31,13 +31,12 @@ def run_search(path, result_path, amount=1):
     save_results(result_path, search_results, query_list)
 
 
-
 def search_article(query, amount):
     global search_engine
     start_time = time.time()
     search_results = search_engine.find_article(query, amount=amount)
     answer_time = round((time.time() - start_time), 3)
-    #search_results['search_time'] = answer_time
+    # search_results['search_time'] = answer_time
 
     print('search_results')
     pprint(search_results)
@@ -51,7 +50,7 @@ def save_results(result_path, search_results, query_list):
         for i, answer in enumerate(search_results):
             for model_name in answer.keys():
                 true_sourse = query_list[i].source
-                #found_title = answer[model_name][0]['title']
+                # found_title = answer[model_name][0]['title']
                 found_sourse = answer[model_name][0]['source']
                 if true_sourse != found_sourse:
                     if model_name not in wrong_ids.keys():
@@ -59,10 +58,11 @@ def save_results(result_path, search_results, query_list):
                     else:
                         wrong_ids[model_name].append((true_sourse, found_sourse))
                 output_answer.append(dict(true_sourse=true_sourse, sourse=found_sourse, model=model_name,
-                                    title=answer[model_name][0]['title'],
-                                    similarity=answer[model_name][0]['similarity']))
+                                          title=answer[model_name][0]['title'],
+                                          similarity=answer[model_name][0]['similarity']))
         file.write(json.dumps(output_answer, indent=2, ensure_ascii=False))
         file.write(json.dumps(wrong_ids, indent=2, ensure_ascii=False))
+
 
 if __name__ == "__main__":
     log_of_result = []
@@ -77,6 +77,7 @@ if __name__ == "__main__":
     d2v = Storage.load_model('out/d2v', 'phyge', 'd2v')
     fast_text = Storage.load_model('out/fast_text', 'phyge', 'ft')
     search_engine = SearchEngine(models=[fast_text, d2v, lda, lsi])
-    test_path = os.path.join(PhyVariables.testsDir, 'test_'+str(PhyVariables.queriesId))
-    run_search(os.path.join(test_path, PhyVariables.queriesFileName), os.path.join(test_path, PhyVariables.answersFileName), 1)
-    #run_search('Resources/pdf_articles.json','Resources/answers.json',1)
+    test_path = os.path.join(PhyVariables.testsDir, 'test_' + str(PhyVariables.queriesId))
+    run_search(os.path.join(test_path, PhyVariables.queriesFileName),
+               os.path.join(test_path, PhyVariables.answersFileName), 1)
+    # run_search('Resources/pdf_articles.json','Resources/answers.json',1)
