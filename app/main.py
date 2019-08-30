@@ -33,8 +33,7 @@ async def index():
 @app.route('/search_articles', methods=['POST'])
 async def search_articles():
     global search_engine
-    request_body = await
-    request.get_json()
+    request_body = await request.get_json()
     print('search_articles: ', request_body)
     query_text = request_body['query']
     amount = request_body['amount']

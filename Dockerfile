@@ -7,12 +7,10 @@ RUN pip install -U pip pipenv
 RUN mkdir -p project/app
 
 COPY Pipfile /project/Pipfile
-COPY Pipfile.lock /project/Pipfile.lock
 
 WORKDIR /project
 
-RUN cat Pipfile && cat Pipfile.lock
-RUN pipenv install --verbose
+RUN pipenv install
 
 CMD ["/bin/bash"]
 
